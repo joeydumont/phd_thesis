@@ -14,28 +14,90 @@
 % --                       Document Class                        -- %
 % ----------------------------------------------------------------- %
 
-\documentclass{inrsthesis}
+\documentclass[11pt]{inrsthesis}
 
 % ----------------------------------------------------------------- %
 % --                          Packages                           -- %
 % ----------------------------------------------------------------- %
 
+\usepackage[unicode=true,
+      pdfauthor={Joey Dumont},
+      pdftitle={},
+      bookmarks=true,
+      bookmarksnumbered=true,
+      bookmarksopen=true,
+      bookmarksopenlevel=3,
+      breaklinks=false,
+      pdfborder={0 0 0},
+      backref=false,
+      colorlinks=true,
+      linktoc=page,
+      linkcolor=red,
+      citecolor=blue,
+      urlcolor=blue]
+ {hyperref}
 
-\title{Test}
+
+\title{Strong-field quantum electrodynamics \\ in tightly focused fields}
+\subtitle{Towards a Realitic Modelling of High-Power \\Laser Systems in the Quantum Theory}
 \author{Joey Dumont}
+\year{2018}
+\program{Sciences de l'énergie et des matériaux}
+\centreINRS{Centre Énergie Matériaux et Télécommunications}
+\jury{
+  \juryitem
+    {Président du jury et \\ examinateur interne}
+    {Nom du professeur \\ Institution}
+  \\
+  \juryitem
+    {Examinateur externe}
+    {Nom du professeur \\ Faculté ou département \\ Institution}
+  \\
+  \juryitem
+    {Examinateur interne}
+    {Nom du professeur \\ Institution}
+  \\
+  \juryitem
+    {Directeur de recherche}
+    {Jean-Claude Van Damme \\ INRS-ÉMT}
+  \\
+  \juryitem
+    {Codirecteur de recherche}
+    {Steve MacLean \\ INRS-ÉMT \\ University of Waterloo}
+}
 % --------------------------------------------------------------------------- %
 % --                               Document                                -- %
 % --------------------------------------------------------------------------- %
 
 \begin{document}
 
-\begin{titlingpage}
-\maketitle
-\end{titlingpage}
-
 \frontmatter
 
+\maketitle
+
+\chapter{Résumé}
+
+Mots-clés:
+
+\chapter{Abstract}
+
+Keyword:
+
+\chapter{Sommaire récapitulatif}
+\cleardoublepage
+
 \tableofcontents
+\cleardoublepage
+
+\listoftables
+\cleardoublepage
+
+\listoffigures
+\cleardoublepage
+
+%\dedication{To my wife and son.}
+
+%\epigraph{}{}
 
 \mainmatter
 
@@ -43,7 +105,10 @@
 
 \chapter{Conclusion}
 
-\backmatter
+%\backmatter
+
+\bibliographystyle{osajnl}
+\bibliography{phd_thesis}
 
 \appendix
 
