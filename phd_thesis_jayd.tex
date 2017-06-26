@@ -14,7 +14,7 @@
 % --                       Document Class                        -- %
 % ----------------------------------------------------------------- %
 
-\documentclass[11pt]{inrsthesis}
+\documentclass[11pt,SymmetricalJury]{inrsthesis}
 
 % ----------------------------------------------------------------- %
 % --                          Packages                           -- %
@@ -39,7 +39,7 @@
 
 
 \title{Strong-field quantum electrodynamics \\ in tightly focused fields}
-\subtitle{Towards a Realitic Modelling of High-Power \\Laser Systems in the Quantum Theory}
+%\subtitle{Towards a Realitic Modelling of High-Power \\Laser Systems in the Quantum Theory}
 \author{Joey Dumont}
 \year{2018}
 \program{Sciences de l'énergie et des matériaux}
@@ -59,7 +59,7 @@
   \\
   \juryitem
     {Directeur de recherche}
-    {Jean-Claude Van Damme \\ INRS-ÉMT}
+    {Jean-Claude Kieffer \\ INRS-ÉMT}
   \\
   \juryitem
     {Codirecteur de recherche}
@@ -95,13 +95,53 @@ Keyword:
 \listoffigures
 \cleardoublepage
 
-%\dedication{To my wife and son.}
+% \dedication{To my wife and son.}
+% \cleardoublepage
 
-%\epigraph{}{}
+% \epigraph{}{}
+% \cleardoublepage
 
 \mainmatter
 
 \chapter{Introduction}
+
+Basic plan:
+  \begin{itemize}
+    \item Generic introduction to SF-QED, experiments by SLAC and the upcoming
+          high power-laser facilities.
+    \item Motivation to accurately model the tight focusing regime: field inhomogeneities
+          play an important role in the detection of SF-QED observables (cite recent work by Di Piazza).
+    \item Approach based on two steps: modelling the optical side of things, then the quantum side of things.
+    \item Motivation behind the StrattoCalculator (vs Richards-Wolf, vs analytical solutions).
+    \item Motivation behind SK (vs effective methods, vs analytical solutions). BONUS: inclusive observables.
+    \item Discussion of the use of HPC resources as a driver of future SF-QED experiments?
+  \end{itemize}
+
+Stuff to put in appendices:
+  \begin{enumerate}
+    \item Details of the Stratton-Chu formalism, perhaps some stuff on
+          discontinuity ``problem'' \cite{Asvestas1980} and the heuristic argument as to why
+          the physical approximation is correct.
+    \item Expressions of identity operators in Fock space for photons and fermions.
+    \item Proof that disconnected vacuum diagrams vanish identically in the SK formalism.
+    \item Minor results related to the \texttt{StrattoCalculator}:
+      \begin{itemize}
+        \item Gouy phase and its transverse momentum interpretation.
+        \item Work on the generation of pseudo-radially polarized beams with mosaics of half-wave plates?
+      \end{itemize}
+  \end{enumerate}
+
+\chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
+
+\chapter{Application I: Four-Wave Mixing \textit{in vacuo} and Pair Production}
+
+\chapter{Application II: Radiation Reaction With High Energy Electrons}
+
+\chapter{Tool 2: The Schwinger-Keldysh Formalism and SF-QED Observables}
+
+\chapter{Application III: Photon Production via Compton Scattering}
+
+\chapter{Application IV: Pair Production via Compton Scattering}
 
 \chapter{Conclusion}
 
@@ -114,10 +154,6 @@ Keyword:
 
 \chapter{Conventions}
 
-\chapter{The Stratton-Chu formalism}
-
-\chapter{Disconnected vacuum diagrams vanish identically in the Schwinger-Keldysh formalism}
-
-\chapter{Four-wave mixing: a parameter study}
+\chapter{Other stuff to put in appendices}
 
 \end{document}
