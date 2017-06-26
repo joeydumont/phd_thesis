@@ -133,15 +133,98 @@ Stuff to put in appendices:
 
 \chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
 
+Skeleton:
+  \begin{itemize}
+      \item Short derivation of the Stratton-Chu equations, with emphasis on the physical optics approximation.
+      \item Numerical implementation of the method
+        \begin{itemize}
+            \item Pros/cons vs more popular methods.
+            \item Details of the field calculation (field models, normalization and whatnot).
+            \item Details of the MPI implementation.
+            \item Phase cancellation in the focal spot.
+            \item Appendix: Numerical checks like convergence, solution of Maxwell's equations.
+            \item Appendix: Far-field of the SC equations.
+            \item Appendix: Analysis of the Gouy phase and its transverse momentum interpretation.
+        \end{itemize}
+      \item Comparison with Richards-Wolf:
+        \begin{itemize}
+            \item No ``real'' derivation from SC to RW without implicit approximations.
+            \item Problem with phase cancellation?
+            \item Differing results in similar conditions.
+        \end{itemize}
+      \item Analysis of the fields in the focal spot and comparison with
+            existing analytical solutions (Salamin, e-dipoles).
+      \item Opening to other methods that are less computationnaly intensive;
+        \begin{itemize}
+            \item Transformation optics;
+            \item Propagation equations?
+        \end{itemize}
+  \end{itemize}
+
+
 \chapter{Application I: Four-Wave Mixing \textit{in vacuo} and Pair Production}
+
+Skeleton:
+\begin{itemize}
+    \item Simple derivation of the EH Lagrangian.
+    \item How to extract FWM from EH: linearisation + integral solution (WaveMixer)
+    \item How to extract PP from EH: Adiabatic formula.
+    \item MASTER TABLE, or how different field models affect FWM.
+      \begin{itemize}
+        \item Introduction of the different field models.
+        \item Introduction of the transmission parabola.
+        \item Explain the behaviour of yield as a function of 2f/rmax with Lorentz invariants,
+              i.e. the optics of the experiment.
+      \end{itemize}
+    \item Pair production, w/ linear and radial beams.
+      \begin{itemize}
+          \item Show that both polarizations show the same behaviour as a function of f.
+          \item Visualize the 3D fields and explain optimum in terms of the optics (cancellation of the
+                magnetic field in both cases).
+      \end{itemize}
+\end{itemize}
 
 \chapter{Application II: Radiation Reaction With High Energy Electrons}
 
+Skeleton (still a rough idea):
+  \begin{itemize}
+    \item Quantify RR in different field configurations, checking whether there
+          is an advantage to using a transmission parabola in this case.
+    \item Study the effects of different field models on the detectability of
+          RR effects.
+    \item Mention intensity measurement stuff? I've worked a little on this\ldots
+  \end{itemize}
+
 \chapter{Tool 2: The Schwinger-Keldysh Formalism and SF-QED Observables}
+
+Skeleton (early stages):
+  \begin{itemize}
+      \item Generalities of the SK formalism (definitions and formal results).
+      \item Application to SF-QED: computing inclusive observables in
+            arbitrary fields (proof-of-concept derivation following Gelis).
+      \item Discuss the generality of the method: compatibility with
+            Volkov solns, with the Di Piazza method, \textit{and} with numerical
+            solutions of the Dirac equation.
+      \item Appendix: Disconnected vacuum diagrams vanish in SK.
+      \item Appendix: Proper derivation of the Volkov-SK propagators.
+  \end{itemize}
+
 
 \chapter{Application III: Photon Production via Compton Scattering}
 
+Work to be done:
+  \begin{itemize}
+      \item Formal derivation of the average number of photons with an electron
+            in the initial state.
+      \item Computation with Volkov propagators.
+      \item Computation with Di Piazza solution.
+      \item Opening to numerical solutions?
+\end{itemize}
+
 \chapter{Application IV: Pair Production via Compton Scattering}
+
+Work to be done:
+See previous chapter but with number of pairs through ``secondary'' processes.
 
 \chapter{Conclusion}
 
@@ -152,8 +235,8 @@ Stuff to put in appendices:
 
 \appendix
 
-\chapter{Conventions}
+\chapter{Conventions or w/e}
 
-\chapter{Other stuff to put in appendices}
+%\chapter{Other stuff to put in appendices}
 
 \end{document}
