@@ -37,7 +37,18 @@
       urlcolor=blue]
  {hyperref}
 
+% ----------------------------------------------------------------- %
+% --                        Customization                        -- %
+% ----------------------------------------------------------------- %
+\newenvironment{chaptersummary}{%
+  \begin{quotation}
+  \SingleSpacing
+  \setlength{\parskip}{\baselineskip}}{%
+  \end{quotation}}
 
+% ----------------------------------------------------------------- %
+% --                       Title Page Info                       -- %
+% ----------------------------------------------------------------- %
 \title{Strong-field quantum electrodynamics \\ in tightly focused fields}
 %\subtitle{Towards a Realitic Modelling of High-Power \\Laser Systems in the Quantum Theory}
 \author{Joey Dumont}
@@ -98,8 +109,10 @@ Keyword:
 % \dedication{To my wife and son.}
 % \cleardoublepage
 
-% \epigraph{}{}
-% \cleardoublepage
+\epigraph{More important, the formulation in terms of a variational principle is the route
+          that is generally followed when we try to describe apparently nonmechanical systems
+          in the mathematical clothes of classical mechanics, as in the theory of fields.}{Goldstein \textit{et al}, Classical Mechanics, 3rd edition.}
+\cleardoublepage
 
 \mainmatter
 
@@ -132,6 +145,16 @@ Stuff to put in appendices:
   \end{enumerate}
 
 \chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
+
+\begin{chaptersummary}
+This chapter discusses the problem of properly modelling electromagnetic fields
+in the tight focusing regime. We first lay the foundation of electromagnetic
+scattering and justify the choice of the Stratton-Chu formalism. Our numerical
+implementation of this formalism is then discussed at length, and our results
+are benchmarked against analytical results and results from the literature.
+We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
+to the Stratton-Chu formulation.
+\end{chaptersummary}
 
 Skeleton:
   \begin{itemize}
@@ -197,8 +220,14 @@ Skeleton (still a rough idea):
 
 \chapter{Tool 2: The Schwinger-Keldysh Formalism and SF-QED Observables}
 
+% On the mathematical nonexistence of path integrals.
+\epigraph{The emperor has no clothes.}{Yours truly}
+
+
 Skeleton (early stages):
   \begin{itemize}
+      \item Motivation of SK: single+double Compton scattering in Furry picture,
+            difficulty of going above double/including the effects of arbitrary fields.
       \item Generalities of the SK formalism (definitions and formal results).
       \item Application to SF-QED: computing inclusive observables in
             arbitrary fields (proof-of-concept derivation following Gelis).
@@ -210,7 +239,7 @@ Skeleton (early stages):
   \end{itemize}
 
 
-\chapter{Application III: Photon Production via Compton Scattering}
+\chapter{Application III: Photon Production via Compton Scattering (Trident/Breit-Wheeler)}
 
 Work to be done:
   \begin{itemize}
