@@ -1,0 +1,3 @@
+[submodule "latex-tools"]
+	path = latex-tools
+	url = git@github.com:valandil/latex-tools.git

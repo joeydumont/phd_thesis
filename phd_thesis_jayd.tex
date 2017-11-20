@@ -37,6 +37,10 @@
       urlcolor=blue]
  {hyperref}
 
+\usepackage[showframe,pass]{geometry} % Shows the frame properly when using memoir.
+\usepackage[theorems=false]{latex-tools/vphys}        % Common LaTeX tools that I use.
+\usepackage[charter]{mathdesign}
+
 % ----------------------------------------------------------------- %
 % --                        Customization                        -- %
 % ----------------------------------------------------------------- %
@@ -114,6 +118,16 @@ Keyword:
           in the mathematical clothes of classical mechanics, as in the theory of fields.}{Goldstein \textit{et al}, Classical Mechanics, 3rd edition.}
 \cleardoublepage
 
+\epigraph{Whatever you do, do the best you can. The film lives forever!}{Jackie Chan}
+
+\begin{flushright}
+\begin{minipage}{0.35\textwidth}
+The author claims that this statement not only applies for films with badass
+action sequences, but for every artistic, cultural or scientific endeavour.
+\end{minipage}
+\end{flushright}
+
+\cleardoublepage
 \mainmatter
 
 \chapter{Introduction}
@@ -145,6 +159,7 @@ Stuff to put in appendices:
   \end{enumerate}
 
 \chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
+\label{chapter:stratton-chu}
 
 \begin{chaptersummary}
 This chapter discusses the problem of properly modelling electromagnetic fields
@@ -155,6 +170,22 @@ are benchmarked against analytical results and results from the literature.
 We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
 to the Stratton-Chu formulation.
 \end{chaptersummary}
+
+IDEAS:
+  \begin{itemize}
+    \item Example of laser chain diagram with regime of validity of paraxial approximation.
+    \item HNA parabolic mirror as counterexample in the laser chain, and danger of
+            sending the laser back into itself through secondary reflections.
+    \item
+  \end{itemize}
+
+As mentioned in the introduction of this thesis, focusing electromagnetic fields
+down to a volume approximately the size of the wavelength $\lambda$ of the radiation
+is a major ingredient in the journey to ever higher intensities. In this regime where
+the spatial extension of the field is on the same order of magnitude as its wavelength,
+the very common paraxial approximation does not hold. This approximation can be applied
+to fields with small diffraction angles $\epsilon=\lambda/\pi w_0$ where $w_0$ is the
+transverse width of the beam.
 
 Skeleton:
   \begin{itemize}
@@ -221,6 +252,7 @@ Skeleton (still a rough idea):
 \chapter{Tool 2: The Schwinger-Keldysh Formalism and SF-QED Observables}
 
 % On the mathematical nonexistence of path integrals.
+%Goldstein, 3rd ed. p. 36
 \epigraph{The emperor has no clothes.}{Yours truly}
 
 
@@ -239,7 +271,7 @@ Skeleton (early stages):
   \end{itemize}
 
 
-\chapter{Application III: Photon Production via Compton Scattering (Trident/Breit-Wheeler)}
+\chapter{Application III: Photon Production via Compton Scattering}
 
 Work to be done:
   \begin{itemize}
@@ -250,7 +282,7 @@ Work to be done:
       \item Opening to numerical solutions?
 \end{itemize}
 
-\chapter{Application IV: Pair Production via Compton Scattering}
+\chapter{Application IV: Pair Production via Compton Scattering (Trident/Breit-Wheeler)}
 
 Work to be done:
 See previous chapter but with number of pairs through ``secondary'' processes.
@@ -263,6 +295,107 @@ See previous chapter but with number of pairs through ``secondary'' processes.
 \bibliography{phd_thesis}
 
 \appendix
+
+\chapter{Explicit expressions of the Stratton-Chu equations}
+
+In chapter \ref{chapter:stratton-chu}, we discussed the numerical evaluation
+of the Stratton-Chu equations as a way to model electromagnetic fields in the
+tightly focused regime. Specifically, we implemented a program that evaluates
+\eqref{} for arbitrary mirror geometries, arbitrary incident fields and capable
+of modeling broadband pulses. In this appendix, we provide explicit expressions
+of the Stratton-Chu equations in cylindrical coordinates, for a surface parametrized
+with $z=F(r,\theta)$. Our starting point is \eqref{}, which we print here for
+convenience
+  \begin{subequations}
+  \label{eq:app.sc-explicit.poa-og}
+  \begin{align}
+    \label{eq:app.sc-explicit.poa-og.efield}
+    \vb{E}'_\text{ref}(\vb{r}',k)  &= 2\iint_S
+      \left\{
+        ik(\vu{n}\times\vb{B}_\text{inc})g
+        +\left(\vu{n}\cdot\vb{E}_\text{inc}\right)\nabla g\right\}dS
+            - \frac{2}{ik}\oint_{\partial S}\nabla g
+                    \left[\vu{n}\times(\vu{n}\times\vb{B}_\text{inc})\right]\cdot d\vb{\ell},\\
+    \label{eq:app.sc-explicit.poa-og.bfield}
+    \vb{B}'_\text{ref}(\vb{r}',k)  &= 2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla g dS.
+  \end{align}
+  \end{subequations}
+where recall that
+  \begin{align}
+    g(\vb{r},\vb{r}') &= \frac{e^{ik\left|\vb{r}-\vb{r}'\right|}}{\left|\vb{r}-\vb{r}'\right|}, \\
+    \left|\vb{r}-\vb{r}'\right| &= \sqrt{r^2+r'^2-2rr'\cos(\theta-\theta')-(z-z')^2}.
+  \end{align}
+For the given parametrization, the normal is given
+  \begin{align}
+    \vu{n} &= \frac{\nabla(z-F(r,\theta))}{\left|\nabla(z-F(r,\theta))\right|} \\
+           &= \frac{\left[-\partial_r F(r,\theta)\vu{r}-\frac{1}{r}\partial_\theta F(r,\theta)\vu{\theta}+\vu{z}\right]}
+                    {\sqrt{1+\left(\partial_r F(r,\theta\right)^2+\left(\frac{1}{r}\partial_\theta F(r,\theta)\right)^2}}
+  \end{align}
+while the surface element is given by
+  \begin{equation}
+    S = rdrd\theta\sqrt{1+\left(\partial_r F(r,\theta)\right)^2+\left(\frac{1}{r}\partial_\theta F(r,\theta)\right)^2}.
+  \end{equation}
+Given that the normal vector is present only once in most of terms of the integrals,
+the Jacobian due to the surface will conveniently cancel. We will deal with the
+line integral separately.
+
+Before we proceed, we'll show some useful intermediate results that will ease the parsing
+of this expression. First, note that we compute the gradient of the Green's
+function w.r.t. to the unprimed coordinates such that
+  \begin{equation}
+    \nabla g = \left(\frac{ik}{u}-\frac{1}{u^2}\right)\left[\left(r-r'\cos(\theta-\theta')\right)\vu{r}+r'\sin(\theta-\theta')\vu{\theta}+(z-z')\vu{z}\right]g = \vb{G}g
+  \end{equation}
+Also note that to extract the cylindrical components of the electromagnetic
+field vectors, it will be necessary to dot the r.h.s of
+\eqref{eq:app.sc-explicit.poa-og} with cylindrical basis vectors evaluated
+at $\vb{r}'$ with cylindrical basis vectors evaluated at $\vb{r}$.
+Because the cylindrical basis vectors form a non-coordinate basis, these
+dot products do not vanish. In fact, we have
+  \begin{align}
+    \vu{r}'\cdot\vu{r}            &= (\cos\theta'\vu{x}+\sin\theta'\vu{y})\cdot(\cos\theta\vu{x}+\sin\theta\vu{y})
+                                   = \cos\theta'\cos\theta+\sin\theta'\sin\theta
+                                   = \cos(\theta-\theta') \\
+    \vu{r}'\cdot\vu{\theta}       &= (\cos\theta'\vu{x}+\sin\theta'\vu{y})\cdot(-\sin\theta\vu{x}+\cos\theta\vu{y})
+                                   = -\cos\theta'\sin\theta+\sin\theta'\cos\theta
+                                   = -\sin(\theta-\theta')\\
+    \vu{\theta'}\cdot\vu{r}       &= (-\sin\theta'\vu{x}+\cos\theta'\vu{y})\cdot(\cos\theta\vu{x}+\sin\theta\vu{y})
+                                   = -\sin\theta'\cos\theta+\cos\theta'sin\theta
+                                   = \sin(\theta-\theta') \\
+    \vu{\theta}'\cdot\vu{\theta}  &= (-\sin\theta'\vu{x}+\cos\theta'\vu{y})\cdot(-\sin\theta\vu{x}+\cos\theta\vu{y})
+                                   = \sin\theta'\sin\theta+\cos\theta'\cos\theta
+                                   = \cos(\theta-\theta')
+  \end{align}
+
+We now compute each individual term in the integrals. We have
+  \begin{align}
+    \vb{N}\times\vb{B}_\text{inc}
+                &= \left[\left(-\frac{1}{r}\partial_\theta F(r,\theta)B_z - B_\theta\right)              \vu{r}
+                        +\left(B_r+\partial_r F(r,\theta) B_z\right)                                    \vu{\theta}
+                        +\left(\frac{1}{r}\partial_\theta F(r,\theta)B_r-\partial_r F(r,\theta)B_\theta\right) \vu{z}
+                  \right] \\
+    \vb{N}\cdot\vb{E}_\text{inc}
+                &= -\partial_r F(r,\theta)E_r-\frac{1}{r}\partial_\theta F(r,\theta)E_\theta + E_z \\
+    (\vb{N}\times\vb{B}_\text{inc})\times\vb{G}
+                &=
+                ( \left( B_{{r}}+ \left( {\frac {\partial }{\partial r}}F \left( r,
+\theta \right)  \right) B_{{z}} \right) g_{{z}}- \left( - \left( {
+\frac {\partial }{\partial r}}F \left( r,\theta \right)  \right) B_{{
+\theta}}+{\frac { \left( {\frac {\partial }{\partial \theta}}F \left( 
+r,\theta \right)  \right) B_{{r}}}{r}} \right) g_{{\theta}})
+\, \mathbf{ \bar{e}_{r}} \\
+&+( \left( - \left( {\frac {\partial }{
+\partial r}}F \left( r,\theta \right)  \right) B_{{\theta}}+{\frac {
+ \left( {\frac {\partial }{\partial \theta}}F \left( r,\theta \right) 
+ \right) B_{{r}}}{r}} \right) g_{{r}}- \left( -{\frac { \left( {\frac 
+{\partial }{\partial \theta}}F \left( r,\theta \right)  \right) B_{{z}
+}}{r}}-B_{{\theta}} \right) g_{{z}})\, \mathbf{ \bar{e}_{\theta}}\\
+&+(
+ \left( -{\frac { \left( {\frac {\partial }{\partial \theta}}F \left( 
+r,\theta \right)  \right) B_{{z}}}{r}}-B_{{\theta}} \right) g_{{\theta
+}}- \left( B_{{r}}+ \left( {\frac {\partial }{\partial r}}F \left( r,
+\theta \right)  \right) B_{{z}} \right) g_{{r}})\, \mathbf{ \bar{e}_{z
+}}
+  \end{align}
 
 \chapter{Conventions or w/e}
 
