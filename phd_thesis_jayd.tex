@@ -318,8 +318,9 @@ Our starting point is \eqref{}, which we print here for convenience
       \left\{
         ik(\vu{n}\times\vb{B}_\text{inc})g
         +\left(\vu{n}\cdot\vb{E}_\text{inc}\right)\nabla g\right\}dS
-            - \frac{2}{ik}\oint_{\partial S}\nabla g
-                    \left[\vu{n}\times(\vu{n}\times\vb{B}_\text{inc})\right]\cdot d\vb{\ell},\\
+            + \frac{2}{ik}\oint_{\partial S}\nabla g
+                    \vb{B}\cdot d\vb{\ell},\\
+                    %\left[\vu{n}\times(\vu{n}\times\vb{B}_\text{inc})\right]\cdot d\vb{\ell},\\
     \label{eq:app.sc-explicit.poa-og.bfield}
     \vb{B}'_\text{ref}(\vb{r}',k)  &= 2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla g dS.
   \end{align}
@@ -342,6 +343,7 @@ field vectors, it will be necessary to dot the r.h.s of
 at $\vb{r}'$ with cylindrical basis vectors evaluated at $\vb{r}$.
 Because the cylindrical basis vectors form a non-coordinate basis, these
 dot products do not vanish. In fact, we have
+  \begin{subequations}
   \begin{align}
     \vu{r}'\cdot\vu{r}            &= (\cos\theta'\vu{x}+\sin\theta'\vu{y})\cdot(\cos\theta\vu{x}+\sin\theta\vu{y})
                                    = \cos\theta'\cos\theta+\sin\theta'\sin\theta
@@ -356,6 +358,7 @@ dot products do not vanish. In fact, we have
                                    = \sin\theta'\sin\theta+\cos\theta'\cos\theta
                                    = \cos(\theta-\theta')
   \end{align}
+  \end{subequations}
 
 To streamline the computation, we first compute the vector products contained
 in each term of the integrands individually. This yields
@@ -371,68 +374,74 @@ in each term of the integrands individually. This yields
     (\vb{N}\times\vb{B}_\text{inc})\times\vb{G}
                 &= \left\{
                       \left[
-                        \left( n_z B_r - n_r B_z \right) g_z
-                        -\left( n_r B_\theta - n_\theta B_r \right) g_\theta
-                      \right] \vu{r} \right. \\
+                        \left( n_z B_r - n_r B_z \right) G_z
+                        -\left( n_r B_\theta - n_\theta B_r \right) G_\theta
+                      \right] \vu{r} \right. \nonumber\\
                 &\quad+\left[
-                        \left( n_r B_\theta - n_\theta B_r \right) g_r
-                       -\left( n_\theta B_z - n_z B_\theta\right) g_z
-                      \right]  \vu{\theta} \\
+                        \left( n_r B_\theta - n_\theta B_r \right) G_r
+                       -\left( n_\theta B_z - n_z B_\theta\right) G_z
+                      \right]  \vu{\theta} \nonumber\\
                 &\quad+\left.\left[
-                    \left( n_\theta B_z-n_z B_\theta \right) g_\theta
-                    -\left( n_z B_r - n_r B_z \right) g_r
+                    \left( n_\theta B_z-n_z B_\theta \right) G_\theta
+                    -\left( n_z B_r - n_r B_z \right) G_r
                       \right]\vu{z}\right\}
   \end{align}
 We can now extract the explicit expressions for the components of the reflected
 electromagnetic fields, paying attention to the products of primed and unprimed
 basis vectors:
 %\todo[inline]{Check for multiline automatic sizing for \verb|\left| and \verb|\right|.}
+  \begin{subequations}
   \begin{align}
     E_r'(\vb{r}', k)
-          &= \vu{r}'\cdot\vb{E}'(\vb{r}',k) \\
+          &= \vu{r}'\cdot\vb{E}'(\vb{r}',k) \nonumber\\
           &= 2\iint_S\left\{ikg \left[
-              \left( n_\theta B_z -N_z B_\theta \right)\cos(\theta-\theta')
-              +\left( -n_zB_r +n_r B_z \right)         \sin(\theta-\theta')\right]\right.\\
-            &\quad \left.+\left(\frac{ik}{u}-\frac{1}{u^2}\right)
-                   \left(n_r E_r + n_\theta E_\theta + n_z E_z\right)\left(r\cos(\theta-\theta')-r'\right)\right\}dS \\
-            &\quad + \text{line integral},\\
+              \left( n_\theta B_z -n_z B_\theta \right)\cos(\theta-\theta')
+              +\left(n_r B_z -n_zB_r \right)         \sin(\theta-\theta')\right]\right.\nonumber\\
+            &\quad \left.+\left(\frac{ik}{u}-\frac{1}{u^2}\right)g
+                   \left(n_r E_r + n_\theta E_\theta + n_z E_z\right)\left(r\cos(\theta-\theta')-r'\right)\right\}dS \nonumber\\
+            &\quad + \frac{2}{ik}\oint_{\partial S} \left(\frac{ik}{u}-\frac{1}{u^2}\right) g
+                    \left(B_r l_r + B_\theta l_\theta + B_z l_z\right)\left(r\cos(\theta-\theta')-r'\right)dl,\\
    E_\theta'(\vb{r}',k)
-          &=\vu{\theta}'\cdot\vb{E}'(\vb{r}',k) \\
+          &=\vu{\theta}'\cdot\vb{E}'(\vb{r}',k) \nonumber\\
           &= 2\iint_S\left\{ikg \left[
               \left(n_\theta B_z - n_z B_\theta\right)\sin(\theta-\theta')
-              +\left(n_z B_r  - n_r B_z\right)        \cos(\theta-\theta')\right]\right.\\
-            &\quad+\left(\frac{ik}{u}-\frac{1}{u^2}\right)\left.\left(n_r E_r + n_\theta E_\theta + n_z E_z\right)
-             r\sin(\theta-\theta')g\right\}dS \\
-            &\quad + \text{line integral}, \\
+              +\left(n_z B_r  - n_r B_z\right)        \cos(\theta-\theta')\right]\right.\nonumber\\
+            &\quad+\left(\frac{ik}{u}-\frac{1}{u^2}\right)g\left.\left(n_r E_r + n_\theta E_\theta + n_z E_z\right)
+             r\sin(\theta-\theta')g\right\}dS \nonumber\\
+            &\quad +\frac{2}{ik}\oint_{\partial S} \left(\frac{ik}{u}-\frac{1}{u^2}\right)g
+                    \left(B_r l_r + B_\theta l_\theta + B_z l_z\right)r\sin(\theta-\theta')dl \\
   E_z'(\vb{r}',k)
-          &= \vu{z}'\cdot\vb{E}'(\vb{r}',k) \\
-          &= 2\iint_S\left\{ikg \left(n_r B_\theta - n_\theta B_r\right)+\left(\frac{ik}{u}-\frac{1}{u^2}\right)\left( n_r E_r + n_\theta E_\theta + n_z E_z\right)(z-z')g\right\} dS\\
-            &\quad +\text{line integral}.
+          &= \vu{z}'\cdot\vb{E}'(\vb{r}',k) \nonumber\\
+          &= 2\iint_S\left\{ikg \left(n_r B_\theta - n_\theta B_r\right)+\left(\frac{ik}{u}-\frac{1}{u^2}\right)\left( n_r E_r + n_\theta E_\theta + n_z E_z\right)(z-z')g\right\} dS\nonumber\\
+            &\quad +\frac{2}{ik}\oint_{\partial S} \left(\frac{ik}{u}-\frac{1}{u^2}\right)g
+              \left(B_r l_r + B_\theta l_\theta + B_z l_z\right)(z-z')dl
   \end{align}
 The magnetic field gives
   \begin{align}
     B_r'(\vb{r}', k)
-          &= \vu{r}'\cdot\vb{B}'(\vb{r}',k) \\
+          &= \vu{r}'\cdot\vb{B}'(\vb{r}',k) \nonumber\\
           &= 2\iint_S \left(\frac{ik}{u}-\frac{1}{u^2}\right)g \left[
-                \left(n_z B_r - n_r B_z \right) (z-z')\cos(\theta-\theta')\right.\\
+                \left(n_z B_r - n_r B_z \right) (z-z')\cos(\theta-\theta')\right.\nonumber\\
           &\quad\left.\left(
                +r\left(n_\theta B_z - n_z B_\theta\right)
                +\left(n_\theta B_z - n_z B_\theta\right)(z-z')\right)\sin(\theta-\theta')
                \right] \\
     B_\theta'(\vb{r}',k)
-          &=\vu{\theta}'\cdot\vb{B}'(\vb{r}',k) \\
+          &=\vu{\theta}'\cdot\vb{B}'(\vb{r}',k) \nonumber\\
           &= 2\iint_S \left(\frac{ik}{u}-\frac{1}{u^2}\right)g \left[
-              \left(n_z B_r-n_r B_z\right)(z-z')\sin(\theta-\theta')\right. \\
-          &\quad +\left(n_z B_\theta - n_\theta B_z\right)(z-z')\cos(\theta-\theta') \\
+              \left(n_z B_r-n_r B_z\right)(z-z')\sin(\theta-\theta')\right. \nonumber\\
+          &\quad +\left(n_z B_\theta - n_\theta B_z\right)(z-z')\cos(\theta-\theta') \nonumber\\
           &\quad\left.+\left(n_\theta B_r- n_r B_\theta\right)\left(r'-r\cos(\theta-\theta')\right)\right] dA \\
     B_z'(\vb{r}',k)
-          &= \vu{z}'\cdot\vb{B}'(\vb{r}',k) \\
-          &= -2\iint_S \left(\frac{ik}{u}-\frac{1}{u^2}\right)g\left[
-            \left(n_\theta B_z- n_z B_\theta\right)r'\sin(\theta-\theta') \right.\\
+          &= \vu{z}'\cdot\vb{B}'(\vb{r}',k) \nonumber\\
+          &= 2\iint_S \left(\frac{ik}{u}-\frac{1}{u^2}\right)g\left[
+            \left(n_\theta B_z- n_z B_\theta\right)r'\sin(\theta-\theta') \right.\nonumber\\
           &\quad\left.+\left(n_r B_z - n_z B_r\right)\left(r-r'\cos(\theta-\theta')\right)\right] dA
   \end{align}
+  \end{subequations}
 
 For the given parametrization, the normal is given
+  \begin{subequations}
   \begin{align}
     \vu{n} &= \frac{\nabla(z-F(r,\theta))}{\left|\nabla(z-F(r,\theta))\right|} \\
            &= \frac{\left[-\partial_r F(r,\theta)\vu{r}-\frac{1}{r}\partial_\theta F(r,\theta)\vu{\theta}+\vu{z}\right]}
@@ -442,9 +451,23 @@ while the surface element is given by
   \begin{equation}
     dS = dA\sqrt{1+\left(\partial_r F(r,\theta)\right)^2+\left(\frac{1}{r}\partial_\theta F(r,\theta)\right)^2}.
   \end{equation}
+  \end{subequations}
 Given that the normal vector is present only once in most of terms of the integrals,
-the Jacobian due to the surface will conveniently cancel. We will deal with the
-line integral separately.
+the Jacobian due to the surface will conveniently cancel.
+
+\chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
+
+It is possible to derive the polarization and magnetization vectors (\vb{P} and \vb{M})
+that arise from the spontaneous creation and annihilation of virtual electron-positron
+pairs from the Euler-Heisenberg (EH) Lagrangian. To do so, we use the weak-field
+approximation of the EHL and compute the classical equations of motion that arise
+from it. We can write
+  \begin{subequations}
+  \begin{align}
+    \vb{P} &= 2\left[\frac{4\alpha^2}{45}\mathcal{F}\vb{E}+\frac{14\alpha^2}{45}\mathcal{G}\vb{B}\right] \\
+    \vb{M} &= -2\left[\frac{4\alpha^2}{45}\mathcal{F}\vb{B}+\frac{14\alpha^2}{45}\mathcal{G{\vb{E}}}]
+  \end{align}
+  \end{subequations}
 
 \chapter{Conventions or w/e}
 
