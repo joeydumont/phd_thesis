@@ -461,7 +461,7 @@ the Jacobian due to the surface will conveniently cancel.
 
 \todo[inline]{Appendix summary and references to main text.}
 
-\section{}
+\section{Solution of the Non-Linear Maxwell Equations}
 It is possible to derive the polarization and magnetization vectors ($\vb{P}$ and $\vb{M}$)
 that arise from the spontaneous creation and annihilation of virtual electron-positron
 pairs from the Euler-Heisenberg (EH) Lagrangian. To do so, we use the weak-field
@@ -469,7 +469,7 @@ approximation of the EHL and compute the classical equations of motion that aris
 from it. We can write
   \begin{subequations}
   \begin{align}
-    \vb{P} &= \frac{4\alpha^2}{45}\left[ 4\mathcal{F}\vb{E}+7\mathcal{G}\vb{B}\right], \\
+    \vb{P} &= \frac{4\alpha^2}{45}\left[ 4\mathcal{F}\vb{E}+7\mathcal{G}\vb{B}\right], \label{eq:app.fwm.polarization}\\
     \vb{M} &= \frac{4\alpha^2}{45}\left[-4\mathcal{F}\vb{B}+7\mathcal{G{\vb{E}}}\right]
   \end{align}
   \end{subequations}
@@ -701,6 +701,115 @@ mapping $\vb{P}_0\mapsto\vb{M}_0$ and $\vb{M}_0\mapsto-\vb{P}_0$.
 
 \section{Modes}
 
+To evaluate the integrals above, we must compute the range of frequencies
+that will be generated through the non-linear interaction. To do so,
+we simply must evaluate the Fourier expansion of $\vb{P}(\vb{r},t)$.
+Substiting the Fourier transforms of the electric and magnetic fiels in
+the r.h.s. of Eq.~\eqref{eq:app.fwm.polarization} yields
+  \begin{equation}
+    \vb{P}(\vb{r},t) = \frac{4\alpha^2}{45}\int_{-\infty}^\infty\int_{-\infty}^\infty\int_{-\infty}^\infty
+                        \left[
+                          4\left(\vb{E}_a\cdot\vb{E}_b-\vb{B}_a\cdot\vb{B}_b\right)\vb{E}_c
+                         +7\left(\vb{E}_a\cdot\vb{B}_b\right)\vb{B}_c
+                        \right]e^{-i(\omega_a+\omega_b+\omega_c)t}d\omega_ad\omega_bd\omega_c
+  \end{equation}
+where $\vb{E}_a$ is a shorthand for $\vb{E}(\vb{r},\omega_a)$. Using the fact
+the fields must be real, we can write this integral as
+  \begin{align}
+    \vb{P}(\vb{r},t) 
+        &= \frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty
+            \left[
+              4\left(\vb{E}_ae^{-i\omega_a t}+\vb{E}_a^*e^{i\omega_a t}\right)
+          \cdot\left(\vb{E}_be^{-i\omega_b t}+\vb{E}_b^*e^{i\omega_b t}\right)
+               \left(\vb{E}_ce^{-i\omega_c t}+\vb{E}_c^*e^{i\omega_c t}\right)
+            \right. \nonumber\\
+        &\phantom{\frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty}
+             -4\left(\vb{B}_ae^{-i\omega_a t}+\vb{B}_a^*e^{i\omega_a t}\right)
+          \cdot\left(\vb{B}_be^{-i\omega_b t}+\vb{B}_b^*e^{i\omega_b t}\right)
+               \left(\vb{E}_ce^{-i\omega_c t}+\vb{E}_c^*e^{i\omega_c t}\right)
+            \nonumber\\
+        &\left.
+             +7\left(\vb{E}_ae^{-i\omega_a t}+\vb{E}_a^*e^{i\omega_a t}\right)
+          \cdot\left(\vb{B}_be^{-i\omega_b t}+\vb{B}_b^*e^{i\omega_b t}\right)
+               \left(\vb{B}_ce^{-i\omega_c t}+\vb{B}_c^*e^{i\omega_c t}\right)
+          \right].
+  \end{align}
+Evaluating the products and rearranging yields
+  \begin{align}
+    \vb{P}(\vb{r},t)
+      &= \frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty
+        \left\{
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_b-\vb{B}_a\cdot\vb{B}_b\right)\vb{E}_c+7\left(\vb{E}_a\cdot\vb{B}_b\right)\vb{B}_c
+          \right]e^{-i(\omega_a+\omega_b+\omega_c)t}
+        \right. \nonumber\\
+      & \phantom{\frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty}
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_b-\vb{B}_a\cdot\vb{B}_b\right)\vb{E}_c^*+7\left(\vb{E}_a\cdot\vb{B}_b\right)\vb{B}_c^*
+          \right]e^{-i(\omega_a+\omega_b-\omega_c)t}
+         \nonumber\\
+      & \phantom{\frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty}
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_b^*-\vb{B}_a\cdot\vb{B}_b^*\right)\vb{E}_c+7\left(\vb{E}_a\cdot\vb{B}_b^*\right)\vb{B}_c
+          \right]e^{-i(\omega_a-\omega_b+\omega_c)t}
+         \nonumber\\
+      & \phantom{\frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty}
+          \left[
+            4\left(\vb{E}_a^*\cdot\vb{E}_b-\vb{B}_a^*\cdot\vb{B}_b\right)\vb{E}_c+7\left(\vb{E}_a^*\cdot\vb{B}_b\right)\vb{B}_c
+          \right]e^{-i(-\omega_a+\omega_b+\omega_c)t}
+         \nonumber\\
+      &  \phantom{\frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty} \left.+ c.c.\right\}d\omega_ad\omega_bd\omega_c
+  \end{align}
+where c.c. denotes the complex conjugate of the expression before it.
+
+To simplify this expression, we will discretize it, as is done in the C++
+implementation and write
+  \begin{equation}
+    \vb{P}(\vb{r},t) = \frac{4\alpha^2}{45}\sum_a\sum_b\sum_c \left\{\;\right\}\Delta\omega^3
+  \end{equation}
+Denoting the smallest frequency over which we sum by $\omega_0$, we write the
+frequencies as $\omega_a = \omega_0 + a\Delta\omega$. Substituting and renaming
+some dummy indices
+  \begin{align}
+    \vb{P}(\vb{r},t)
+      &= \frac{4\alpha^2}{45}\sum_{a=0}^{N}\sum_{b=0}^{N}\sum_{c=0}^{N} \left\{\right.\\
+        &\left\{
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_b-\vb{B}_a\cdot\vb{B}_b\right)\vb{E}_c+7\left(\vb{E}_a\cdot\vb{B}_b\right)\vb{B}_c
+          \right]
+        \right\}e^{-i(3\omega_0+(a+b+c)\Delta\omega)t} \nonumber\\
+      & \left\{
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_b-\vb{B}_a\cdot\vb{B}_b\right)\vb{E}_c^*+7\left(\vb{E}_a\cdot\vb{B}_b\right)\vb{B}_c^*
+          \right]
+         \right.\nonumber\\
+      &
+          \left[
+            4\left(\vb{E}_a\cdot\vb{E}_c^*-\vb{B}_a\cdot\vb{B}_c^*\right)\vb{E}_b+7\left(\vb{E}_a\cdot\vb{B}_c^*\right)\vb{B}_b
+          \right]
+         \nonumber\\
+      & \left.\left.
+          \left[
+            4\left(\vb{E}_c^*\cdot\vb{E}_b-\vb{B}_c^*\cdot\vb{B}_b\right)\vb{E}_a+7\left(\vb{E}_c^*\cdot\vb{B}_b\right)\vb{B}_a
+          \right]
+         \right\}e^{-i(\omega_0+(a+b-c)\Delta\omega)t} + c.c.\right\}\Delta\omega^3.
+  \end{align}
+To obtain the value of $\vb{P}(\vb{r},\omega)$ for each $\omega$, we must determine
+the unique frequencies that are generated by the triple sum, and then identify
+the specific combinations which contribute to all of those unique frequencies.
+This is done by noticing that the generated frequencies can be written as
+  \begin{equation}
+    \omega_{[\sigma_m,n_m]} = \sum_{i=1}^m \sigma_i(\omega_0+n_i\Delta\omega)
+  \end{equation}
+where $\sigma_i=\pm1$ and $n_i\in[0,N]$. Frequencies $\omega_{[\sigma_m,n_m]}$ such that
+  \begin{align}
+    S_1 &= \sum_{i=1}^m \sigma_in_i \\
+    S_2 &= \sum_{i=1}^m \sigma_i
+  \end{align}
+are identical will be the same. This makes it possible to construct of table of
+terms that contribute to a given generated frequency $\omega_{[\sigma_m,n_m]}$
+by iterating through all the possible values of $\sigma_i$ and $n_i$ and
+classifying them according to their $S_1$ and $S_2$ values.
 
 %\chapter{Other stuff to put in appendices}
 
