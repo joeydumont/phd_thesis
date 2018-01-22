@@ -425,7 +425,7 @@ The magnetic field gives
           &= 2\iint_S \left(\frac{ik}{u}-\frac{1}{u^2}\right)g \left[
                 \left(n_z B_r - n_r B_z \right) (z-z')\cos(\theta-\theta')\right.\nonumber\\
           &\quad\left.\left(
-               +r\left(n_\theta B_z - n_z B_\theta\right)
+               +r\left(n_\theta B_r - n_r B_\theta\right)
                +\left(n_\theta B_z - n_z B_\theta\right)(z-z')\right)\sin(\theta-\theta')
                \right] \\
     B_\theta'(\vb{r}',k)
@@ -456,6 +456,317 @@ while the surface element is given by
   \end{subequations}
 Given that the normal vector is present only once in most of terms of the integrals,
 the Jacobian due to the surface will conveniently cancel.
+
+\section{Far-Field Expressions}
+
+When using the Stratton-Chu equations, our interest lies in computing fields
+in the tight focusing regime. As such, we will generally compute the fields
+in a small region around the focal spot. In practice, this means that the mirror
+is far away from the region over which we compute the field­. The approximation
+that $|\vb{r}|\gg|\vb{r}'|$ can thus be used to simplify the expressions.
+This is akin to a far-field approximation, except that the observation point is
+close to the origin instead of far from it: it is instead the source point that
+is far away.
+
+To simplify the procedure, notice that $\nabla g = -\nabla' g$, such that we
+start from
+  \begin{subequations}
+  \begin{align}
+    \vb{E}'_\text{ref}(\vb{r}',k)  &= 2\iint_S
+      \left\{
+        ik(\vu{n}\times\vb{B}_\text{inc})g
+        -\left(\vu{n}\cdot\vb{E}_\text{inc}\right)\nabla' g\right\}dS
+        -\frac{2}{ik}\oint_{\partial S}\nabla' g
+                    \vb{B}\cdot d\vb{\ell},\\
+                    %\left[\vu{n}\times(\vu{n}\times\vb{B}_\text{inc})\right]\cdot d\vb{\ell},\\
+    \vb{B}'_\text{ref}(\vb{r}',k)  &= -2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla' g dS.
+  \end{align}
+  \end{subequations}
+Given our approximation, we can write
+  \begin{equation}
+    |\vb{r}-\vb{r}'| = R-\frac{1}{R}\vb{r}\cdot\vb{r}'
+  \end{equation}
+and
+  \begin{equation}
+    g(\vb{r},\vb{r}') = \frac{e^{ikR}}{R}e^{-\frac{ik}{R}\vb{r}\cdot\vb{r}'}
+  \end{equation}
+where $R=|\vb{r}|$. The gradient thus yield the simple expression
+  \begin{equation}
+    \nabla'g = -\frac{ikg}{R}\vb{r}
+  \end{equation}
+\todo[inline]{Fix the notation for $|\vb{r}|/R$. Right now it's confusing as all hell.}
+Substituting yields
+  \begin{subequations}
+  \begin{align}
+    E_r'(\vb{r}', k)
+          &= 2ik\iint_S\left\{ \left[
+              \left( n_\theta B_z -n_z B_\theta \right)\cos(\theta-\theta')
+              +\left(n_r B_z -n_zB_r \right)         \sin(\theta-\theta')\right]\right.\nonumber\\
+            &\quad \left.+
+                   \left(n_r E_r + n_\theta E_\theta + n_z E_z\right)R_r\cos(\theta-\theta')\right\}
+                   \frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}dS \\
+   E_\theta'(\vb{r}',k)
+          &= 2ik\iint_S\left\{\left[
+              \left(n_\theta B_z - n_z B_\theta\right)\sin(\theta-\theta')
+              +\left(n_z B_r  - n_r B_z\right)        \cos(\theta-\theta')\right]\right.\nonumber\\
+            &\quad+\left.\left(n_r E_r + n_\theta E_\theta + n_z E_z\right)
+             R_r\sin(\theta-\theta')\right\}\frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}dS \\
+  E_z'(\vb{r}',k)
+          &= 2ik\iint_S\left\{
+            \left(n_r B_\theta - n_\theta B_r\right)
+            +\left( n_r E_r + n_\theta E_\theta + n_z E_z\right)R_z\right\}
+            \frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}dS
+  \end{align}
+The magnetic field gives
+  \begin{align}
+    B_r'(\vb{r}', k)
+          &= 2ik\iint_S \left[
+                \left(n_z B_r - n_r B_z \right) R_z\cos(\theta-\theta')\right.\nonumber\\
+          &\quad\left.+\left(
+               \left(n_\theta B_r - n_r B_\theta\right)R_r
+               +\left(n_\theta B_z - n_z B_\theta\right)R_z\right)\sin(\theta-\theta')
+               \right]\frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}} dS\\
+    B_\theta'(\vb{r}',k)
+          &= 2ik\iint_S \left[
+              \left(n_z B_r-n_r B_z\right)R_z\sin(\theta-\theta')\right. \nonumber\\
+          &\quad \left.-\left(\left(n_\theta B_r- n_r B_\theta\right)R_r
+                +\left(n_\theta B_z- n_z B_\theta \right)R_z\right)\cos(\theta-\theta')\right]\frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}} dS \\
+    B_z'(\vb{r}',k)
+          &= 2ik\iint_S \left[\left(n_r B_z - n_z B_r\right)R_r\right]\frac{e^{ikR}}{R}e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}} dS.
+  \end{align}
+  \end{subequations}
+Note that we ignored the line integral in these expressions. While this term is
+formally necessary for the Stratton-Chu equations to be a solution of Maxwell's
+equations, in practice its contribution can be shown to be negligible \cite{SOMEONE}.
+
+To go further, it is necessary to specialize these equations a little. We assume
+a paraboloid mirror such that $n_\theta=0$ and $R=\sqrt{r^2+z^2}=r^2/4f+f$. We also assume that every field component carries a
+$e^{-ikz}$ phase term. Following the discussion in \ref{section on phase}, we
+see that exponential term $e^{ikR-ikz}=e^{2ikf}$ factors out of the integrand.
+We are left with
+  \begin{subequations}
+  \begin{align}
+    E_r'(\vb{r}', k)
+          &= 2ike^{2ikf}\iint_S\left\{ \left[
+               -B_\theta \cos(\theta-\theta')
+              +\left(-\frac{r}{2f} B_z -B_r \right)\sin(\theta-\theta')\right]\right.\nonumber\\
+            &\quad \left.+
+                   \left(-\frac{r}{2f} E_r + E_z\right)\frac{r}{R}\cos(\theta-\theta')\right\}
+                   \frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}}{R}dA \\
+   E_\theta'(\vb{r}',k)
+          &= 2ike^{2ikf}\iint_S\left\{\left[
+              - B_\theta\sin(\theta-\theta')
+              +\left(B_r  + \frac{r}{2f} B_z\right)\cos(\theta-\theta')\right]\right.\nonumber\\
+            &\quad+\left.\left(-\frac{r}{2f} E_r + E_z\right)
+             \frac{r}{R}\sin(\theta-\theta')\right\}\frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}}{R}dA \\
+  E_z'(\vb{r}',k)
+          &= 2ike^{2ikf}\iint_S\left\{
+            -\frac{r}{2f} B_\theta
+            +\left( -\frac{r}{2f} E_r  +E_z\right)\frac{z}{R}\right\}
+            \frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}}{R}dA
+  \end{align}
+The magnetic field gives
+  \begin{align}
+    B_r'(\vb{r}', k)
+          &= 2ike^{2ikf}\iint_S \left[
+                \left(B_r + \frac{r}{2f} B_z \right) \frac{z}{R}\cos(\theta-\theta')
+               +B_\theta\sin(\theta-\theta')
+               \right]\frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}}{R} dA\\
+    B_\theta'(\vb{r}',k)
+          &= 2ike^{2ikf}\iint_S \left[
+              \left(B_r + \frac{r}{2f} B_z\right)\frac{z}{R}\sin(\theta-\theta')
+                - B_\theta \cos(\theta-\theta')\right]
+                \frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}} }{R}dA \\
+    B_z'(\vb{r}',k)
+          &= -2ike^{2ikf}\iint_S \left[\left(\frac{r}{2f} B_z + B_r\right)\frac{r}{R}\right]
+          \frac{e^{\frac{-ik\vb{r}\cdot\vb{r}'}{R}}}{R} dA.
+  \end{align}
+  \end{subequations}
+
+\subsection{Analytic Solutions for Some Field Models}
+In the far-field approximation, it is possible to evaluate the integrals
+for some simple field models. In the following, we will extensively use the
+relation \cite[\S9.1.21]{Abramowitz1965}
+  \begin{equation}
+    \int_0^{2\pi} \cos(n\theta)e^{iz\cos\theta}= 2\pi i^n J_n(z).
+  \end{equation}
+
+\paragraph{Linear polarization}
+For a linearly polarized beam, we have
+  \begin{equation}
+    B_r = -E_0(r)\sin\theta; B_\theta=-E_0(r)\cos(\theta); B_z=0.
+  \end{equation}
+
+We can write $B_z$ as
+  \begin{equation*}
+    B_z = 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi}
+            E_0(r)\frac{r^2}{\left(r^2/4f+f\right)^2}\sin\theta\exp\left[-\frac{ik}{r^2/4f+f}\left(rr'\cos(\theta-\theta')+zz'\right)\right]d\theta dr
+  \end{equation*}
+Since the integrand is periodic with period $2\pi$, we can apply the transformation
+$\theta\mapsto\theta-\theta'$ and write
+  \begin{equation*}
+    B_z = 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi}
+            E_0(r)\frac{r^2}{\left(r^2/4f+f\right)^2}\sin(\theta-\theta')\exp\left[-\frac{ik}{r^2/4f+f}\left(rr'\cos\theta+zz'\right)\right]d\theta dr
+  \end{equation*}
+Applying the difference formula and noting that $\int_0^{2\pi}\sin\theta F(\cos\theta)d\theta=0$,
+we obtain
+  \begin{equation*}
+    B_z = -2ike^{2ikf}\sin\theta'
+          \int_0^{r_\text{max}}
+            E_0(r)\frac{r^2}{\left(r^2/4f+f\right)^2}e^{-\frac{ikzz'}{r^2/4f+f}}
+          \int_0^{2\pi}
+            \cos\theta\exp\left[-\frac{ik}{r^2/4f+f}\left(rr'\cos\theta\right)\right]
+          d\theta dr
+  \end{equation*}
+We can perform the angular integration to yield
+  \begin{equation*}
+    B_z = -4\pi ke^{2ikf}\sin\theta'
+          \int_0^{r_\text{max}}
+            E_0(r)\frac{r^2}{\left(r^2/4f+f\right)^2}e^{-\frac{ikzz'}{r^2/4f+f}}
+          J_1\left(kr'\frac{4fr}{r^2+4f^2}\right)
+          dr
+  \end{equation*}
+where $J_1(z)$ is the Bessel function of the first kind. We can simplify this
+by substituting $z=r^2/4f-f$, defining $\rho=r/r_\text{max}$ and $\alpha=2f/r_\text{max}$.
+This yields
+  \begin{equation*}
+    B_z = -16\pi\alpha^2 kfe^{2ikf}\sin\theta'
+          \int_0^{1}
+            E_0(r_\text{max}\rho)\frac{\rho^2}{\left(\rho^2+\alpha^2\right)^2}e^{-ikz'\frac{\rho^2-\alpha^2}{\rho^2+\alpha^2}}
+          J_1\left(2\alpha kr'\frac{\rho}{\rho^2+\alpha^2}\right)
+          d\rho
+  \end{equation*}
+As it stands, this cannot be integrated. We can perform another substitution,
+$\rho=\alpha\tan x$, $d\rho=\alpha\sec^2xdx$ and write
+  \begin{equation*}
+    B_z = -16\pi\alpha kfe^{2ikf}\sin\theta'
+          \int_{\arctan(0)}^{\arctan(1/\alpha)}
+            E_0(r_\text{max}\alpha\tan x)\sin^2xe^{ikz\cos2x}
+          J_1\left(2kr'\cos x\sin x\right)
+          dx
+  \end{equation*}
+This still can't be integrated. We perform yet another substitution, $t=\cos x$, $dt=-\sin x dx$
+and write
+  \begin{equation*}
+    B_z = 16\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \int_{1}^{1/\sqrt{1+1/\alpha^2}}
+            E_0\left(r_\text{max}\alpha\frac{\sqrt{1-t^2}}{t}\right)\sqrt{1-t^2}e^{2ikz't^2}
+          J_1\left(2kr't\sqrt{1-t^2}\right)
+          dt.
+  \end{equation*}
+Using the power series representation of the Bessel function, we can get
+    \begin{multline*}
+    B_z = 16\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(-1)^m}{m!(m+1)!}(kr')^{2m+1}\\
+          \times\int_{1}^{1/\sqrt{1+1/\alpha^2}}
+            E_0\left(r_\text{max}\alpha\frac{\sqrt{1-t^2}}{t}\right)\left(1-t^2\right)^{m+1}t^{2m+1}e^{2ikz't^2}
+          dt.
+  \end{multline*}
+Applying the binomial theorem on the $1-t^2$ yields
+  \begin{multline*}
+    B_z = 16\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(-1)^m}{m!(m+1)!}(kr')^{2m+1}\sum_{k=0}^{m+1}(-1)^k\binom{m+1}{k}\\
+          \times\int_{1}^{1/\sqrt{1+1/\alpha^2}}
+            E_0\left(r_\text{max}\alpha\frac{\sqrt{1-t^2}}{t}\right)t^{2k+2m+1}e^{2ikz't^2}
+          dt.
+  \end{multline*}
+To go further, we must choose a field model that allows this integral to be evaluated.
+As a first step, we will choose a top-hat field, i.e. $E_0=1$. The integrand
+is thus the incomplete gamma function and we can write
+  \begin{multline*}
+    B_z = -8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(-1)^m}{m!(m+1)!}(kr')^{2m+1}\sum_{k=0}^{m+1}(-1)^k\binom{m+1}{k}
+          \left.
+          \frac{\Gamma(m+k+1,-2ict^2)}{(-2ic)^{m+k+1}}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{multline*}
+We can simplify this to
+  \begin{equation*}
+    B_z = 8\pi\alpha kef^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
+          \left.
+          \frac{\Gamma(m+k+1,-2ikz't^2)}{(2ikz')^{m+k+1}}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{equation*}
+Because $m+k+1\in\mathbb{N}$, we can write
+  \begin{equation*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
+          \left.
+          \frac{(m+k)!}{(2ikz')^{m+k+1}}e^{2ikz't^2}\sum_{\ell=0}^{m+k}\frac{(-2ikz't^2)^\ell}{\ell!}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{equation*}
+In terms of our original variable, this is
+  \begin{multline*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
+          \left.
+          \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell\left(1+\frac{\rho^2}{\alpha^2}\right)^{-\ell}\exp\left[-ikz'\frac{\rho^2-\alpha^2}{\rho^2+\alpha^2}\right]
+          \right|^1_0,
+  \end{multline*}
+and, finally,
+  \begin{multline*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
+          \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell
+            \left[\left(1+\frac{1}{\alpha^2}\right)^{-\ell}\exp\left[ikz'\frac{\alpha^2-1}{\alpha^2+1}\right]-e^{ikz'}\right].
+  \end{multline*}
+
+We can perform the other integrals in a similar fashion, although the expressions
+will be quite a big longer. We can write
+  \begin{multline*}
+    B_r' = -2ikfe^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{rE_0(r)}{R^2}
+      \left[z\sin(\theta-\theta')\cos\theta+R\cos(\theta-\theta')\sin\theta\right]\\
+        \times\exp\left[-\frac{ik}{r^2/4f+f}\left(rr'\cos\theta+zz'\right)\right]d\theta dr
+  \end{multline*}
+We can reduce this to Bessel function integrals by applying the difference formula
+on $\cos(\theta-\theta')$ and $\sin(\theta-\theta')$, and the power reduction formula
+on the ensuing trigonometric functions. This yields
+  \begin{multline*}
+    B_r' = 2\pi ike^{2ikf}\sin\theta'\int_0^{r_\text{max}} E_0(r)
+      \left[\frac{rz}{\left(r^2/4f+f\right)^2}\left(J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)-J_2\left(4fkr'\frac{r}{r^2+4f^2}\right)\right)\right.\\
+        \left.-
+          \frac{r}{\left(r^2/4f+f\right)}\left(J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)+J_2\left(4fkr'\frac{r}{r^2+4f^2}\right)\right)\right]
+  \end{multline*}
+Similarly, we can write $B_\theta'$ as
+  \begin{multline*}
+    B_\theta' = 2\pi ike^{2ikf}\cos\theta'\int_0^{r_\text{max}} E_0(r)
+      \left[-\frac{rz}{\left(r^2/4f+f\right)^2}\left(J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)+J_2\left(4fkr'\frac{r}{r^2+4f^2}\right)\right)\right.\\
+        \left.+
+          \frac{r}{\left(r^2/4f+f\right)}\left(J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)-J_2\left(4fkr'\frac{r}{r^2+4f^2}\right)\right)\right]
+  \end{multline*}
+We can see that the Cartesian components will be much simpler, given the symmetry of
+these equations. Indeed, we have
+  \begin{align}
+    B_x' &= -4\pi ike^{2ikf}\cos\theta'\sin\theta'\int_0^{r_\text{max}} E_0(r)
+          J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)\frac{r}{R}\left(1-\frac{z}{R}\right)dr \\
+    B_y' &= 2\pi ike^{2ikf}\int_0^{r_\text{max}}\frac{r}{R}
+          \left[\cos(2\theta')\left(1-\frac{z}{R}\right)J_0\left(4fkr'\frac{r}{r^2+4f^2}\right)
+                -\left(1+\frac{z}{R}\right)J_2\left(4fkr'\frac{r}{r^2+4f^2}\right)\right]dr
+  \end{align}
+Expressing this in terms or our scaled variables and simplifying the $z$ terms
+yields
+  \begin{align}
+    B_x' &=-32\pi i\alpha^2 kfe^{2ikf}\cos\theta'\sin\theta'
+          \int_0^1 E_0(r_\text{max}\rho)\frac{\rho}{(\rho^2+\alpha^2)^2}
+            J_0\left(2\alpha kr'\frac{\rho}{\rho^2+\alpha^2}\right)d\rho\\
+    B_y' &=16\pi ikfe^{2ikf}\int_0^1 E_0(r_\text{max}\rho)\frac{\rho}{(\rho^2+\alpha^2)^2}
+      \left[
+        \alpha^2\cos2\theta'J_0\left(2\alpha kr'\frac{\rho}{\rho^2+\alpha^2}\right)
+       -\rho^2J_2\left(2\alpha kr'\frac{\rho}{\rho^2+\alpha^2}\right)
+       \right]d\rho
+\end{align}
+
+We can perform the same substitutions as before and obtain
+  \begin{align}
+    B_x' &= -16\pi ikfe^{2ikf}\cos\theta'\sin\theta'e^{-ikz'}\sum_{m=0}^\infty \frac{(-1)^m}{(m!)^2}(kr')^{2m}
+              \sum_{k=0}^m\binom{m}{k}\frac{(-1)^k}{(-2ikz')^{k+m+1}}\Gamma(k+m+1,-2ikz't^2) \\
+    B_y' &= 8\pi ikfe^{2ikf}e^{-ikz'}
+            \left[
+            \cos2\theta'\sum_{m=0}^\infty\frac{(-1)^m}{(m!)^2}
+            \sum_{k=0}^m\binom{m}{k}\frac{(-1)^k}{(-2ikz')^{k+m+1}}\Gamma(k+m+1,-2ikz't^2)\right. \\
+         & \left.+\sum_{m=0}\frac{(-1)^m}{m!(m+2)!}(kr')^{2m+2}\sum_{k=0}^{m+2}\binom{m+2}{k}\frac{(-1)^k}{(-2ikz')^{k+m+1}}\Gamma(m+k+1,-2ikz't^2)\right].
+  \end{align}
 
 \chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
 
@@ -572,6 +883,7 @@ We can expand the distance function using the law of cosines
   \begin{equation}
     |\vb{r}-\vb{r}'| = \sqrt{|\vb{r}|^2+|\vb{r}'|^2-2|\vb{r}||\vb{r}'|\cos\theta}\simeq |\vb{r}'|-\frac{1}{R}\vb{r}'\cdot\vb{r}.
   \end{equation}
+\todo[inline]{Fix the notation for $\vb{r}'|/R$.  Right now it's confusing.}
 Substituting this result in the Green's function yields
   \begin{equation}
     g(\vb{r},\vb{r}')\simeq \frac{e^{i\omega R}e^{-i\omega \vb{r}'\cdot\vb{r}/R}}{R}.
