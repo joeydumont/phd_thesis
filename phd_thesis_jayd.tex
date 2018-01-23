@@ -768,6 +768,29 @@ We can perform the same substitutions as before and obtain
          & \left.+\sum_{m=0}\frac{(-1)^m}{m!(m+2)!}(kr')^{2m+2}\sum_{k=0}^{m+2}\binom{m+2}{k}\frac{(-1)^k}{(-2ikz')^{k+m+1}}\Gamma(m+k+1,-2ikz't^2)\right].
   \end{align}
 
+The electric field have similar expressions. We have
+  \begin{align}
+    E_r' &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi}
+              E_0(r)e^{-ikzz'/R}\cos\theta'\left[-\frac{r^2-4f^2}{r^2+4f^2}\cos^2\theta +\sin^2\theta\right]e^{-ikrr'\cos\theta/R}rdrd\theta\\
+    E_\theta' &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi}
+              E_0(r)e^{-ikzz'/R}\sin\theta'\left[-\frac{r^2-4f^2}{r^2+4f^2}\sin^2\theta+\cos^2\theta\right]e^{-ikrr'\cos\theta/R}rdrd\theta \\
+    E_z' &= 32ikf^2e^{2ikf}\int_0^{r_\text{max}}E_0(r)e^{-ikzz'/R}\cos\theta'\frac{r^2}{(r^2+4f^2)^2}\cos\theta e^{-ikrr'\cos\theta/R}drd\theta
+  \end{align}
+Using the power-reduction formulae and the representation of the Bessel functions, 
+we can simplify this to
+  \begin{align}
+    E_x' &= 32\pi ikf^2e^{2ikf}\int_0^{r_\text{max}}\frac{4fr}{(r^2+4f^2)^2}\left(\cos2\theta'J_0()+J_2()\right)dr \\
+    E_y' &= 64\pi ikf^2e^{2ikf}\cos\theta'\sin\theta'\int_0^{r_\text{max}}\frac{4fr}{(r^2+4f^2)^2}J_0() \\
+    E_z' &= -64\pi kf^2e^{2ikf}\cos\theta'\int_0^{r_\text{max}}\frac{r^2}{(r^2+4f^2)^2}J_1().
+  \end{align}
+Expressing this in terms of our scaled variables yields
+  \begin{align}
+    E_x' &= 32\pi ikf\alpha^2e^{2ikf}\int_0^{1}\frac{\rho}{(\rho^2+\alpha^2)^2}\left(\cos2\theta'J_0()+J_2()\right)d\rho \\
+    E_y' &= 64\pi ikf\alpha^2e^{2ikf}\cos\theta'\sin\theta'\int_0^{1}\frac{\rho}{(\rho^2+\alpha^2)^2}J_0()d\rho \\
+    E_z' &= -64\pi kf\alpha e^{2ikf}\cos\theta'\int_0^{1}\frac{\rho^2}{(\rho^2+\alpha^2)^2}J_1()d\rho.
+  \end{align}
+
+
 \chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
 
 \todo[inline]{Appendix summary and references to main text.}
