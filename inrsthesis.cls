@@ -1,1 +1,0 @@
-/home/valandil/software/inrsthesis/inrsthesis.cls

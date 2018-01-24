@@ -14,11 +14,19 @@
 % --                       Document Class                        -- %
 % ----------------------------------------------------------------- %
 
-\documentclass[11pt,SymmetricalJury]{inrsthesis}
+\documentclass[11pt,SymmetricalJury]{inrsthesis/inrsthesis}
 
 % ----------------------------------------------------------------- %
 % --                          Packages                           -- %
 % ----------------------------------------------------------------- %
+
+\usepackage[charter]{mathdesign}
+\usepackage[scaled=.96,osf]{XCharter}
+
+\usepackage[showframe,pass]{geometry} % Shows the frame properly when using memoir.
+\usepackage{amsmath}
+\usepackage[theorems=false]{latex-tools/vphys}        % Common LaTeX tools that I use.
+\usepackage{todonotes}
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -37,11 +45,6 @@
       urlcolor=blue]
  {hyperref}
 
-\usepackage[showframe,pass]{geometry} % Shows the frame properly when using memoir.
-\usepackage[theorems=false]{latex-tools/vphys}        % Common LaTeX tools that I use.
-\usepackage[charter]{mathdesign}
-\usepackage{todonotes}
-
 % ----------------------------------------------------------------- %
 % --                        Customization                        -- %
 % ----------------------------------------------------------------- %
@@ -57,7 +60,7 @@
 % --                       Title Page Info                       -- %
 % ----------------------------------------------------------------- %
 \title{Strong-field quantum electrodynamics \\ in tightly focused fields}
-%\subtitle{Towards a Realitic Modelling of High-Power \\Laser Systems in the Quantum Theory}
+%\subtitle{Towards a Realitnatbibic Modelling of High-Power \\Laser Systems in the Quantum Theory}
 \author{Joey Dumont}
 \year{2018}
 \program{Sciences de l'énergie et des matériaux}
@@ -790,6 +793,10 @@ Expressing this in terms of our scaled variables yields
     E_z' &= -64\pi kf\alpha e^{2ikf}\cos\theta'\int_0^{1}\frac{\rho^2}{(\rho^2+\alpha^2)^2}J_1()d\rho.
   \end{align}
 
+\todo{Rewrite by first stating all of the components in terms of $\rho$ and perform
+the $\theta$ integrals. State the components as an integral over the relevant
+Bessel functions. Maybe compare to RW at that point. Then introduce the power-series
+representation, and the incomplete gamma function expression.s}
 
 \chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
 

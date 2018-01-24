@@ -1,3 +1,7 @@
 [submodule "latex-tools"]
 	path = latex-tools
 	url = git@github.com:valandil/latex-tools.git
+[submodule "inrsthesis"]
+	path = inrsthesis
+	url = git@github.com:valandil/inrsthesis.git
+
