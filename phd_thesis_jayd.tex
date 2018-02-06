@@ -20,8 +20,9 @@
 % --                          Packages                           -- %
 % ----------------------------------------------------------------- %
 
+\let\mathfrak\undefined
 \usepackage[charter]{mathdesign}
-\usepackage[scaled=.96,osf]{XCharter}
+\usepackage[scaled=.96]{XCharter}
 
 \usepackage[showframe,pass]{geometry} % Shows the frame properly when using memoir.
 \usepackage{amsmath}
@@ -178,32 +179,78 @@ to the Stratton-Chu formulation.
 \end{chaptersummary}
 
 The observation of strong-field quantum electrodynamics (SF-QED) processes with light
-is contingent, for the most part, on the development of high-intensity laser sources \cite{}. Achieving
-these high intensities can be achieved either by (1) increasing the pump energy, 
+is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza}. Achieving
+these high intensities can be achieved either by (1) increasing the pump energy,
 (2) shortening the pulse duration or (3) concentrating the beam in a small volume of space.
 While recent laser systems have made significant advances on the first two items, there seems
 to be technological difficulties in engineering gratings resistant enough to withstand the extreme
-energy of the laser pulse. 
+energy of the laser pulse.
 
 A promising avenue is the focusing of light down to extremely small volumes, on the order
 of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
-does not 
+does not hold. This approximation can be related to a Taylor expansion in terms
+of the $\epsilon=\lambda/\pi w_0$ \cite{LAX}, which diverges for tightly focused
+fields \cite{10.1364/OL.28.000774}.
+
+To see this, simply compare the fields of a ``focused'' paraxial beam with that
+of a fully numerical solution of Maxwell's equations (more on that later).
+\todo{Add figures of the fields seperately, then show the overlap integral
+for each. Comment on it.} Even with added terms \todo{Same thing again.}
+
+There also exists analytical solutionso f Maxwell's equations that do not rely
+on the paraxial approximation, such as e-dipole pulses and other models
+\cite{Gonoskov,Salamin}. They can be incredibly useful when used as part of
+numerically-heavy codes, such as particle-in-cell codes because of their low
+cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
+they do not take into account the minutiae of a given experimental setup
+and thus fail to reproduce some details of tightly focused fields.
+\todo{Argue why this is important.}
+
+In this chapter, we introduce a fully numerical implementation of the Stratton-Chu
+equations used to model the spatio-temporal focusing properties of large
+bandwidth laser pulses focused by high numerical aperture optics. First, we
+provide a detailed review of the Stratton-Chu integral representation and discuss
+their reduction to a set of diffraction integrals. \todo{Finish division paragraph.}
+
+\section{Derivation of the Stratton-Chu Diffraction Integrals}
+
+The theoretical setup is as follows. Electric and magnetic currents\footnote{Magnetic
+currents are used as a stand-in for an incident electric field \cite{Scheluchoff}.}
+whose support are $V_e$ and $V_m$, respectively, are supposed to exist in free
+space, denoted by $V_\infty$ (Fig.~\ref{fig:sc.scatteringSystem})
+
+The starting point is, as usual, the Maxwell equations. Their macroscopic version,
+in Lorentz-Heaviside units with $c=1$, read
+  \begin{align}
+    \nabla\times\vb{E} &= -\frac{\partial\vb{B}}{\partial t} \\
+    \nabla\times\vb{H} &=  \frac{\partial\vb{D}}{\partial t} + \vb{J_e}
+  \end{align}
+where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field,
+$\vb{D}$ the electric displacement, and $\vb{H}$ the magnetic field strength.
+$\vb{J}_e$ is an electric current distribution that generates
+
+  \begin{figure}
+    \label{fig:sc.scatteringSystem}
+    \centering
+    \includegraphics{figs/scatteringSystem.pdf}
+    \caption[Geometry used in the derivation of the Stratton-Chu equations.]
+            {Geometry used in the derivation of the Stratton-Chu equations.
+             $V_s$ contains the scattering object, while $V_e$ and $V_m$ are the
+             support of the electric and magnetic current distribution fonctions.
+             $V_\infty$ represents free space, minus the scatterer, i.e.
+             $V_\infty=\mathbb{R}^3\backslash V_s$.}
+  \end{figure}
+
+\begin{comment}
 
 IDEAS:
   \begin{itemize}
     \item Example of laser chain diagram with regime of validity of paraxial approximation.
     \item HNA parabolic mirror as counterexample in the laser chain, and danger of
             sending the laser back into itself through secondary reflections.
-    \item Overlap
+    \item Overlap of "focused" Gaussian beam with StrattoCalculator result.
+    \item Overlap of other field models with StrattoCalculator.
   \end{itemize}
-
-As mentioned in the introduction of this thesis, focusing electromagnetic fields
-down to a volume approximately the size of the wavelength $\lambda$ of the radiation
-is a major ingredient in the journey to ever higher intensities. In this regime where
-the spatial extension of the field is on the same order of magnitude as its wavelength,
-the very common paraxial approximation does not hold. This approximation can be applied
-to fields with small diffraction angles $\epsilon=\lambda/\pi w_0$ where $w_0$ is the
-transverse width of the beam.
 
 Skeleton:
   \begin{itemize}
@@ -233,6 +280,7 @@ Skeleton:
         \end{itemize}
   \end{itemize}
 
+\end{comment}
 
 \chapter{Application I: Four-Wave Mixing \textit{in vacuo} and Pair Production}
 
