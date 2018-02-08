@@ -179,7 +179,7 @@ to the Stratton-Chu formulation.
 \end{chaptersummary}
 
 The observation of strong-field quantum electrodynamics (SF-QED) processes with light
-is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza}. Achieving
+is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza2012}. Achieving
 these high intensities can be achieved either by (1) increasing the pump energy,
 (2) shortening the pulse duration or (3) concentrating the beam in a small volume of space.
 While recent laser systems have made significant advances on the first two items, there seems
@@ -189,17 +189,17 @@ energy of the laser pulse.
 A promising avenue is the focusing of light down to extremely small volumes, on the order
 of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
 does not hold. This approximation can be related to a Taylor expansion in terms
-of the $\epsilon=\lambda/\pi w_0$ \cite{LAX}, which diverges for tightly focused
-fields \cite{10.1364/OL.28.000774}.
+of the $\epsilon=\lambda/\pi w_0$ \cite{Lax1975}, which diverges for tightly focused
+fields \cite{Borghi2003}.
 
 To see this, simply compare the fields of a ``focused'' paraxial beam with that
 of a fully numerical solution of Maxwell's equations (more on that later).
-\todo{Add figures of the fields seperately, then show the overlap integral
+\todo{Add figures of the fields separately, then show the overlap integral
 for each. Comment on it.} Even with added terms \todo{Same thing again.}
 
-There also exists analytical solutionso f Maxwell's equations that do not rely
+There also exists analytical solutions of Maxwell's equations that do not rely
 on the paraxial approximation, such as e-dipole pulses and other models
-\cite{Gonoskov,Salamin}. They can be incredibly useful when used as part of
+\cite{Gonoskov2012,Salamin2015a,Salamin2015b}. They can be incredibly useful when used as part of
 numerically-heavy codes, such as particle-in-cell codes because of their low
 cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
 they do not take into account the minutiae of a given experimental setup
@@ -214,20 +214,16 @@ their reduction to a set of diffraction integrals. \todo{Finish division paragra
 
 \section{Derivation of the Stratton-Chu Diffraction Integrals}
 
+The derivation of the Stratton-Chu equations is fairly standard, and has been
+written about many times \cite{}. Here, however, we follow Sancer's derivation,
+whose exhaustive approach allows for a more thorough discussion.
+
 The theoretical setup is as follows. Electric and magnetic currents\footnote{Magnetic
 currents are used as a stand-in for an incident electric field \cite{Scheluchoff}.}
 whose support are $V_e$ and $V_m$, respectively, are supposed to exist in free
-space, denoted by $V_\infty$ (Fig.~\ref{fig:sc.scatteringSystem})
-
-The starting point is, as usual, the Maxwell equations. Their macroscopic version,
-in Lorentz-Heaviside units with $c=1$, read
-  \begin{align}
-    \nabla\times\vb{E} &= -\frac{\partial\vb{B}}{\partial t} \\
-    \nabla\times\vb{H} &=  \frac{\partial\vb{D}}{\partial t} + \vb{J_e}
-  \end{align}
-where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field,
-$\vb{D}$ the electric displacement, and $\vb{H}$ the magnetic field strength.
-$\vb{J}_e$ is an electric current distribution that generates
+space, denoted by $V_\infty$ (Fig.~\ref{fig:sc.scatteringSystem}). Later in the
+derivation, integrals over these currents will be taken to represent the incident
+field.
 
   \begin{figure}
     \label{fig:sc.scatteringSystem}
@@ -240,6 +236,232 @@ $\vb{J}_e$ is an electric current distribution that generates
              $V_\infty$ represents free space, minus the scatterer, i.e.
              $V_\infty=\mathbb{R}^3\backslash V_s$.}
   \end{figure}
+
+The starting point is, as usual, the Maxwell equations. Their macroscopic version,
+in Lorentz-Heaviside units with $c=1$, read
+  \begin{subequations}
+  \begin{align}
+    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
+    \nabla\times\vb{H} - \frac{\partial\vb{D}}{\partial t}  &= \vb{J}_e
+  \end{align}
+  \end{subequations}
+where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field,
+$\vb{D}$ the electric displacement, and $\vb{H}$ the magnetic field strength.
+$\vb{J}_e$ is an electric current distribution that generates the incident
+magnetic field and $\vb{J}_m$ is a fictitious magnetic current distribution
+that generates an incident electric field. We will mostly be interested
+in the electromagnetic field distribution in the $V_\infty$ region, i.e.
+in vacuum. In this case, we have $\vb{D}=\vb{E}$ and $\vb{H}=\vb{B}$.
+
+We first take the Fourier transform of the fields, i.e.
+  \begin{equation}
+    \mathcal{F}\left\{\vb{A}(\vb{r},t)\right\}(\vb{r},\omega)
+                      = \int_{-\infty}^\infty \vb{A}(\vb{r},t)e^{-i\omega t }dt
+  \end{equation}
+and then take the curl of both equations.\todo{How much of the derivation do I
+actually want to show?}
+
+Finally, we can derive this representation for the electromagnetic field
+in Fourier space
+  \begin{subequations}
+  \label{eq:sc.field-stratton-chu-sancer}
+  \begin{align}
+  \vb{E}' &=
+     \vb{E}_\text{inc}'+\iint_{S}
+    \left\{ ik(\vu{n}\times \vb{B})              g
+          +   (\vu{n}\times \vb{E})\times \nabla g
+          +\frac{i}{k}\nabla\nabla g\cdot(\vu{n}\times\vb{B})
+    \right\} dS,
+  \label{eq:sc.efield-stratton-chu-sancer}\\
+  \vb{B}' &=
+    \vb{B}_\text{inc}' + \iint_{S}
+    \left\{-ik(\vu{n}\times \vb{E})              g
+          +   (\vu{n}\times \vb{B})\times \nabla g
+          -\frac{i}{k}\nabla\nabla g\cdot(\vu{n}\times\vb{E})
+    \right\} dS.
+  \label{eq:sc.bfield-stratton-chu-sancer}
+  \end{align}
+  \end{subequations}
+valid $\forall\vb{r}'\in V_\infty$. In these equations, $\{\vb{E}_\text{inc},\vb{B}_\text{inc}\}$
+are the incident fields and are assumed
+to arise from the sources and currents in $V_e$ and $V_m$, respectively.The primed coordinates
+represent any point in $V_\infty$, while the unprimed coordinates represent points
+on $S$, and are integrated over. $\{\vb{E}', \vb{B}'\}$ thus represent the field at any
+given point in $V_\infty$, while $\{\vb{E}, \vb{B}\}$ denote the field on the surface $S$.
+The notation $\vb{E}'$ [$\vb{E}$] is short for $\vb{E}(\vb{r}',k)$ [$\vb{E}(\vb{r},k)$]
+where $k=2\pi/\lambda$ is the wavenumber of the laser pulse. $g$ is the scalar Green's function
+  \begin{equation}
+    g(\vb{r},\vb{r}') = \frac{e^{ik|\vb{r}-\vb{r}'|}}{4\pi|\vb{r}-\vb{r}'|}.
+  \end{equation}
+It is the only factor in Eq.~\eqref{eq:sc.field-stratton-chu-sancer}
+that depends on both the integration variables $\vb{r}$
+and the observation variables $\vb{r}'$.
+
+Equation (\ref{eq:sc.field-stratton-chu-sancer}) is an integral representation
+that expresses the field at any point in $V_\infty$ as integrals of the (yet unknown)
+fields $\{\vb{E},\vb{B}\}$ over the surface of the scatterer.
+To find the value of the fields on the scatterer, we take the limit $\vb{r}'\rightarrow S$.
+This results in an integral equation on $S$, which can be solved iteratively. However,
+care must be taken in the evaluation of this limit as $g$ has a simple pole at $\vb{r}=\vb{r}'$,
+i.e. on the surface of the mirror.
+This singularity is dealt with analytically by deforming the surface at $\vb{r}=\vb{r}'$
+to a hemispherical surface with vanishing radius $R$. Let this contour be $S_\epsilon$. The
+surface integrals can now be written as
+  \begin{align}
+    \lim_{\vb{r}'\rightarrow S}\iint_S \left\{\cdot\right\} dS
+        &= \lim_{R\rightarrow0}\left(\iint_{S/S_\epsilon}+\iint_{S_\epsilon}\right) \left\{\cdot\right\}dS,
+  \end{align}
+where $\{\cdot\}$ represents any function. Evaluating this limit for each term separately
+yields (the details of the computation are left for Appendix~\ref{app.limits}):
+  \begin{subequations}
+  \label{eq:sc.singularLimits}
+  \begin{align}
+    \lim_{\vb{r}'\rightarrow S}\iint_S \vb{A}g dS &= \miint{\rule{1em}{0.5pt}}_S \vb{A}g dS\label{eq:sc.regularLimit}, \\
+    \lim_{\vb{r}'\rightarrow S}\iint_S \vb{A}\times\nabla gdS &= \frac{1}{2}\vb{A}\times\vu{n} + \miint{\rule{1em}{0.5pt}} \vb{A}\times\nabla gdS,\label{eq:sc.singularLimit}\\
+    \lim_{\vb{r}'\rightarrow S}\iint_S \nabla\nabla g\cdot\vb{A}dS &= \HadamardSurf_S \nabla\nabla g \cdot\vb{A} dS\label{eq:sc.hypersingularLimit},
+  \end{align}
+  \end{subequations}
+where $\vb{A}=\vu{n}\times\vb{F}$ and $\vb{F}$ stands for either the electric or
+magnetic field. Equations (\ref{eq:sc.regularLimit}-\ref{eq:sc.singularLimit})
+use the Cauchy principal value, denoted by $\CauchySurf$, and Eq.~\eqref{eq:sc.hypersingularLimit}
+the Hadamard finite part \cite[Eq. (2.5)]{Blanchet2000}, denoted by $\HadamardSurf$.
+Substituting the results of Eq.~\eqref{eq:sc.singularLimits} in the limit
+$\vb{r}'\rightarrow S$ of Eq.~\eqref{eq:sc.field-stratton-chu-sancer}
+yields the hypersingular integral equations
+  \begin{subequations}
+  \label{eq:sc.field-stratton-chu-sancer-hypersingular}
+  \begin{align}
+  \label{eq:sc.efield-stratton-chu-sancer-hypersingular}
+  \vb{E} &= \vb{E}_\text{inc}+ \frac{1}{2}(\vu{n}\times\vb{E})\times\vu{n}
+          +\CauchySurf_S
+            \left\{ ik(\vu{n}\times \vb{B})              g
+                    +   (\vu{n}\times \vb{E})\times \nabla g\right\}dS
+          +\HadamardSurf_S\frac{i}{k}\nabla\nabla g\cdot(\vu{n}\times\vb{B}) dS,\\
+  \label{eq:sc.bfield-stratton-chu-sancer-hypersingular}
+  \vb{B}
+      &= \vb{B}_\text{inc} + \frac{1}{2}(\vu{n}\times\vb{B})\times\vu{n}
+      +\CauchySurf_S
+        \left\{-ik(\vu{n}\times \vb{E})g +(\vu{n}\times \vb{B})\times \nabla g\right\}dS
+      -\HadamardSurf_S\frac{i}{k}\nabla\nabla g\cdot(\vu{n}\times\vb{E})dS,
+  \end{align}
+  \end{subequations}
+for $\vb{r}\in S$. Note that there are no more primed coordinates, as the integral
+equations (\ref{eq:sc.field-stratton-chu-sancer-hypersingular})
+are valid only for points on the surface of the mirror.
+
+Although it may seem surprising for the
+physical electromagnetic fields to be represented by hypersingular integrals,
+the singularity is actually caused by the physical discontinuity in the reflecting surface.
+The hypersingularity in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
+disappears if the surface $S$ is closed. Applying Stokes' theorem to the double gradient
+term in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer} yields the usual Stratton-Chu
+representation for the fields in $V_\infty$
+  \begin{subequations}
+  \label{eq:sc.field.stratton-chu}
+  \begin{align}
+    \vb{E}'   &= \vb{E}_\text{inc}'+\frac{1}{ik}\oint_{\partial S} \nabla g \vb{B}\cdot d\vb{\ell}
+                  + \int_S\left\{ ik(\vu{n}\times\vb{B})g
+                  + (\vu{n}\times\mathbf{E})\times\nabla g
+                  + (\vu{n}\cdot\vb{E})\nabla g
+                 \right\} dS, \\
+    \vb{B}'   &= \vb{B}_\text{inc}'-\frac{1}{ik}\oint_{\partial S} \nabla g \vb{E}\cdot d\vb{\ell}
+                  + \int_S\left\{ ik(\vu{n}\times\vb{E})g
+                  + (\vu{n}\times\mathbf{B})\times\nabla g
+                  + (\vu{n}\cdot\vb{B})\nabla g
+                 \right\} dS.
+  \end{align}
+  \end{subequations}
+Taking the limit $\vb{r}'\rightarrow S$ as before reveals that all terms diverge
+at most as $1/R^2$. This divergence can be readily integrated using the Cauchy
+principal value for the terms inside the surface integral as the integration
+measure cancels the divergence. However, this is not true for the terms contained in the line integral,
+as the integration measure, $R$, does not cancel the divergence and the integral
+is thus hypersingular. It can be shown that, before we take the limit $\vb{r}'\rightarrow S$,
+the line integral itself vanishes identically
+for a closed surface \cite{Sancer1968}, thus removing the hypersingularity.
+
+Let us now go back to Eq.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular} and
+impose the appropriate boundary conditions for a perfectly
+conducting mirror \cite[Eq. (1.18)]{Stratton1941}, i.e.
+  \begin{equation}
+    \label{eq:sc.boundaryConditions}
+    \vu{n}\times\vb{E}=0;\qquad \vu{n}\times\vb{B}=\vb{J}.
+  \end{equation}
+Extracting the tangential components of Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
+and imposing these conditions yields
+  \begin{subequations}
+  \begin{align}
+    -\vu{n}\times\vb{E}_\text{inc} &= \vu{n}\times\left[\CauchySurf_S ik\vb{J}g dS + \HadamardSurf_S\frac{i}{k}\nabla\nabla g\cdot\vb{J} dS\right],\\
+    \label{eq:sc.mfie}
+    \frac{1}{2}\vb{J}  &= \vb{J}_\text{inc} + \vu{n}\times\CauchySurf_S \vb{J}\times\nabla gdS,
+  \end{align}
+  \end{subequations}
+where $\vb{J}_\text{inc}=\vu{n}\times\vb{B}_\text{inc}$.
+Both equations can be solved for the current $\vb{J}$ induced by the incident
+field $\{\vb{E}_\text{inc},\vb{B}_\text{inc}\}$. Since it can be shown that
+the integral operator in the magnetic field integral equation, \eqref{eq:sc.mfie},
+is compact, we can use the Liouville-Neumann series to solve the integral equation
+iteratively \cite[\S6.16]{Jones1994}. The first term of the series yields the usual
+physical optics approximation (POA)
+  \begin{equation}
+    \label{eq:sc.poa}
+    \vb{J} = 2\vb{J}_\text{inc},
+  \end{equation}
+which coincides with the result for a plane, infinite mirror \cite[\S12.2]{Bladel2007}. The
+integral in Eq.~\eqref{eq:sc.mfie} can thus be interpreted as a curvature effect.
+Indeed, each term in the iterative solution can be shown to get gradually smaller
+in magnitude if the radius of curvature is larger than the wavelength of the
+incident radiation \cite{Cullen1958,Bladel2007}.
+The POA has been used successfully in many studies \cite{Bouwkamp1954,Love1978}.
+
+Substituting the POA [Eq.~\eqref{eq:sc.poa}] and the boundary conditions
+[Eq.~\eqref{eq:sc.boundaryConditions}] in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer},
+we can express the reflected field $\vb{F}'_\text{ref}=\vb{F}'-\vb{F}_\text{inc}$
+in $V_\infty$ as
+  \begin{subequations}
+  \label{eq:sc.stratton-chu-poa}
+  \begin{align}
+    \label{eq:sc.stratton-chu-poa.efield}
+    \vb{E}'_\text{ref}  &=  2\iint_S
+      \left\{
+        ik(\vu{n}\times\vb{B}_\text{inc})g
+        +\frac{i}{k}\nabla\nabla g\cdot(\vu{n}\times\vb{B}_\text{inc})
+        \right\}dS, \\
+    \label{eq:sc.stratton-chu-poa.bfield}
+    \vb{B}'_\text{ref}  &= 2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla g dS.
+  \end{align}
+  \end{subequations}
+Even though Eqs.~\eqref{eq:sc.stratton-chu-poa} are valid expressions
+for the reflected field, the double gradient term tends to strongly oscillate in applications and therefore
+make its numerical evaluation difficult. We sidestep this issue by once again applying
+Stokes' theorem on the double gradient term, which leads to
+  \begin{subequations}
+  \label{eq:sc.stratton-chu-poa-og}
+  \begin{align}
+    \label{eq:sc.stratton-chu-poa-og.efield}
+    \vb{E}'_\text{ref}(\vb{r}',k)  &= 2\iint_S
+      \left\{
+        ik(\vu{n}\times\vb{B}_\text{inc})g
+        +\left(\vu{n}\cdot\vb{E}_\text{inc}\right)\nabla g
+        \right\}dS
+            - \frac{2}{ik}\oint_{\partial S}\nabla g
+                    \left[\vu{n}\times(\vu{n}\times\vb{B}_\text{inc})\right]\cdot d\vb{\ell},\\
+    \label{eq:sc.stratton-chu-poa-og.bfield}
+    \vb{B}'_\text{ref}(\vb{r}',k)  &= 2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla g dS.
+  \end{align}
+  \end{subequations}
+The double gradient term has been replaced by two terms: a surface term with a
+single gradient and an additional line integral term  which also contains
+a single gradient. The single gradient results in a $1/R$ behavior of the integrands,
+compared to the $1/R^2$ of the double gradient. This weakens the oscillations of
+the integrands.
+
+Equations (\ref{eq:sc.stratton-chu-poa-og}) describe a spectral component
+of frequency $k$ of the reflected field at a given position $\vb{r}'$ as an integral
+of the incident field on the surface of the mirror. The remainder of this paper
+will be devoted to their efficient numerical evaluation for arbitrary incident
+fields $\{\vb{E}_\text{inc},\vb{B}_\text{inc}\}$ with complex time-dependence
+and for arbitrary mirror geometries $S$.
 
 \begin{comment}
 
@@ -358,23 +580,102 @@ See previous chapter but with number of pairs through ``secondary'' processes.
 %\backmatter
 
 \bibliographystyle{osajnl}
-\bibliography{phd_thesis}
+\bibliography{phd_thesis_bibertool}
 
 \appendix
 
+\chapter{Evaluation of the Singular Surface Integrals in the Stratton-Chu Diffraction Integrals}
+\label{app.limits}
+
+
+Here, we evaluate the singular part of the integrals of the Stratton-Chu equations,
+Eqs.~\eqref{eq:sc.singularLimits}.
+The integration is done over a hemispherical surface of radius $R$ centered at
+$\vb{r}=\vb{r}'$. We use spherical coordinates $(R,\phi,\theta)$. Note that
+$\vb{R}=\vb{r}-\vb{r}'$ in these coordinates.
+We then take the limit as $R\rightarrow0$. Since the surface
+is small, we suppose that the field does not change on the surface and assume
+it takes its value at $\vb{r}=\vb{r}'$ over the whole surface. We can then move it
+outside the integral sign. We also ignore the phase of the Green's function, as
+it is constant over the hemisphere and goes to 0 after the limit.
+The integral over the hemisphere in Eq.~\eqref{eq:sc.regularLimit} becomes
+  \begin{align}
+    \lim_{R\rightarrow0}\iint_{S_\epsilon}\vb{A}gdS
+      &= \lim_{R\rightarrow0}\vb{A}\int_0^{\frac{\pi}{2}}\int_0^{2\pi}\frac{1}{4\pi R} R^2 \sin\theta d\phi d\theta,\nonumber\\
+      &= 0.
+  \end{align}
+The integral is in fact regular at $\vb{r}=\vb{r}'$ because the integration measure
+cancels the pole of the Green's function.
+
+In Eq.~\eqref{eq:sc.singularLimit}, the gradient of the Green's function
+generates a $R^{-1}$ term and a $R^{-2}$ term. The former does not contribute to the integral
+because of the integration measure, while the latter reads
+  \begin{align}
+    \lim_{R\rightarrow0}\iint_{S_\epsilon}\vb{A}\times\nabla gdS
+      &= \lim_{R\rightarrow0}\vb{A}\times
+      \int_0^{\frac{\pi}{2}}\int_0^{2\pi}\frac{R^2\vu{n}}{4\pi R^2}\sin\theta d\phi d\theta, \nonumber\\
+      &= \frac{1}{2}\vb{A}\times\vb{n},
+  \end{align}
+where $\vb{n}$ comes from the fact that the gradient of the Green's function is
+normal to the hemispherical surface.
+
+The integral in Eq.~\eqref{eq:sc.hypersingularLimit} diverges due to the presence
+of the double gradient of $g$. However, it is still possible to assign it a finite
+value.
+To do so, we use the explicit
+expression of the double gradient of the Green's function \cite[Eq. (2.61)]{Volakis2012}:
+  \begin{align}
+    \label{eq:singularInt.doubleGradientExp}
+    \nabla\nabla g(\vb{r},\vb{r}')  &= -\dyad{I}\left[-\frac{ik}{R}+\frac{1}{R^2}\right]g
+                    +\left(\vu{R}\otimes\vu{R}\right)\left[\frac{3}{R^2}-\frac{3ik}{R}-k^2\right]g
+  \end{align}
+where $\dyad{I}$ is the unit dyad, $R=|\vb{r}-\vb{r}'|$, $\vu{R}=(\vu{r}-\vu{r}')/R$
+and $\otimes$ is the Kronecker outer product. The contribution of the second line
+of Eq.~\eqref{eq:singularInt.doubleGradientExp} to the surface integral
+vanishes due to the tensor structure, i.e.
+  \begin{align}
+    \label{eq:singularInt.dyadVectorProd}
+    \vu{R}\otimes\vu{R}\cdot\left(\vu{n}\times\vb{F}\right)&\xrightarrow{r\in S_\epsilon}
+      \vu{R}\otimes\vu{R}\cdot\left(\vu{R}\times\vb{F}\right).
+  \end{align}
+On the hemispherical surface, the dyad $\vu{R}\otimes\vu{R}$ has a single
+non-vanishing component in, obviously, the $\vu{R}\otimes\vu{R}$ direction, while the vector
+it multiplies, $\vu{R}\times\vb{F}$ only has angular ($\vu{\phi}$ and $\vu{\theta}$)
+components. The dyad-vector product
+of Eq.~\eqref{eq:singularInt.dyadVectorProd} thus
+vanishes. The contribution of the first line of Eq.~\eqref{eq:singularInt.doubleGradientExp}, however,
+does not vanish. We expand it in a Laurent-type series and obtain
+  \begin{align*}
+    \left(-\frac{ik}{R}+\frac{1}{R^2}\right)g
+      &\simeq \left(-\frac{ik}{R^2}+\frac{1}{R^3}\right)\left(1+ikR\right) \\
+      &= -\frac{ik}{R^2}+\frac{1}{R^3}+\frac{k^2}{R}+\frac{ik}{R^2} \\
+      &= \frac{1}{R^3}+\frac{k^2}{R}.
+  \end{align*}
+Substituting this last expression in the l.h.s of Eq.~\eqref{eq:sc.hypersingularLimit},
+we see that the second term vanishes due to the $R^2$ measure and that the
+first term formally diverges. To ascribe a finite value to this integral,
+we make use of the Hadamard finite part, which essentially drops the diverging term
+in a mathematically consistent way \cite{Blanchet2000}.
+Equation (\ref{eq:sc.hypersingularLimit}) thus reads
+  \begin{equation}
+    \lim_{\vb{r}'\in S} \iint_S \nabla\nabla g \cdot\left(\vu{n}\times\vb{F}\right)dS
+     = \HadamardSurf_S \nabla\nabla g\cdot\left(\vu{n}\times\vb{F}\right)dS.
+  \end{equation}
+
 \chapter{Explicit expressions of the Stratton-Chu equations}
+\label{app.explicit-sc}
 
 In chapter \ref{chapter:stratton-chu}, we discussed the numerical evaluation
 of the Stratton-Chu equations as a way to model electromagnetic fields in the
 tightly focused regime. Specifically, we implemented a program that evaluates
-\eqref{} for arbitrary mirror geometries, arbitrary incident fields and capable
+\eqref{eq:sc.stratton-chu-poa-og} for arbitrary mirror geometries, arbitrary incident fields and capable
 of modeling broadband pulses. In this appendix, we provide explicit expressions
 of the Stratton-Chu equations in cylindrical coordinates and write down a far-field
 approximation of those equations.
 
 \section{Explicit expression in cylindrical coordinates}
 
-Our starting point is \eqref{}, which we print here for convenience
+Our starting point is \eqref{eq:sc.stratton-chu-poa-og}, which we print here for convenience
   \begin{subequations}
   \label{eq:app.sc-explicit.poa-og}
   \begin{align}
@@ -1020,7 +1321,7 @@ $\vb{P}_0\mapsto\vb{M}_0$ and $\vb{M}_0\mapsto-\vb{P}_0$.
 We now write down the explicit expressions of each component in cylindrical
 coordinates. We will have to evaluate the cross-product of cylindrical
 basis vectors evaluated at different points, similar to what we have done in
-Appendix~\ref{}. We first write
+Appendix~\ref{app.explicit-sc}. We first write
   \begin{subequations}
   \begin{align}
     \vu{r}'\times\vu{r}           &= (\cos\theta'\vu{x}+\sin\theta'\vu{y})\times(\cos\theta\vu{x}+\sin\theta\vu{y})
@@ -1118,7 +1419,7 @@ the r.h.s. of Eq.~\eqref{eq:app.fwm.polarization} yields
 where $\vb{E}_a$ is a shorthand for $\vb{E}(\vb{r},\omega_a)$. Using the fact
 the fields must be real, we can write this integral as
   \begin{align}
-    \vb{P}(\vb{r},t) 
+    \vb{P}(\vb{r},t)
         &= \frac{4\alpha^2}{45}\int_0^\infty\int_0^\infty\int_0^\infty
             \left[
               4\left(\vb{E}_ae^{-i\omega_a t}+\vb{E}_a^*e^{i\omega_a t}\right)

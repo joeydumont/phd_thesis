@@ -47,10 +47,11 @@ TEXINPUTS = .:$(OUTDIR)/
 TEXMFOUTPUT = $(OUTDIR)/
 
 ### File Types (for dependencies)
-TEX_FILES = $(shell find . -name '*.tex' -or -name '*.sty' -or -name '*.cls')
-BIB_FILES = $(shell find . -name '*.bib')
-BST_FILES = $(shell find . -name '*.bst')
-IMG_FILES = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
+TEX_FILES       = $(shell find . -name '*.tex' -or -name '*.sty' -or -name '*.cls')
+BIB_FILES       = $(shell find . -name '*.bib')
+BIB_FILES_RAW   = $(shell find . -name '*.bib.raw')
+BST_FILES       = $(shell find . -name '*.bst')
+IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
 TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
 
 
@@ -114,3 +115,15 @@ $(OUTDIR)/$(PROJECT).bbl: $(BIB_FILES) | $(OUTDIR)/$(PROJECT).aux
 
 $(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
+	cp $@ .
+
+
+### Extra Targets
+# Removes the mendeley tags, groups and file metadata out of the bibliographic
+# files.
+prune-bib: $(BIB_FILES)
+	sed -i.bak '/^file\|^mendeley\|keywords/d' $^
+	biber --tool $^
+
+log: $(OUTDIR)/$(PROJECT).pdf
+	pplatex -i $(OUTDIR)/$(PROJECT).log
