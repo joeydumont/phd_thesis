@@ -49,7 +49,6 @@ TEXMFOUTPUT = $(OUTDIR)/
 ### File Types (for dependencies)
 TEX_FILES       = $(shell find . -name '*.tex' -or -name '*.sty' -or -name '*.cls')
 BIB_FILES       = $(shell find . -name '*.bib')
-BIB_FILES_RAW   = $(shell find . -name '*.bib.raw')
 BST_FILES       = $(shell find . -name '*.bst')
 IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
 TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
@@ -122,8 +121,9 @@ $(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/
 # Removes the mendeley tags, groups and file metadata out of the bibliographic
 # files.
 prune-bib: $(BIB_FILES)
-	sed -i.bak '/^file\|^mendeley\|keywords/d' $^
-	biber --tool $^
+	$(foreach file,$(BIB_FILES), $(shell sed -i.bak '/^file\|^mendeley\|keywords/d' $(file)))
+	$(foreach file,$(BIB_FILES), $(shell biber -q -O $(file) --output-format=bibtex --configfile=biber-tool.conf --tool $(file)))
+	$(foreach file,$(BIB_FILES), $(shell sed -i 's/USERA/YEAR/' $(file)))
 
 log: $(OUTDIR)/$(PROJECT).pdf
 	pplatex -i $(OUTDIR)/$(PROJECT).log
