@@ -463,6 +463,65 @@ will be devoted to their efficient numerical evaluation for arbitrary incident
 fields $\{\vb{E}_\text{inc},\vb{B}_\text{inc}\}$ with complex time-dependence
 and for arbitrary mirror geometries $S$.
 
+\section{Practical Implementation}
+
+The derivation above holds for a single component of the Fourier decomposition
+of our assumed ultrashort pulse. To model the reflection of a short pulse, then,
+it is necessary to repeat that calculation for each frequency component that
+makes up the incident beam, and then to add them coherently.
+
+Experimentally, we are usually given the energy of the pulse along
+with its spectral characeristics. In the following paragraph, we will devise
+a normalization scheme that allows us to model arbitrary incident beam models,
+i.e. with arbitrary spatial and temporal dependence. Then, we will discuss
+the details of the numerical evaluation of the integrals involved in the
+Stratton-Chu formalism, more specifically the parallel domain decomposition
+method used. We will also elaborate on an interesting property of paraboloid
+mirrors: indeed, if the field is evaluated in a region close to the focal volume,
+the Stratton-Chu integrands do not exhibit the highly oscillatory behaviour
+typical of diffraction integrals.
+
+In the last sections, we provide a detailed numerical verification of our
+C++ implementation. This is crucical, as the author is not aware of any useful
+analytical solutions to the Stratton-Chu equations that would allow an easy
+verification of the implementation.
+
+
+\subsection{Handling the Temporal Dynamics}
+
+
+
+\begin{itemize}
+  \item Factorizable temporal dynamics
+  \item Non-factorizable temporal dynamics \cite{Pariente2016}
+\end{itemize}
+
+\subsection{Spatial Discretization}
+
+Phase stuff goes here.
+
+\subsection{Incident Field Models}
+
+\subsection{Parallelization and Performance Analysis}
+
+\subsection{Numerical Verifications}
+
+\section{Comparisons with Other Field Models}
+
+\subsection{Analytical Field Models}
+
+\subsection{The Richards-Wolf Formalism}
+
+\section{Properties of Tightly Focused Fields}
+
+\subsection{Longitudinal Components}
+
+\subsection{Gouy Phase}
+
+\subsection{Generation of Pseudo-Radial Beams with Mosaics}
+
+\section{Partial Conclusion}
+
 \begin{comment}
 
 IDEAS:
