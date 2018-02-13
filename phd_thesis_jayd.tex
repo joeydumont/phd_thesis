@@ -57,6 +57,9 @@
 
 \allowdisplaybreaks
 
+\settocdepth{section}
+\setsecnumdepth{subsection}
+
 % ----------------------------------------------------------------- %
 % --                       Title Page Info                       -- %
 % ----------------------------------------------------------------- %
@@ -482,45 +485,175 @@ the Stratton-Chu integrands do not exhibit the highly oscillatory behaviour
 typical of diffraction integrals.
 
 In the last sections, we provide a detailed numerical verification of our
-C++ implementation. This is crucical, as the author is not aware of any useful
+C++ implementation. This is crucial, as the author is not aware of any useful
 analytical solutions to the Stratton-Chu equations that would allow an easy
 verification of the implementation.
 
 
 \subsection{Handling the Temporal Dynamics}
 
+To properly model the temporal dynamics of the beam at focus, it is in principle
+only necessary to know the temporal dynamics of the incident beam. However, in
+an experimental setting, a complete temporal cartography of the field is usually
+not readily available. Rather, the power spectrum and the (possibly spatially
+dependent) spectral phase is available. To map these quantities to the input
+of our Stratton-Chu equations, we will use the Poynting theorem to relate
+the energy density of the pulse to the spatiotemporal characteristics of the
+incident beam.
 
+We assume that a quantity known as the spectral energy density (to be defined later),
+the total energy, and the spectral phase are known. The total energy of the
+beam can be computed via the Poynting theorem
+  \begin{equation}
+    E_\text{beam}
+      =
+      \int_{-\infty}^\infty \oiint_A
+        \left[\vb{E}(\vb{r},t)\times\vb{B}(\vb{r},t)\right]\cdot d\vb{A}dt.
+  \end{equation}
+Substituting the Fourier transform of the fields, i.e.
+  \begin{align}
+    \vb{E}(\vb{r},t) &=
+      \int_{-\infty}^\infty
+        \vb{E}(\vb{r},\omega)e^{i\varphi(\omega)}e^{-i\omega t} d\omega \\
+    \vb{B}(\vb{r},t) &=
+      \int_{-\infty}^\infty
+        \vb{B}(\vb{r},\omega)e^{i\varphi(\omega)}e^{-i\omega t} d\omega
+  \end{align}
+where $\varphi(\omega)$ is some phase that only depends on the frequency.
+The total energy can then be written as
+  \begin{equation}
+    E_\text{beam} = 4\pi \oiint_A \int_0^\infty
+        \real{\vb{E}(\vb{r},\omega)\times\vb{B}(\vb{r},\omega)}\cdot d\vb{A}d\omega
+  \end{equation}
+From this we define the spectral energy density,
+  \begin{equation}
+    \epsilon(\omega)
+      = 4\pi\oiint_A \real{\vb{E}(\vb{r},\omega)\times\vb{B}(\vb{r},\omega)}\cdot d\vb{A}
+  \end{equation}
+Now, due to the linearity of Maxwell's equations, we can multiply the field
+by an arbitrary complex number and still be solutions of the differential
+equations. We thus write
+  \begin{equation}
+    \vb{E}(\vb{r},\omega) = E_0\vb{f}_E(\vb{r},\omega); \qquad
+    \vb{B}(\vb{r},\omega) = E_0\vb{f}_B(\vb{r},\omega)
+  \end{equation}
+and rescale the fields according to
+  \begin{equation}
+    E_0 \mapsto \sqrt{%
+      \frac{\epsilon_\text{exp}(\omega)}
+           {4\pi\oiint_A\real{\vb{f}_E(\vb{r},\omega)\times\vb{f}_B(\vb{r},\omega)}\cdot d\vb{A}}
+    }
+  \end{equation}
+where $\epsilon_\text{exp}(\omega)$ is the experimentally known spectral density,
+or power spectrum.
 
-\begin{itemize}
-  \item Factorizable temporal dynamics
-  \item Non-factorizable temporal dynamics \cite{Pariente2016}
-\end{itemize}
+\todo[inline]{Add note on the fact that, experimentally, the spectral density
+is actually integrated over a small frequency range? This fixes the units...}
+
 
 \subsection{Spatial Discretization}
 
-Phase stuff goes here.
+The Stratton-Chu equations (Eqs~\eqref{eq:sc.stratton-chu-poa-og}) reference two
+separate spatial domains, the integration surface $S$ that the $\vb{r}$ variable
+references, and the point at which the field is evaluated, $\vb{r}'$. There are
+multiple advantages that stem form this: (1) the typical length scales of the
+unfocused of the unfocused and focused fields can differ by orders of magnitude,
+hence, their natural separation in the integral formulation makes their meshing
+much easier, (2)  the field can be evaluated at any point of our choosing:
+the method is not limited to a specific type of mesh.
+
+In the implementation, we provide two modes of operation. Either we compute the
+field at a user-specified point, or on a predefined mesh of points suitable
+for integration for later use.
+
+In the tight focusing regime, the electromagnetic field shows features that
+are similar in size to the wavelength $\lambda$ of the radiation. Numerically,
+then, the mesh size should be smaller than $\lambda$. However, the incident
+beam usually has spatial variations on the order of the centimeter, orders
+of magnitude larger than $\lambda$. In typical electromagnetic computational
+methods, the limitation of a fixed size mesh throughout all space translates
+in unrealistic memory requirements in the tight focusing regime. In the
+Stratton-Chu formalism, the independence of the spatial domains makes it so
+the meshes can be of different sizes.
+
+However, to achieve sub-$\lambda$ resolution, memory requirements can still be
+prohibitive for a single machine, typically a few gigabytes for each frequency
+component. This is of course compounded by the fact that temporally short pulses
+have broad spectra, requiring a large number of frequency components to properly
+resolve. To mitigate this issue, it is thus necessary to perform the computations
+on multiple machines simultaneously, in parallel.
+
+Parallelization strategy.
+
+Phase cancellation in the paraboloid case.
 
 \subsection{Incident Field Models}
 
+[Maybe move this ahead.]
+
+Discuss paraxial approximation in the incident field case (exp(-ikz) phase, mostly),
+and the fact that all frequency components have the same waist size (I recall an article
+mentioning a rationale for that).
+
+Generic bases for arbitrary field models (linear + radial polarization).
+
 \subsection{Parallelization and Performance Analysis}
 
+Parallel efficiency, data output benchmarks (setting the stage for other
+similar procedures.)
+
 \subsection{Numerical Verifications}
+
+Convergence with respect to the number of points on the mirror.
+Verify that the numerically computed fields solve the Maxwell equations.
+Verify that the numerically computed fields conserve energy.
 
 \section{Comparisons with Other Field Models}
 
 \subsection{Analytical Field Models}
 
+Salamin field model, other ST implementations?
+
 \subsection{The Richards-Wolf Formalism}
+
+Statement of the RW formalism. Comment on derivation from RW to ST.
+Comparison of results with parabolic mirror in the frequency domain.
 
 \section{Properties of Tightly Focused Fields}
 
+Visualization of the field and comments on important properties.
+Max of the field in time domain, and also in frequency components.
+3D visualization of the tranverse part of the beam.
+3D visualization of the longitudinal components of the beam.
+Importance of the longitudinal component as a function of the focal length
+and its possible effects on SF-QED observables (FORESHADOWING).
+
 \subsection{Longitudinal Components}
+
+Relative strength of the longitudinal component as a function of the
+focal length.
 
 \subsection{Gouy Phase}
 
+Gouy phase of tightly focused fields (deviation from Gaussian Gouy phase).
+Mention analytical solution for linear polarization.
+Computation of phase from 2D Fourier transforms.
+
 \subsection{Generation of Pseudo-Radial Beams with Mosaics}
 
+\todo[inline]{Is this section worth it? Basically mention that since the
+SC equations are linear, the articles on focused mosaics are still good.
+Perhaps mention B-integral issues with thick broadband waveplates?
+Find bandwidth at which the field is properly collimated? (This probably
+can be done with the unfocused beams, so probably not interesting.)}
+
 \section{Partial Conclusion}
+
+SC mostly used to model the fine details of tightly focused fields in an
+experimental settings. Most easily used with fast SF-QED observable codes
+in constract with PIC codes due to their high numerical cost.
+
+Alternatives: propagation equations, transformation optics?
 
 \begin{comment}
 
