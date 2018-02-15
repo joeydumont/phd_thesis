@@ -573,7 +573,7 @@ beam usually has spatial variations on the order of the centimeter, orders
 of magnitude larger than $\lambda$. In typical electromagnetic computational
 methods, the limitation of a fixed size mesh throughout all space translates
 in unrealistic memory requirements in the tight focusing regime. In the
-Stratton-Chu formalism, the independence of the spatial domains makes it so
+Stratton-Chu formalism, the independence of the spatiamaximum laser intensityl domains makes it so
 the meshes can be of different sizes.
 
 However, to achieve sub-$\lambda$ resolution, memory requirements can still be
@@ -583,13 +583,83 @@ have broad spectra, requiring a large number of frequency components to properly
 resolve. To mitigate this issue, it is thus necessary to perform the computations
 on multiple machines simultaneously, in parallel.
 
-Parallelization strategy.
+Given that the field at a point $\vb{r}_1$ can be evaluated without any reference
+to another point $\vb{r}_2$, the parallelization strategy is quite simply to
+separate the focal volume into chunks with the same number of points and assign
+these chunks to different processors. Because the numerical cost of evaluating
+the integral does not depend on the position at which the field is evaluated
+(in our approach), the workload is thus evenly divided among the processors.
 
-Phase cancellation in the paraboloid case.
+\todo[inline]{Insert figure of domain decomposition.}
+
+\subsubsection{Side note: phase cancellation in the paraboloid case}
+
+Typically, diffraction integrals have an highly oscillatory behaviour that
+stems from the propagator, or Green's function of the problem. The Stratton-Chu
+integrals (or even the Richards-Wolf integrals, for that matter, although they
+use a trick) are not exception. The diffraction integrals are of the generic form
+  \begin{equation}
+    I = \int f(\vb{r})e^{ikh(\vb{r},\vb{r}')}d\vb{r}
+  \end{equation}
+where $f(\vb{r})$ is a function of the incident fields and $h(\vb{r},\vb{r}'')$
+is the phase function, typically the distance between the points $\vb{r}$ and
+$\vb{r}'$, i.e. $h=|\vb{r}-\vb{r}'|$. In an optical setting, we expect this integrand to oscillate rapidly
+as the wavelength of the radiation is much smaller than the size of the reflecting
+mirror, i.e. $k|\vb{r}|\gg1$. Rapidly oscillating integrals of the form above
+are difficult to evaluate numerically, although there are some techniques
+that facilitate their evaluation in the case $k\rightarrow\infty$ \cite{Iserles2004,Ganesh2007}.
+
+We show that, for a paraboloid mirror, a non-trivial cancellation in the phase function
+results in the strength of the oscillations being dictated by the observation
+variables $k|\vb{r}'|\simeq1$ rather than the integration variables $k|\vb{r}|\gg1$.
+In this case, it is not necessary to use specialized techniques, nor to use
+sub-$\lambda$ mesh resolution on the integration surface. In our implementation,
+we use simple tensor products of either the Simpson or Gauss-Legendre methods
+\cite[\S4.6]{Press1986}.
+
+The cancellation occurs when we consider the oscillatory behaviour of the
+incoming field. In the paraxial approximation, the incoming field carries
+a propagation phase such that $f(\vb{r})\propto e^{-ikz}$. Hence, the phase
+function that determines the oscillatory behaviour is
+$h(\vb{r},\vb{r}')=|\vb{r}-\vb{r}'|-z$. To determine whether the integrand
+oscillate strongly, we examine this function in the vicinity of the focal
+point, i.e. $\vb{r}'=0$ in our coordinates.
+Expanding the phase function in a Taylor series, we have
+  \begin{equation}
+    h(\vb{r},\vb{r}') = \sqrt{r^2+z^2}-z
+                  -\frac{r\cos(\theta-\theta')}{\sqrt{r^2+z^2}} r'
+                  -\frac{z}{\sqrt{r^2+z^2}}z'
+                  + \mathcal{O}\left[\left(\frac{r',z'}{|\vb{r}|}\right)^2\right]
+  \end{equation}
+Near the focal spot, then, the first-order terms oscillate slowly, because the prefactor
+of each term has range $[-1,1]$ and $r'$ and $z'$
+(the radial and longitudinal distances from the focal point)
+do not exceed a few wavelengths, i.e. $k|\vb{r}'|\sim1$.
+The zeroth-order term
+is thus the only term that can lead to a rapidly oscillating
+integrand.
+For the specific of a parabolic mirror, for which $z=r^2/4f-f$, the phase function
+reads
+  \begin{equation}
+    h(\vb{r},\vb{r}')\simeq 2f - \frac{4rf}{f^2+r^2} r' - \frac{r^2-4f^2}{r^2+4f^2} z' + \cdots
+  \end{equation}
+The zeroth-order term does not depend on the integration variables, implying
+that the integrand does not oscillate at $\vb{r}'=0$ and oscillates weakly
+in its vicinity.
+
+This non-trivial cancellation does not carry over to generic surfaces, however.
+For instance, the zeroth-order term does depend on the integration variables
+in the ellipsoidal \footnote{More precisely,
+mirrors of the form $z^2/c^2=1-(x^2+y^2)/a^2$, with focal spots
+at $z=\pm\sqrt{c^2-a^2}$.} case. In fact, for other mirror geometries, the initial
+physical motivation of looking at distances not too far away from the focal spot
+might be lacking. For most mirrors, there are no uniquely
+defined focal points and the field is diffuse. In these cases, care
+should be taken when numerically evaluating the Stratton-Chu integrals.
 
 \subsection{Incident Field Models}
 
-[Maybe move this ahead.]
+\todo[inline]{[Maybe move this ahead.]}
 
 Discuss paraxial approximation in the incident field case (exp(-ikz) phase, mostly),
 and the fact that all frequency components have the same waist size (I recall an article

@@ -32,12 +32,24 @@ FIG_LATEXFLAGS=-output-directory $(FIG_OUTDIR)/
 PY_INPUTDIR=light_table
 PY_BINARY=python
 PY_OUTDIR=figs
+PY_FLAGS=--output-directory $(PY_OUTDIR)
 
-
+# -- User targets.
 default: $(OUTDIR)/$(PROJECT).pdf
 
 display: default
 	(${PDFVIEWER} $(OUTDIR)/$(PROJECT).pdf &)
+
+### Extra Targets
+# Removes the mendeley tags, groups and file metadata out of the bibliographic
+# files.
+prune-bib: $(BIB_FILES)
+	$(foreach file,$(BIB_FILES), $(shell sed -i.bak '/^file\|^mendeley\|keywords/d' $(file)))
+	$(foreach file,$(BIB_FILES), $(shell biber -q -O $(file) --output-format=bibtex --configfile=biber-tool.conf --tool $(file)))
+	$(foreach file,$(BIB_FILES), $(shell sed -i 's/USERA/YEAR/' $(file)))
+
+log: $(OUTDIR)/$(PROJECT).pdf
+	pplatex -i $(OUTDIR)/$(PROJECT).log
 
 
 ### Compilation Flags
@@ -52,6 +64,7 @@ BIB_FILES       = $(shell find . -name '*.bib')
 BST_FILES       = $(shell find . -name '*.bst')
 IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
 TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
+PY_IMAGE_FILES  = $(shell find ./$(PY_INPUTDIR)/ -name '*.py')
 
 
 ### Standard PDF Viewers
@@ -76,6 +89,8 @@ endif
 
 clean::
 	rm -rf $(OUTDIR)/
+	rm -rf $(PY_OUTDIR)
+	rm -rf $(FIG_OUTDIR)
 
 ### Core Latex Generation
 # Performs the typical build process for latex generations so that all
@@ -99,8 +114,15 @@ class:
 $(FIG_OUTDIR)/:
 	mkdir -p $(FIG_OUTDIR)/
 
+#$(PY_OUTDIR)/:
+	#mkdir -p $(PY_OUTDIR)/
+
 latex_images: $(TEX_IMAGE_FILES) | $(FIG_OUTDIR)/
 	$(FIG_LATEX) $(FIG_LATEXFLAGS) $(TEX_IMAGE_FILES)
+	#$(foreach file, $(TEX_IMAGE_FILES), $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
+
+python_images: $(PY_IMAGE_FILES) | $(FIG_OUTDIR)/
+	$(foreach file, $(PY_IMAGE_FILES), $(shell $(PY_BINARY) $(PY_FLAGS) $(file)))
 
 $(OUTDIR)/:
 	mkdir -p $(OUTDIR)/
@@ -112,18 +134,6 @@ $(OUTDIR)/$(PROJECT).bbl: $(BIB_FILES) | $(OUTDIR)/$(PROJECT).aux
 	bibtex $(OUTDIR)/$(PROJECT)
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
 
-$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images
-	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
+$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images python_images
+	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT).tex
 	cp $@ .
-
-
-### Extra Targets
-# Removes the mendeley tags, groups and file metadata out of the bibliographic
-# files.
-prune-bib: $(BIB_FILES)
-	$(foreach file,$(BIB_FILES), $(shell sed -i.bak '/^file\|^mendeley\|keywords/d' $(file)))
-	$(foreach file,$(BIB_FILES), $(shell biber -q -O $(file) --output-format=bibtex --configfile=biber-tool.conf --tool $(file)))
-	$(foreach file,$(BIB_FILES), $(shell sed -i 's/USERA/YEAR/' $(file)))
-
-log: $(OUTDIR)/$(PROJECT).pdf
-	pplatex -i $(OUTDIR)/$(PROJECT).log
