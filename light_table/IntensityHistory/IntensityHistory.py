@@ -134,11 +134,6 @@ axIHistory.set_xlim((1955,2035))
 axIHistory.tick_params(axis='x', colors='gray')
 axIHistory.set_xlabel('Year', color='gray')
 
-
-# -- Add regions delimited by transparent rectangles.
-plt.pcolor([[1955,1e8], [1955,1e8]], cmap=plt.cm.Greens)
-
-
 mkdir_p(args.output_directory)
 plt.savefig(args.output_directory+"IntensityHistory.pdf", bbox_inches='tight')
 

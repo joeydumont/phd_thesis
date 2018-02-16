@@ -21,6 +21,7 @@ PROJECT=phd_thesis_jayd
 CLASS=inrsthesis
 LATEX=pdflatex
 OUTDIR=out
+LIGHT_TABLE=light_table
 
 # -- Figure generation options (TeX)
 FIG_INPUTDIR=light_table
@@ -65,6 +66,7 @@ BST_FILES       = $(shell find . -name '*.bst')
 IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
 TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
 PY_IMAGE_FILES  = $(shell find ./$(PY_INPUTDIR)/ -name '*.py')
+BIN_IMAGES      = $(shell find ./$(LIGHT_TABLE)/ -name "*.pdf")
 
 
 ### Standard PDF Viewers
@@ -124,6 +126,9 @@ latex_images: $(TEX_IMAGE_FILES) | $(FIG_OUTDIR)/
 python_images: $(PY_IMAGE_FILES) | $(FIG_OUTDIR)/
 	$(foreach file, $(PY_IMAGE_FILES), $(shell $(PY_BINARY) $(PY_FLAGS) $(file)))
 
+light_table: $(BIN_IMAGES) | latex_images python_images
+	cp $(BIN_IMAGES) $(FIG_OUTDIR)
+
 $(OUTDIR)/:
 	mkdir -p $(OUTDIR)/
 
@@ -134,6 +139,6 @@ $(OUTDIR)/$(PROJECT).bbl: $(BIB_FILES) | $(OUTDIR)/$(PROJECT).aux
 	bibtex $(OUTDIR)/$(PROJECT)
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
 
-$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images python_images
+$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images python_images light_table
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT).tex
 	cp $@ .

@@ -41,13 +41,13 @@
      inkscape:window-height="982"
      id="namedview1210"
      showgrid="false"
-     inkscape:zoom="1.5094233"
-     inkscape:cx="244.6767"
-     inkscape:cy="187.63468"
+     inkscape:zoom="2.1514405"
+     inkscape:cx="267.96"
+     inkscape:cy="190.1757"
      inkscape:window-x="0"
      inkscape:window-y="35"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer4"
      showguides="false" />
   <defs
      id="defs953">
@@ -412,16 +412,6 @@
          d="M 0 0 L 401.941406 0 L 401.941406 264.488281 L 0 264.488281 Z M 0 0 "
          id="path950" />
     </clipPath>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter1292">
-      <feBlend
-         inkscape:collect="always"
-         mode="multiply"
-         in2="BackgroundImage"
-         id="feBlend1294" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1346"
@@ -459,6 +449,16 @@
        y2="43.233722"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.99880089,0,0,0.99999986,0.47032103,3.9585018e-6)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1164">
+      <feBlend
+         inkscape:collect="always"
+         mode="multiply"
+         in2="BackgroundImage"
+         id="feBlend1166" />
+    </filter>
   </defs>
   <g
      id="surface5425">
@@ -1014,7 +1014,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1153">
+       id="g1153"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph1-5"
          x="7.2010002"
@@ -1067,7 +1068,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1173">
+       id="g1173"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph1-11"
          x="38.413826"
@@ -1134,7 +1136,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1177">
+       id="g1177"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph1-16"
          x="7.2010002"
@@ -1145,7 +1148,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1181">
+       id="g1181"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph0-9"
          x="10.17"
@@ -1156,7 +1160,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1187">
+       id="g1187"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph0-10"
          x="20.614105"
@@ -1174,7 +1179,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1191">
+       id="g1191"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph3-1"
          x="32.946999"
@@ -1185,7 +1191,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1195">
+       id="g1195"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph2-4"
          x="37.841"
@@ -1196,7 +1203,8 @@
     </g>
     <g
        style="fill:#7f7f7f;fill-opacity:1"
-       id="g1199">
+       id="g1199"
+       transform="translate(1.5,-6.0000004)">
       <use
          xlink:href="#glyph1-17"
          x="42.061001"
@@ -1207,11 +1215,11 @@
     </g>
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.50002003;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1"
-       d="m 78.34375,63.794687 20.929688,31.183594 c 0,0 93.422252,5.568339 96.253902,7.796879 l 8.3711,23.39062 50.21875,31.18359 66.96093,15.59375 8.3711,7.79688"
+       d="m 78.34375,63.794687 c 0,0 12.05532,23.362146 20.929688,31.183594 6.328362,5.577519 82.749662,3.017051 90.281022,12.715729 0,0 11.48599,9.69012 17.15475,14.78264 14.65813,13.1681 32.25796,23.07989 50.21875,31.18359 20.35281,9.18295 39.51335,13.79146 64.15016,19.28288"
        transform="matrix(1,0,0,-1,0,264.49)"
        id="path1201"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
+       sodipodi:nodetypes="cssssc" />
     <path
        style="fill:none;stroke:#7f7f7f;stroke-width:0.80000001;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1"
        d="M 47.421875,48.200937 V 235.31422"
@@ -1224,12 +1232,22 @@
        transform="matrix(1,0,0,-1,0,264.49)"
        id="path1205"
        inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.31811023;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.27244113, 1.31811028;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 321.07812,91.54688 58.11603,-41.861578 v 0 0 0"
+       id="path1088"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:0.5;fill:#ff0000;fill-rule:evenodd;stroke:#ff0000;stroke-width:1.31811023;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.95433084, 1.31811028;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 321.07812,91.54688 26.81269,-61.239841 v 0"
+       id="path1090"
+       inkscape:connector-curvature="0" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Highlights"
-     style="filter:url(#filter1292)">
+     style="display:inline;filter:url(#filter1164)">
     <rect
        style="opacity:1;fill:url(#linearGradient1348);fill-opacity:1;stroke:none;stroke-width:2.83464575;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect1214"
@@ -1260,19 +1278,174 @@
        y="29.175781" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.00000191px;line-height:125%;font-family:'Source Sans Pro';-inkscape-font-specification:'Source Sans Pro';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="49.190975"
-       y="128.84215"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:125%;font-family:'Droid SAns';-inkscape-font-specification:'Droid SAns';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;opacity:1;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="49.370472"
+       y="127.83902"
        id="text1383"><tspan
          sodipodi:role="line"
          id="tspan1381"
-         x="49.190975"
-         y="128.84215"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:'Source Sans Pro';-inkscape-font-specification:'Source Sans Pro';stroke-width:0.75000006px;fill:#f2f2f2">Relativistic Optics</tspan></text>
+         x="49.370472"
+         y="127.83902"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;line-height:125%;font-family:'Droid SAns';-inkscape-font-specification:'Droid SAns';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:0px;word-spacing:0px;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;vector-effect:none;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">Relativistic Optics</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="50.268909"
+       y="89.082527"
+       id="text1076"><tspan
+         sodipodi:role="line"
+         id="tspan1074"
+         x="50.268909"
+         y="89.082527"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;stroke-width:0.75000006px">Vacuum Polarization</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="49.370472"
+       y="51.835354"
+       id="text1080"><tspan
+         sodipodi:role="line"
+         id="tspan1078"
+         x="49.370472"
+         y="51.835354"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#ffffff;stroke-width:0.75000006px">Non-perturbative QED</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="49.370472"
+       y="222.28342"
+       id="text1084"><tspan
+         sodipodi:role="line"
+         id="tspan1082"
+         x="49.370472"
+         y="222.28342"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;font-family:'Droid SAns';-inkscape-font-specification:'Droid SAns';fill:#ffffff;stroke-width:0.75000006px">Bound Electrons</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="Main Data"
-     style="" />
+     style="display:none" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Overlay"
+     style="display:inline">
+    <circle
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.92692918;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.7807875, 0.92692916;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1056"
+       cx="223.35733"
+       cy="129.10201"
+       r="3.6731961"
+       inkscape:transform-center-x="1.3993126"
+       inkscape:transform-center-y="-0.69965624" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="229.93419"
+       y="135.76726"
+       id="text1060"><tspan
+         sodipodi:role="line"
+         id="tspan1058"
+         x="229.93419"
+         y="135.76726"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75000006px">SLAC</tspan></text>
+    <circle
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.92692918;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.78078752, 0.92692917;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1056-3"
+       cx="262.36649"
+       cy="108.42957"
+       r="3.6731961"
+       inkscape:transform-center-x="1.3993126"
+       inkscape:transform-center-y="-0.69965624" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="268.15027"
+       y="115.62897"
+       id="text1060-6"><tspan
+         sodipodi:role="line"
+         id="tspan1058-7"
+         x="268.15027"
+         y="115.62897"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75px">CUOS</tspan><tspan
+         sodipodi:role="line"
+         x="268.15027"
+         y="158.83354"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75px"
+         id="tspan1101" /></text>
+    <circle
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.92692918;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.78078755, 0.92692918;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1056-3-5"
+       cx="326.44919"
+       cy="88.570038"
+       r="3.6731961"
+       inkscape:transform-center-x="1.3993126"
+       inkscape:transform-center-y="-0.69965624" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="331.27737"
+       y="93.032219"
+       id="text1060-6-3"><tspan
+         sodipodi:role="line"
+         x="331.27737"
+         y="93.032219"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75px"
+         id="tspan1101-6">ELI</tspan><tspan
+         sodipodi:role="line"
+         x="331.27737"
+         y="136.2368"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75px"
+         id="tspan1141" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="317.70966"
+       y="104.30904"
+       id="text1060-6-3-2"><tspan
+         sodipodi:role="line"
+         x="317.70966"
+         y="104.30904"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';stroke-width:0.75px"
+         id="tspan1141-1">INRS</tspan></text>
+    <circle
+       style="opacity:1;vector-effect:none;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.92692918;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.78078758, 0.92692919;stroke-dashoffset:0;stroke-opacity:1"
+       id="path1056-3-5-2"
+       cx="316.51163"
+       cy="93.06691"
+       r="3.6731961"
+       inkscape:transform-center-x="1.3993126"
+       inkscape:transform-center-y="-0.69965624" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="326.86246"
+       y="43.678761"
+       id="text1286"><tspan
+         sodipodi:role="line"
+         id="tspan1284"
+         x="326.86246"
+         y="43.678761"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.25px;font-family:'Droid SAns';-inkscape-font-specification:'Droid SAns, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke-width:0.75000006px">λ<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.25px;font-family:'Droid SAns';-inkscape-font-specification:'Droid SAns, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;baseline-shift:super;text-anchor:start;fill:#ff0000;fill-opacity:1"
+   id="tspan1288">3</tspan></tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="QCD"
+     style="opacity:1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:30.00000191px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75000006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="48.187855"
+       y="37.416515"
+       id="text1145"><tspan
+         sodipodi:role="line"
+         id="tspan1143"
+         x="48.187855"
+         y="37.416515"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10px;font-family:'Droid Sans';-inkscape-font-specification:'Droid Sans';fill:#000000;stroke-width:0.75000006px">Quantum Chromodynamics</tspan></text>
+  </g>
 </svg>
