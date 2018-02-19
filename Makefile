@@ -67,6 +67,7 @@ IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path
 TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
 PY_IMAGE_FILES  = $(shell find ./$(PY_INPUTDIR)/ -name '*.py')
 BIN_IMAGES      = $(shell find ./$(LIGHT_TABLE)/ -name "*.pdf")
+INKSCAPE_FILES  = $(shell find ./$(LIGHT_TABLE)/ -name "*.svg")
 
 
 ### Standard PDF Viewers
@@ -124,10 +125,14 @@ latex_images: $(TEX_IMAGE_FILES) | $(FIG_OUTDIR)/
 	#$(foreach file, $(TEX_IMAGE_FILES), $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
 
 python_images: $(PY_IMAGE_FILES) | $(FIG_OUTDIR)/
-	$(foreach file, $(PY_IMAGE_FILES), $(shell $(PY_BINARY) $(PY_FLAGS) $(file)))
+	$(foreach file, $(PY_IMAGE_FILES), $(shell $(PY_BINARY) $(file) $(PY_FLAGS) ))
 
-light_table: $(BIN_IMAGES) | latex_images python_images
-	cp $(BIN_IMAGES) $(FIG_OUTDIR)
+%.pdf: %.svg | $(FIG_OUTDIR)/
+	inkscape --file=$< --export-area-drawing --without-gui --export-pdf=$(FIG_OUTDIR)/$(notdir $@)
+	#$(foreach file, $(INKSCAPE_FILES), $(shell inkscape --file=$(file) --export-area-drawing --without-gui --export-pdf=$(basename $(notdir $(file))).pdf))
+
+light_table: $(BIN_IMAGES) $(INKSCAPE_FILES) | latex_images python_images
+	cp $(BIN_IMAGES) $(FIG_OUTDIR)/
 
 $(OUTDIR)/:
 	mkdir -p $(OUTDIR)/

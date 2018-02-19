@@ -144,7 +144,7 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/IntensityHistory_inkscape.pdf}
+  \includegraphics[width=0.9\textwidth]{figs/IntensityHistory.pdf}
   \caption[Short history of the intensity of laser systems.]
           {Intensity of laser systems as a function of time (approximative).
             Figured adapted from \cite{Mourou2015}.}
@@ -551,6 +551,7 @@ and rescale the fields according to
       \frac{\epsilon_\text{exp}(\omega)}
            {4\pi\oiint_A\real{\vb{f}_E(\vb{r},\omega)\times\vb{f}_B(\vb{r},\omega)}\cdot d\vb{A}}
     }
+    \label{eq:sc.normalization}
   \end{equation}
 where $\epsilon_\text{exp}(\omega)$ is the experimentally known spectral density,
 or power spectrum.
@@ -667,55 +668,84 @@ should be taken when numerically evaluating the Stratton-Chu integrals.
 
 \subsection{Incident Field Models}
 
-\todo[inline]{[Maybe move this ahead.]}
+Incident field models should try to replicate the experimental conditions
+as close as possible. As the goal of the StrattoCalculator is to explore
+and identify the most promising experimental designs, its free parameters
+should be set as close as possible as those of the experiment. This limits
+our set of approximations that we can use.
 
-Discuss paraxial approximation in the incident field case (exp(-ikz) phase, mostly),
+With that mind, we will use two main approximations. One, the incident field
+is a solution of the paraxial wave equation. This is not a restricting approximation,
+as the fields that modern laser systems output are highly collimated. Moreover,
+the output through a hole restricts the waist of each of the frequency components
+to be the same. In fact, most laser systems can be well-approximated by a
+superposition of super-Gaussian beams, i.e. beams with the shape
+  \begin{equation}
+    f(r,\theta) \propto \exp\left[-\left(\frac{r}{w_0}\right)^{2n}\right]
+  \end{equation}
+where $n$ is the order of the super-Gaussian and $w_0$ is the beam waist.
+$n=1$ refers to a standard Gaussian beam, of course.
+
+While the Stratton-Chu equations do not explicitly require any assumption on
+the incident field, it is useful to introduce some. In particular, we will be
+interested in field models where the normalization constant [\eqref{eq:sc.normalization}]
+can be computed analytically, as this can drastically reduce the setup time
+of the computation. \todo{Why?}
+
+Unfortunately, this precludes the direct use of the super-Gaussian function,
+as it typically leads to non-integrable functions. Our strategy, then, will
+be to use general solutions of the paraxial equation as a basis to express
+arbitrary spatial dependence, including super-Gaussian dependence.
+
+\todo[inline]{Derivation of the paraxial wave equation. Show that both
+$\vb{E}$, $\vb{B}$ and $\vb{A}$ obey the same equation. Use that to
+define linear and radially polarized solutions.}
+
+\todo[inline]{Discuss paraxial approximation in the incident field case (exp(-ikz) phase, mostly),
 and the fact that all frequency components have the same waist size (I recall an article
-mentioning a rationale for that).
-
-Generic bases for arbitrary field models (linear + radial polarization).
+mentioning a rationale for that).}
 
 \subsection{Parallelization and Performance Analysis}
 
-Parallel efficiency, data output benchmarks (setting the stage for other
-similar procedures.)
+\todo[inline]{Parallel efficiency, data output benchmarks (setting the stage for other
+similar procedures).}
 
 \subsection{Numerical Verifications}
 
-Convergence with respect to the number of points on the mirror.
-Verify that the numerically computed fields solve the Maxwell equations.
-Verify that the numerically computed fields conserve energy.
+\todo[inline]{Convergence with respect to the number of points on the mirror.}
+\todo[inline]{Verify that the numerically computed fields solve the Maxwell equations.}
+\todo[inline]{Verify that the numerically computed fields conserve energy.}
 
 \section{Comparisons with Other Field Models}
 
 \subsection{Analytical Field Models}
 
-Salamin field model, other ST implementations?
+\todo[inline]{Salamin field model, other ST implementations?}
 
 \subsection{The Richards-Wolf Formalism}
 
-Statement of the RW formalism. Comment on derivation from RW to ST.
-Comparison of results with parabolic mirror in the frequency domain.
+\todo[inline]{Statement of the RW formalism. Comment on derivation from RW to ST.}
+\todo[inline]{Comparison of results with parabolic mirror in the frequency domain.}
 
 \section{Properties of Tightly Focused Fields}
 
-Visualization of the field and comments on important properties.
-Max of the field in time domain, and also in frequency components.
-3D visualization of the tranverse part of the beam.
-3D visualization of the longitudinal components of the beam.
-Importance of the longitudinal component as a function of the focal length
-and its possible effects on SF-QED observables (FORESHADOWING).
+\todo[inline]{Visualization of the field and comments on important properties.}
+\todo[inline]{Max of the field in time domain, and also in frequency components.}
+\todo[inline]{3D visualization of the tranverse part of the beam.}
+\todo[inline]{3D visualization of the longitudinal components of the beam.}
+\todo[inline]{Importance of the longitudinal component as a function of the focal length}
+\todo[inline]{and its possible effects on SF-QED observables (FORESHADOWING).}
 
 \subsection{Longitudinal Components}
 
-Relative strength of the longitudinal component as a function of the
-focal length.
+\todo[inline]{Relative strength of the longitudinal component as a function of the
+focal length.}
 
 \subsection{Gouy Phase}
 
-Gouy phase of tightly focused fields (deviation from Gaussian Gouy phase).
-Mention analytical solution for linear polarization.
-Computation of phase from 2D Fourier transforms.
+\todo[inline]{Gouy phase of tightly focused fields (deviation from Gaussian Gouy phase).}
+\todo[inline]{Mention analytical solution for linear polarization.}
+\todo[inline]{Computation of phase from 2D Fourier transforms.}
 
 \subsection{Generation of Pseudo-Radial Beams with Mosaics}
 
@@ -727,11 +757,11 @@ can be done with the unfocused beams, so probably not interesting.)}
 
 \section{Partial Conclusion}
 
-SC mostly used to model the fine details of tightly focused fields in an
+\todo[inline]{SC mostly used to model the fine details of tightly focused fields in an
 experimental settings. Most easily used with fast SF-QED observable codes
 in constract with PIC codes due to their high numerical cost.
 
-Alternatives: propagation equations, transformation optics?
+Alternatives: propagation equations, transformation optics?}
 
 \begin{comment}
 
