@@ -697,13 +697,41 @@ as it typically leads to non-integrable functions. Our strategy, then, will
 be to use general solutions of the paraxial equation as a basis to express
 arbitrary spatial dependence, including super-Gaussian dependence.
 
-\todo[inline]{Derivation of the paraxial wave equation. Show that both
-$\vb{E}$, $\vb{B}$ and $\vb{A}$ obey the same equation. Use that to
-define linear and radially polarized solutions.}
+In vacuum, the electric field, magnetic field and vector potential all obey
+the same differential equation, namely
+  \begin{equation}
+    \left(\nabla^2-\partial_t^2\right)\vb{F}(\vb{r},t) = 0
+  \end{equation}
+where $\vb{F}$ is any of the fields mentioned above. Solving this
+in the Fourier domain and applying the paraxial approximation
+yields
+  \begin{equation}
+    \left(\nabla_\perp^2-2ik\partial_z\right)\psi(r,\theta,z) = 0
+  \end{equation}
+where
+  \begin{equation}
+    \vb{F}(\vb{r},t) = \psi(r,\theta,z)e^{-i\omega t - ikz} \vu{z}.
+  \end{equation}
+The general solution reads \cite{Allen1992}
+  \begin{multline}
+    \psi(r,\theta,z) = \sum_{\ell=-\infty}^\infty\sum_{n=0}^\infty
+      \frac{c_{n\ell}}{\sqrt{1+\left(\frac{z}{z_R}\right)^2}}
+      \left(\frac{\sqrt{2}r}{w(z)}\right)
+      L_p^\ell\left(\frac{2r^2}{w^2(z)}\right)\exp\left(-\frac{r^2}{w^2(z)}\right)
+      \exp\left(-\frac{ikr^2}{2R(z)}\right)e^{-i\ell\theta}\\
+      \times\exp\left[i\left(2n+\ell+1\right)\arctan\frac{z}{z_R}\right].
+  \end{multline}
 
-\todo[inline]{Discuss paraxial approximation in the incident field case (exp(-ikz) phase, mostly),
-and the fact that all frequency components have the same waist size (I recall an article
-mentioning a rationale for that).}
+This equation can be used to describe both linearly and radially polarized
+beams. Indeed, choosing $\vb{E}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t -ikz}\vu{x}$,
+we can describe a linearly polarized beam. Choosing $\vb{A}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t - ikz}\vu{z}$
+yields
+  \begin{align}
+    \vb{E}(\vb{r},k) &= ik\vb{A}+\frac{i}{k}\nabla\left(\nabla\cdot\vb{A}\right) \\
+    \vb{B}(\vb{r},k) &= \nabla\times\vb{A}.
+  \end{align}
+
+\todo[inline]{Add normalization in Appendix.}
 
 \subsection{Parallelization and Performance Analysis}
 
@@ -733,8 +761,8 @@ similar procedures).}
 \todo[inline]{Max of the field in time domain, and also in frequency components.}
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
-\todo[inline]{Importance of the longitudinal component as a function of the focal length}
-\todo[inline]{and its possible effects on SF-QED observables (FORESHADOWING).}
+\todo[inline]{Importance of the longitudinal component as a function of the focal length
+                and its possible effects on SF-QED observables (FORESHADOWING).}
 
 \subsection{Longitudinal Components}
 
