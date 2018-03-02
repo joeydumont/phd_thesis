@@ -5,3 +5,6 @@
 	path = inrsthesis
 	url = git@github.com:valandil/inrsthesis.git
 
+[submodule "python-tools"]
+	path = python-tools
+	url = git@github.com:valandil/python-tools.git
