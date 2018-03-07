@@ -74,7 +74,7 @@ def GaussIntegrals(analysis_obj, field_type, r_index, frequency_index):
 
   # -- In cylindrical coordinates, the integrand must be multiplied by r.
   for i in range(cylinderIntegrand.shape[0]):
-    cylinderIntegrand[i,:,:] = analysis_obj.coord_r[i]*Fr[i,:,:]
+    cylinderIntegrand[i,:,:] =  analysis_obj.coord_r[i]*Fr[i,:,:]
     circleIntegrand[i,:,:]   = -analysis_obj.coord_r[i]*Fz[i,:,:]
 
   cylinderContribution  =  integrate.simps(integrate.simps(cylinderIntegrand[r_index,:,:],
@@ -142,4 +142,3 @@ print("The line integral for the electric case yields: {}".format(SurfaceLineInt
                                                                                        analysis_object.size_r//2,
                                                                                        analysis_object.size_z//2,
                                                                                        analysis_object.size_freq//2)))
-

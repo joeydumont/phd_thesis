@@ -735,8 +735,41 @@ yields
 
 \subsection{Parallelization and Performance Analysis}
 
-\todo[inline]{Parallel efficiency, data output benchmarks (setting the stage for other
-similar procedures).}
+When designing parallel applications, it is important to know how the implementation's
+performance scales with the number of processors. Often, the most important
+performance gains can be realized by changing the underlying algorithm that
+is used to perform computations. When we are confident that the chosen algorithm
+will provide the better scaling, it is useful to verify this scaling by measuring
+the performance of the code as a function of the number of processors.
+
+An important measure of scalability is the parallel efficiency, defined by the
+formula
+  \begin{equation}
+    E_n = \frac{t_1}{nt_n}
+  \end{equation}
+where $E_n$ is the efficiency at $n$ processors and $t_m$ is the time for a typical
+simulation run to execute on $m$ processors. Ideally, we would like
+$E_n\equiv1\forall n$.
+
+Of course, the performance increase is capped by Amdahl's law, which states that
+the theoretical speedup of parallel program that is divided into a serial portion
+$s$ and a parallel portion $p$ is given by
+  \begin{equation}
+    S = \frac{1}{1-p+\frac{p}{s}}
+  \end{equation}
+This can be misleading, as it is possible that other factors, such as a reduced
+number of cache misses, occur when increasing the number of processors.
+This could even lead to a parallel efficiency that is larger than 1!
+
+The StrattoCalculator has two use cases: (1) we compute the field in the
+focal spot and save it to a file for later analysis and (2) we compute the
+field in the focal spot and use the field available in memory to compute
+other observables. The former typically outputs large files, up to hundrends
+of gigabytes in size. In turn, we expect its parallel efficiency to decrease
+substantially, as the parallel I/O portion of the code will make up a larger
+proportion of the runtime, and parallel I/O is very hard to scale. \todo{Citation.}
+The latter is expected to scale perfectly, as the underlying algorithm is
+embarassingly parallel.
 
 \subsection{Numerical Verifications}
 
@@ -762,7 +795,11 @@ similar procedures).}
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
 \todo[inline]{Importance of the longitudinal component as a function of the focal length
-                and its possible effects on SF-QED observables (FORESHADOWING).}
+                and its possible effects on SF-QED observables (FORESHADOWING).
+                Interpretation of strong longitudinal components as presence
+                of both forward and backwards propagating longitudinal vectors
+                as focal length decreases.}
+\todo[inline]{Confirm of infirm http://iopscience.iop.org/article/10.1088/2040-8986/aaadc8/meta.}
 
 \subsection{Longitudinal Components}
 
@@ -834,6 +871,9 @@ Skeleton:
 
 \chapter{Application I: Four-Wave Mixing \textit{in vacuo} and Pair Production}
 
+\todo[inline]{On the importance of modeling spatial inhomogeneities:
+https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022515}
+
 Skeleton:
 \begin{itemize}
     \item Simple derivation of the EH Lagrangian.
@@ -853,6 +893,12 @@ Skeleton:
                 magnetic field in both cases).
       \end{itemize}
 \end{itemize}
+
+\todo[inline]{Compare results and prensetation with
+https://journals.aps.org/prd/abstract/10.1103/PhysRevD.97.036022.}
+
+\todo[inline]{Compare results and presentation with
+https://journals.aps.org/prd/pdf/10.1103/PhysRevD.97.036026.}
 
 \chapter{Application II: Radiation Reaction With High Energy Electrons}
 
