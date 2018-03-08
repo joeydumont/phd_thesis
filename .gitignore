@@ -1,3 +1,10 @@
+# LaTeX by-products
 out/
 figs/
 *.pdf
+
+# emacs leftovers
+*~
+
+# Binary data
+*.txt

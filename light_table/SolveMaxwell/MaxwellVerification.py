@@ -89,7 +89,8 @@ def GaussIntegrals(analysis_obj, field_type, r_index, frequency_index):
                                            x=analysis_obj.coord_theta[:]),
                                            x=analysis_obj.coord_r[0:r_index-1])
 
-  return cylinderContribution+negCircleContribution+posCircleContribution
+  print(np.amax(cylinderIntegrand[r_index,:,:]))
+  return (cylinderContribution+negCircleContribution+posCircleContribution)/np.abs(np.amax(cylinderIntegrand[r_index,:,:]))
 
 def SurfaceLineIntegrals(analysis_obj, field_type, r_index, z_index, frequency_index):
   """
@@ -101,7 +102,7 @@ def SurfaceLineIntegrals(analysis_obj, field_type, r_index, z_index, frequency_i
     long_field   = "Bz"
   elif field_type == "magnetic":
     factor = -1
-    radial_field = "Bth"
+    theta_field = "Bth"
     long_field  = "Ez"
 
   Fth = analysis_obj.GetFrequencyComponent(theta_field, frequency_index)
@@ -117,10 +118,14 @@ def SurfaceLineIntegrals(analysis_obj, field_type, r_index, z_index, frequency_i
 
   lineContribution   = integrate.simps(lineIntegrand[r_index,:,z_index],
                                        x=analysis_obj.coord_theta[:])
+
   circleContribution = integrate.simps(integrate.simps(circleIntegrand[0:r_index-1,:,z_index],
                                        x=analysis_obj.coord_theta[:]),
                                        x=analysis_obj.coord_r[0:r_index-1])
 
+  plt.plot(lineIntegrand[r_index,:,z_index])
+  plt.savefig("lineIntegrand.pdf")
+  print(1j*analysis_obj.omega[frequency_index]*analysis_obj.UNIT_TIME*circleContribution)
   return lineContribution-1j*analysis_obj.omega[frequency_index]*analysis_obj.UNIT_TIME*factor*circleContribution
 
 # ------------------------------ MAIN FUNCTION ------------------------------ #
@@ -132,13 +137,19 @@ print("The surface integral for the electric case yields: {}".format(GaussIntegr
                                                                                     analysis_object.size_r//2,
                                                                                     analysis_object.size_freq//2)))
 
-print("The surface integral for the electric case yields: {}".format(GaussIntegrals(analysis_object,
+print("The surface integral for the magnetic case yields: {}".format(GaussIntegrals(analysis_object,
                                                                                     "magnetic",
                                                                                     analysis_object.size_r//2,
                                                                                     analysis_object.size_freq//2)))
 
 print("The line integral for the electric case yields: {}".format(SurfaceLineIntegrals(analysis_object,
                                                                                        "electric",
+                                                                                       analysis_object.size_r//2,
+                                                                                       analysis_object.size_z//2,
+                                                                                       analysis_object.size_freq//2)))
+
+print("The line integral for the magnetic case yields: {}".format(SurfaceLineIntegrals(analysis_object,
+                                                                                       "magnetic",
                                                                                        analysis_object.size_r//2,
                                                                                        analysis_object.size_z//2,
                                                                                        analysis_object.size_freq//2)))
