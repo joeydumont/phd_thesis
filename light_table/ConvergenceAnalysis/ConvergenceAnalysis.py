@@ -66,8 +66,12 @@ def ListSimulationDirectories(bin_dir):
   """
   dirList = [f for f in os.listdir(bin_dir) if re.search(r'(.*\d{5}.BQ)', f)]
 
-  return sorted(dirList, key=str.lower)
+  sortedList = sorted(dirList, key=str.lower)
 
+  for i in range(len(sortedList)):
+    sortedList[i] += "/{:05g}.BQ/".format(i+1)
+
+  return sortedList
 
 def ComputeTotalEnergyDensityTemporalRadial(file_id, r_dat, z_dat, timeIdx):
   """
@@ -89,7 +93,7 @@ def ComputeTotalEnergyDensityTemporalRadial(file_id, r_dat, z_dat, timeIdx):
   for i in range(integrand.shape[0]):
     integrand[i,:] *= r_dat[i]
 
-  return 2.0*np.pi*integration.simps(integration.simps(integrand,x=z_dat[:]),x=r_dat[:])*analstrat.UNIT_MASS*analstrat.SPEED_OF_LIGHT**2
+  return 2.0*np.pi*integrate.simps(integrate.simps(integrand,x=z_dat[:]),x=r_dat[:])*analstrat.UNIT_MASS*analstrat.SPEED_OF_LIGHT**2
 
 def ComputeTotalEnergyDensityTemporalLinear(file_id, r_dat, theta_dat, z_dat, timeIdx):
   r_dat_SI     = r_dat[:]*UNIT_LENGTH
@@ -109,7 +113,7 @@ def ComputeTotalEnergyDensityTemporalLinear(file_id, r_dat, theta_dat, z_dat, ti
   for i in range(integrand.shape[0]):
     integrand[i,:,:] *= r_dat[i]
 
-  return integration.simps(integration.simps(integration.simps(integrand, x=z_dat[:]), x=theta_dat[:]), x=r_dat[:])*analstrat.UNIT_MASS*analstrat.SPEED_OF_LIGHT**2
+  return integrate.simps(integrate.simps(integrate.simps(integrand, x=z_dat[:]), x=theta_dat[:]), x=r_dat[:])*analstrat.UNIT_MASS*analstrat.SPEED_OF_LIGHT**2
 
 # ------------------------------ MAIN FUNCTION ------------------------------ #
 
@@ -119,7 +123,7 @@ def ComputeTotalEnergyDensityTemporalLinear(file_id, r_dat, theta_dat, z_dat, ti
 # -- as a function of the average cell area. We then plot the convergence rate
 # -- to check that it matches the integrator's.
 bin_folder = "../../bin/Convergence/Stratto/Radial/"
-configFile = folder+"stratto-convergence.ini"
+configFile = bin_folder+"stratto-convergence.ini"
 dirList = ListSimulationDirectories(bin_folder)
 
 # -- Load the ref. simulation in memory.
@@ -172,7 +176,7 @@ for idx in range(size_loop):
   # -- of the number of intervals.
   # Open the config file.
   config       = configparser.ConfigParser(inline_comment_prefixes=";")
-  config.read(folder+"/"+dirList[idx]+"stratto-convergence.ini")
+  config.read(bin_folder+"/"+dirList[idx]+"stratto-convergence.ini")
 
   # Read the number of intervals.
   intervals_r   = int(config['Parabola']['intervals_r'])
@@ -188,7 +192,7 @@ for idx in range(size_loop):
   area[idx]  = deltaTheta*deltaR**2*(N_r+1)**2/(2*N_r)
 
   # -- We open the proper files.
-  folderName = folder+dirList[idx]
+  folderName = bin_folder+dirList[idx]
   hdf5File   = h5py.File(folderName+"/Field_reflected_time.hdf5", 'r')
   hdf5Freq   = h5py.File(folderName+"/Field_reflected.hdf5", 'r')
 
@@ -199,7 +203,7 @@ for idx in range(size_loop):
 
   # -- We compute the energy at the reference index.
   energyInt[idx] = ComputeTotalEnergyDensityTemporalRadial(hdf5File,r_dat,z_dat,refIndex)
-  print(energyInt[idx], energyInt[idx]-refEnergy)
+  print(energyInt[idx], energyInt[idx]-refEnergy, refEnergy)
 
   # -- We compute the difference of the frequency components, but keep only the
   # -- minimum, average and maximum.
@@ -207,17 +211,17 @@ for idx in range(size_loop):
   absDiffEz  = np.abs(refEz-hdf5Freq['/field/Ez-{}/amplitude'.format(refIndexFreq)][:]*np.exp(1j*hdf5Freq['/field/Ez-{}/phase'.format(refIndexFreq)][:]))
   absDiffBth = np.abs(refBth-hdf5Freq['/field/Bth-{}/amplitude'.format(refIndexFreq)][:]*np.exp(1j*hdf5Freq['/field/Bth-{}/phase'.format(refIndexFreq)][:]))
 
-  minDiffEr[size]  = np.amin(absDiffEr)
-  avgDiffEr[size]  = np.mean(absDiffEr)
-  maxDiffEr[size]  = np.amax(absDiffEr)
+  minDiffEr[idx]  = np.amin(absDiffEr)
+  avgDiffEr[idx]  = np.mean(absDiffEr)
+  maxDiffEr[idx]  = np.amax(absDiffEr)
 
-  minDiffEz[size]  = np.amin(absDiffEz)
-  avgDiffEz[size]  = np.mean(absDiffEz)
-  maxDiffEz[size]  = np.amax(absDiffEz)
+  minDiffEz[idx]  = np.amin(absDiffEz)
+  avgDiffEz[idx]  = np.mean(absDiffEz)
+  maxDiffEz[idx]  = np.amax(absDiffEz)
 
-  minDiffBth[size] = np.amin(absDiffBth)
-  avgDiffBth[size] = np.mean(absDiffBth)
-  maxDiffBth[size] = np.amax(absDiffBth)
+  minDiffBth[idx] = np.amin(absDiffBth)
+  avgDiffBth[idx] = np.mean(absDiffBth)
+  maxDiffBth[idx] = np.amax(absDiffBth)
 
   # -- Some bookkeeping for the loop.
   hdf5File.close()
@@ -226,10 +230,12 @@ for idx in range(size_loop):
 # ------------------------- Plotting the Convergence ------------------------ #
 
 # -- We check the convergence order of the components.
-convXFit      = np.log(area[0:6])
-ErConvYFit    = np.log(avgDiffEr[0:6])
-EzConvYFit    = np.log(avgDiffEz[0:6])
-BthConvYFit   = np.log(avgDiffBth[0:6])
+minIndexConv = 3
+maxIndexConv = -1
+convXFit      = np.log(area[minIndexConv:maxIndexConv])
+ErConvYFit    = np.log(avgDiffEr[minIndexConv:maxIndexConv])
+EzConvYFit    = np.log(avgDiffEz[minIndexConv:maxIndexConv])
+BthConvYFit   = np.log(avgDiffBth[minIndexConv:maxIndexConv])
 
 # Polynomial fits.
 ErConvPoly    = np.polyfit(convXFit, ErConvYFit, 1)
@@ -242,7 +248,7 @@ print("Order of convergence for Bth is {}".format(BthConvPoly[0]))
 
 # Fitted values.
 ErConvFitted  = np.poly1d(ErConvPoly)(convXFit)
-EzConfFitted  = np.poly1d(EzConvPoly)(convXFit)
+EzConvFitted  = np.poly1d(EzConvPoly)(convXFit)
 BthConvFitted = np.poly1d(BthConvPoly)(convXFit)
 
 # -- We check the convergence of the components.
@@ -256,15 +262,15 @@ figCompConv.suptitle("Average cell length [$/\lambda$]", y=0)
 #axErConv    = figCompConv.add_subplot(141)
 #axErConv.plot(np.sqrt(area), minDiffEr)
 #axErConv.plot(np.sqrt(area), avgDiffEr)
-axErConv.plot(np.sqrt(area_plot)[0:6], maxDiffEr[0:6],       'b^', zorder=3)
-axErConv.plot(np.sqrt(area_plot)[6:],  maxDiffEr[6:],        'b^', zorder=3, markevery=5)
-axErConv.plot(np.sqrt(area_plot)[0:6], np.exp(ErConvFitted), 'k',  zorder=3)
+axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEr[minIndexConv:maxIndexConv],       'b^', zorder=3)
+axErConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEr[maxIndexConv:],        'b^', zorder=3, markevery=5)
+axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(ErConvFitted), 'k',  zorder=3)
 
 #axErConv.set_title(r'$E_r$')
 axErConv.set_xscale('log')
 axErConv.set_yscale('log')
-axErConv.set_xlim((10**(1),10**(4.5)))
-axErConv.xaxis.set_ticks((1e0,1e1,1e2,1e3,1e4))
+axErConv.set_xlim((10**(1.5),10**(4.5)))
+axErConv.xaxis.set_ticks((1e2,1e3,1e4))
 axErConv.invert_xaxis()
 
 axErConv.set_ylabel("Absolute\n error", rotation='horizontal', va='center', ha='left')
@@ -278,14 +284,14 @@ axErConv.grid(True,color='gray', zorder=0)
 # axEzConv   = figCompConv.add_subplot(142, sharey=axErConv)
 #axEzConv.plot(np.sqrt(area), minDiffEz)
 #axEzConv.plot(np.sqrt(area), avgDiffEz)
-axEzConv.plot(np.sqrt(area_plot)[0:6], maxDiffEz[0:6],       'b^', zorder=3)
-axEzConv.plot(np.sqrt(area_plot)[6:],  maxDiffEz[6:],        'b^', zorder=3, markevery=5)
-axEzConv.plot(np.sqrt(area_plot)[0:6], np.exp(EzConvFitted), 'k',  zorder=3)
+axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEz[minIndexConv:maxIndexConv],       'b^', zorder=3)
+axEzConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEz[maxIndexConv:],        'b^', zorder=3, markevery=5)
+axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(EzConvFitted), 'k',  zorder=3)
 
 #axEzConv.set_title(r'$E_z$')
 axEzConv.set_xscale('log')
-axEzConv.set_xlim((10**(1),10**(4.5)))
-axEzConv.xaxis.set_ticks((1e0,1e1,1e2,1e3,1e4))
+axEzConv.set_xlim((10**(1.5),10**(4.5)))
+axEzConv.xaxis.set_ticks((1e2,1e3,1e4))
 axEzConv.invert_xaxis()
 
 axEzConv.text(0.03,0.83, "(b)", transform=axEzConv.transAxes)#, backgroundcolor='white')
@@ -297,14 +303,14 @@ axEzConv.grid(True, color='gray', zorder=0)
 #axBthConv  = figCompConv.add_subplot(143, sharey=axErConv)
 #axBthConv.plot(np.sqrt(area), minDiffBth)
 #axBthConv.plot(np.sqrt(area), avgDiffBth)
-axBthConv.plot(np.sqrt(area_plot)[0:6], maxDiffBth[0:6],       'b^', zorder=3)
-axBthConv.plot(np.sqrt(area_plot)[6:],  maxDiffBth[6:],        'b^', zorder=3, markevery=5)
-axBthConv.plot(np.sqrt(area_plot)[0:6], np.exp(BthConvFitted), 'k', zorder=3)
+axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffBth[minIndexConv:maxIndexConv],       'b^', zorder=3)
+axBthConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffBth[maxIndexConv:],        'b^', zorder=3, markevery=5)
+axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(BthConvFitted), 'k', zorder=3)
 
 #axBthConv.set_title(r'$B_\theta$')
 axBthConv.set_xscale('log')
-axBthConv.set_xlim((10**(1),10**(4.5)))
-axBthConv.xaxis.set_ticks((1e0,1e1,1e2,1e3,1e4))
+axBthConv.set_xlim((10**(1.5),10**(4.5)))
+axBthConv.xaxis.set_ticks((1e2,1e3,1e4))
 axBthConv.invert_xaxis()
 
 axBthConv.text(0.03,0.83, "(c)", transform=axBthConv.transAxes)#, backgroundcolor='white')
@@ -316,8 +322,8 @@ axBthConv.grid(True, color='gray', zorder=0)
 
 # -- We check the convergence of the energy.
 # -- We fit a line on the log-log graph.
-xfit  = np.log(np.sqrt(area[0:6]))
-yfit  = np.log(np.abs(energyInt-refEnergy)[0:6])
+xfit  = np.log(np.sqrt(area[minIndexConv:maxIndexConv]))
+yfit  = np.log(np.abs(energyInt-refEnergy)[minIndexConv:maxIndexConv])
 polyno= np.polyfit(xfit,yfit,1)
 pfit  = np.poly1d(polyno)
 fitplt= pfit(xfit)
@@ -326,14 +332,14 @@ print("Order of convergence of the energy is {}".format(polyno[0]))
 
 #figConv  = plt.figure(figsize=(3,3))
 #axConv   = figCompConv.add_subplot(144, sharey=axErConv)
-axConv.plot(np.sqrt(area_plot)[0:6],np.abs(energyInt-refEnergy)[0:6], 'b^', zorder=3)
-axConv.plot(np.sqrt(area_plot)[6:], np.abs(energyInt-refEnergy)[6:],  'b^', zorder=3, markevery=5)
-axConv.plot(np.sqrt(area_plot)[0:6],np.exp(fitplt),                    'k', zorder=3)
+axConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv],np.abs(energyInt-refEnergy)[minIndexConv:maxIndexConv], 'b^', zorder=3)
+axConv.plot(np.sqrt(area_plot)[maxIndexConv:], np.abs(energyInt-refEnergy)[maxIndexConv:],  'b^', zorder=3, markevery=5)
+axConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv],np.exp(fitplt),                    'k', zorder=3)
 
 #axConv.set_title("Energy")
 axConv.set_xscale('log')
-axConv.set_xlim((10**(1),10**(4.5)))
-axConv.xaxis.set_ticks((1e0,1e1,1e2,1e3,1e4))
+axConv.set_xlim((10**(1.5),10**(4.5)))
+axConv.xaxis.set_ticks((1e2,1e3,1e4))
 axConv.invert_xaxis()
 axConv.text(0.03,0.83, "(d)", transform=axConv.transAxes)#,backgroundcolor='white')
 axConv.text(0.95,0.85, "Energy", transform=axConv.transAxes, ha='right')
@@ -349,8 +355,8 @@ plt.savefig("ConvergenceAll.pdf", bbox_inches='tight')
 # as a function of the average cell area. We then plot the convergence rate   #
 # to check that it matches the integrator's.                                  #
 # --------------------------------------------------------------------------- #
-bin_folder = "../../bin/Convergence/Stratto/Radial/"
-configFile = folder+"stratto-convergence.ini"
+bin_folder = "../../bin/Convergence/Stratto/Linear/"
+configFile = bin_folder+"stratto-convergence.ini"
 dirList = ListSimulationDirectories(bin_folder)
 
 # -- Load the ref. simulation in memory.
@@ -403,7 +409,7 @@ for idx in range(size_loop):
   # -- of the number of intervals.
   # Open the config file.
   config       = configparser.ConfigParser(inline_comment_prefixes=";")
-  config.read(folder+"/"+dirList[idx]+"stratto-convergence.ini")
+  config.read(bin_folder+"/"+dirList[idx]+"stratto-convergence.ini")
 
   # Read the number of intervals.
   intervals_r   = int(config['Parabola']['intervals_r'])
@@ -419,7 +425,7 @@ for idx in range(size_loop):
   area[idx]  = deltaTheta*deltaR**2*(N_r+1)**2/(2*N_r)
 
   # -- We open the proper files.
-  folderName = folder+dirList[idx]
+  folderName = bin_folder+dirList[idx]
   hdf5File   = h5py.File(folderName+"/Field_reflected_time.hdf5", 'r')
   hdf5Freq   = h5py.File(folderName+"/Field_reflected.hdf5", 'r')
 
