@@ -1321,19 +1321,83 @@ The magnetic field gives
   \end{align}
   \end{subequations}
 
-\subsection{Analytic Solutions for Some Field Models}
+\section{Analytic Solutions in the Far Field}
 In the far-field approximation, it is possible to evaluate the integrals
 for some simple field models. In the following, we will extensively use the
-relation \cite[\S9.1.21]{Abramowitz1965}
+following two relations
   \begin{equation}
-    \int_0^{2\pi} \cos(n\theta)e^{iz\cos\theta}= 2\pi i^n J_n(z).
+    \stepcounter{equation}
+    \int_0^{2\pi} \cos(n\theta)e^{iz\cos\theta}= 2\pi i^n J_n(z). \tag{\theequation,\cite[\S9.1.21]{Abramowitz1965}}
   \end{equation}
 
-\paragraph{Linear polarization}
+\subsection{Radially Symmetric, Linearly Polarized Beam}
 For a linearly polarized beam, we have
-  \begin{equation}
-    B_r = -E_0(r)\sin\theta; B_\theta=-E_0(r)\cos(\theta); B_z=0.
-  \end{equation}
+  \begin{subequations}
+  \begin{align}
+    E_r       &= E_0(r)\cos\theta ,  & B_r      &= -E_0\sin\theta, \\
+    E_\theta  &= -E_0(r)\sin\theta,  & B_\theta &= -E_0\cos\theta, \\
+    E_z       &= 0                ,  & B_z      &=  0.
+  \end{align}
+  \end{subequations}
+where $E_0(r)$ is the radial shape of the beam.
+Substituting these incident field in the SC equations above, we have the following
+result for the electric field
+  \begin{subequations}
+  \begin{align}
+    E_r      &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{rE_0(r)}{R}
+      \left[\frac{r^2-4f^2}{r^2+4f^2}\cos\theta\cos(\theta-\theta')+\sin\theta\sin(\theta-\theta')\right]
+      e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,                         \\
+    E_\theta &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{rE_0(r)}{R}
+      \left[\frac{r^2-4f^2}{r^2+4f^2}\cos\theta\sin(\theta-\theta')-\sin\theta\cos(\theta-\theta')\right]
+      e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,                         \\
+    E_z      &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{r^2E_0(r)}{2fR}
+      \cos\theta\left(1-\frac{z}{R}\right)e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,
+  \end{align}
+while the magnetic field yields
+  \begin{align}
+    B_r      &= -2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{rE_0(r)}{R}
+      \left[\frac{z}{R}\sin\theta\cos(\theta-\theta')+\cos\theta\sin(\theta-\theta')\right]
+      e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,                         \\
+    B_\theta &=  2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{rE_0(r)}{R}
+      \left[-\frac{z}{R}\sin\theta\sin(\theta-\theta')+\cos\theta\cos(\theta-\theta')\right]
+      e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,                         \\
+    B_z      &= 2ike^{2ikf}\int_0^{r_\text{max}}\int_0^{2\pi} \frac{r^2E_0(r)}{R^2}
+      \sin\theta e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr.
+  \end{align}
+  \end{subequations}
+Given that the incident fields are simpler in Cartesian coordinates, as they have
+no angular dependence, we will convert our fields to the Cartesian ones with
+  \begin{align*}
+    A_x   &= A_r\cos\theta'-A_\theta\sin\theta' \\
+    A_y   &= A_r\sin\theta'+A_\theta\cos\theta'
+  \end{align*}
+to get
+  \begin{subequations}
+  \begin{align}
+    E_x      &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
+        \left[\sin^2\theta-\frac{r^2-4f^2}{r^2+4f^2}\cos^2\theta\right]
+        e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr, \\
+    E_y     &= -2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
+        \sin\theta\cos\theta\left(1+\frac{r^2-4f^2}{r^2+4f^2}\right)
+        e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr, \\
+    E_z     &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{r^2E_0(r)}{2fR}\int_0^{2\pi}
+        \cos\theta\left(1-\frac{z}{R}\right)
+        e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,
+  \end{align}
+for the electric and
+  \begin{align}
+    B_x       &=-2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
+        \sin\theta\cos\theta\left(1+\frac{z}{R}\right)
+        e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr, \\
+    B_\theta  &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
+        \left[\cos^2\theta-\frac{z}{R}\sin^2\theta\right]
+        e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,\\
+    B_z       &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{r^2}{R^2}\int_0^{2\pi}
+        \sin\theta e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,
+  \end{align}
+  \end{subequations}
+for the magnetic field.
+
 
 We can write $B_z$ as
   \begin{equation*}
@@ -1532,6 +1596,9 @@ Expressing this in terms of our scaled variables yields
 the $\theta$ integrals. State the components as an integral over the relevant
 Bessel functions. Maybe compare to RW at that point. Then introduce the power-series
 representation, and the incomplete gamma function expression.s}
+
+\subsection{Radially Symmetric, Radially Polarized Beam}
+
 
 \chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
 

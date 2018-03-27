@@ -144,6 +144,6 @@ $(OUTDIR)/$(PROJECT).bbl: $(BIB_FILES) | $(OUTDIR)/$(PROJECT).aux
 	bibtex $(OUTDIR)/$(PROJECT)
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
 
-$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images python_images light_table
+$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images #python_images light_table
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT).tex
 	cp $@ .
