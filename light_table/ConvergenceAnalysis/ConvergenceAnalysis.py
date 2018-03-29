@@ -122,7 +122,7 @@ def ComputeTotalEnergyDensityTemporalLinear(file_id, r_dat, theta_dat, z_dat, ti
 # -- absolute difference between the reference simulation and other simulation
 # -- as a function of the average cell area. We then plot the convergence rate
 # -- to check that it matches the integrator's.
-bin_folder = "../../bin/Convergence/Stratto/Radial/"
+bin_folder = "../../bin_tmp/Convergence/Stratto/Radial/"
 configFile = bin_folder+"stratto-convergence.ini"
 dirList = ListSimulationDirectories(bin_folder)
 
@@ -230,7 +230,7 @@ for idx in range(size_loop):
 # ------------------------- Plotting the Convergence ------------------------ #
 
 # -- We check the convergence order of the components.
-minIndexConv = 3
+minIndexConv = 5
 maxIndexConv = -1
 convXFit      = np.log(area[minIndexConv:maxIndexConv])
 ErConvYFit    = np.log(avgDiffEr[minIndexConv:maxIndexConv])
@@ -287,6 +287,8 @@ axErConv.grid(True,color='gray', zorder=0)
 axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEz[minIndexConv:maxIndexConv],       'b^', zorder=3)
 axEzConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEz[maxIndexConv:],        'b^', zorder=3, markevery=5)
 axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(EzConvFitted), 'k',  zorder=3)
+
+print(np.sqrt(area_plot))
 
 #axEzConv.set_title(r'$E_z$')
 axEzConv.set_xscale('log')
