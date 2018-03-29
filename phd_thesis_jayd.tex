@@ -1290,7 +1290,8 @@ formally necessary for the Stratton-Chu equations to be a solution of Maxwell's
 equations, in practice its contribution can be shown to be negligible \cite{SOMEONE}.
 
 To go further, it is necessary to specialize these equations a little. We assume
-a paraboloid mirror such that $n_\theta=0$ and $R=\sqrt{r^2+z^2}=r^2/4f+f$. We also assume that every field component carries a
+a paraboloid mirror such that $n_\theta=0$ and $R=\sqrt{r^2+z^2}=r^2/4f+f$.
+We also assume that every field component carries a
 $e^{-ikz}$ phase term. Following the discussion in \ref{section on phase}, we
 see that exponential term $e^{ikR-ikz}=e^{2ikf}$ factors out of the integrand.
 We are left with
@@ -1396,19 +1397,49 @@ to get
         \cos\theta\left(1-\frac{z}{R}\right)
         e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,
   \end{align}
-for the electric and
+for the electric field and
   \begin{align}
     B_x       &=-2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
         \sin\theta\cos\theta\left(1+\frac{z}{R}\right)
         e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr, \\
-    B_\theta  &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
+    B_y       &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{rE_0(r)}{R}\int_0^{2\pi}
         \left[\cos^2\theta-\frac{z}{R}\sin^2\theta\right]
         e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,\\
     B_z       &= 2ike^{2ikf}\int_0^{r_\text{max}}\frac{r^2}{R^2}\int_0^{2\pi}
         \sin\theta e^{\frac{-ik\vb{r}\cdot\vb{r'}}{R}} d\theta dr,
   \end{align}
   \end{subequations}
-for the magnetic field.
+for the magnetic field. The analysis can be streamlined by defining $\rho=r/r_\text{max}$
+and $\xi=2f/r_\text{max}$. We also substitute the paraboloid relation $z=r^2/4f-f$
+to obtain
+  \begin{subequations}
+  \begin{align}
+    E_x      &= A\int_0^{1}\frac{\rho E_0(r)}{\rho^2+\xi^2}\int_0^{2\pi}
+        \left[\sin^2\theta-\frac{\rho^2-\xi^2}{\rho^2+\xi^2}\cos^2\theta\right]
+        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+    E_y     &= -A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
+        \sin\theta\cos\theta
+        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+    E_z     &= A\int_0^{1}\frac{2\xi\rho^2E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
+        \cos\theta e^{iF(\vb{r},\vb{r}')}d\theta dr
+  \end{align}
+for the electric field
+  \begin{align}
+    B_x       &=-A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
+        \sin\theta\cos\theta
+        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+    B_y        &= A\int_0^{1}\frac{\rho E_0(r)}{\rho^2+\xi^2}\int_0^{2\pi}
+        \left[\cos^2\theta-\frac{\rho^2-\xi^2}{\rho^2+\xi^2}\sin^2\theta\right]
+        e^{iF(\vb{r},\vb{r}')}d\theta dr,\\
+    B_z       &= A\int_0^{1}\frac{2\xi\rho^2 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
+        \sin\theta e^{iF(\vb{r},\vb{r}')}d\theta dr,
+  \end{align}
+  \end{subequations}
+where $A=8ikfe^{2ikf}$ and
+  \begin{equation}
+    F(\vb{r},\vb{r}') = -2ikr'\frac{\xi\rho\cos(\theta-\theta')}{\rho^2+\xi^2}
+                        -ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}.
+  \end{equation}
 
 
 We can write $B_z$ as
