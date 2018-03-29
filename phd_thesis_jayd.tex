@@ -764,12 +764,19 @@ This could even lead to a parallel efficiency that is larger than 1!
 The StrattoCalculator has two use cases: (1) we compute the field in the
 focal spot and save it to a file for later analysis and (2) we compute the
 field in the focal spot and use the field available in memory to compute
-other observables. The former typically outputs large files, up to hundrends
+other observables. The former typically outputs large files, up to hundreds
 of gigabytes in size. In turn, we expect its parallel efficiency to decrease
 substantially, as the parallel I/O portion of the code will make up a larger
 proportion of the runtime, and parallel I/O is very hard to scale. \todo{Citation.}
 The latter is expected to scale perfectly, as the underlying algorithm is
 embarassingly parallel.
+
+Running tests on two different clusters reveals that the parallel efficiency
+greatly depends on the underlying hardware. In one cluster, the test simulation
+with data output did not scale well to a larger number of processors (Fig.~x(a))
+while in the other, it took about N nodes to observe diminishing returns. Our
+hypothesis is that the HDF5 library compiled on GP3 has been properly optimized
+for the Lustre setup used on GP3.
 
 \subsection{Numerical Verifications}
 
@@ -779,11 +786,24 @@ embarassingly parallel.
 
 \section{Comparisons with Other Field Models}
 
+As implied in the sections above, calculations using our Stratton-Chu implementation
+can be quite long, in some cases taking up to five days! It is thus necessary
+to make sure that the use of our formalism is indeed warranted. We will thus
+compare the fields obtained with our method to other field models that appear in
+the literature. We discuss both analytical solutions of Maxwell's equations
+and the Richards-Wolf diffraction formalism.
+
 \subsection{Analytical Field Models}
 
 \todo[inline]{Salamin field model, other ST implementations?}
 
 \subsection{The Richards-Wolf Formalism}
+
+The Richards-Wolf formalism rests on two approximations. First, the focal point
+is assumed far away from the reflecting surface, i.e. the far-field approximation
+is used. The second one is less explicit and thus more difficult to trace:
+it assumes that the light rays follow an energy conversation law.
+
 
 \todo[inline]{Statement of the RW formalism. Comment on derivation from RW to ST.}
 \todo[inline]{Comparison of results with parabolic mirror in the frequency domain.}
@@ -1416,23 +1436,23 @@ to obtain
   \begin{align}
     E_x      &= A\int_0^{1}\frac{\rho E_0(r)}{\rho^2+\xi^2}\int_0^{2\pi}
         \left[\sin^2\theta-\frac{\rho^2-\xi^2}{\rho^2+\xi^2}\cos^2\theta\right]
-        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+        e^{iF(\vb{r},\vb{r}')}d\theta d\rho, \\
     E_y     &= -A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
         \sin\theta\cos\theta
-        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+        e^{iF(\vb{r},\vb{r}')}d\theta d\rho, \\
     E_z     &= A\int_0^{1}\frac{2\xi\rho^2E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
-        \cos\theta e^{iF(\vb{r},\vb{r}')}d\theta dr
+        \cos\theta e^{iF(\vb{r},\vb{r}')}d\theta d\rho
   \end{align}
 for the electric field
   \begin{align}
     B_x       &=-A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
         \sin\theta\cos\theta
-        e^{iF(\vb{r},\vb{r}')}d\theta dr, \\
+        e^{iF(\vb{r},\vb{r}')}d\theta d\rho, \\
     B_y        &= A\int_0^{1}\frac{\rho E_0(r)}{\rho^2+\xi^2}\int_0^{2\pi}
         \left[\cos^2\theta-\frac{\rho^2-\xi^2}{\rho^2+\xi^2}\sin^2\theta\right]
-        e^{iF(\vb{r},\vb{r}')}d\theta dr,\\
+        e^{iF(\vb{r},\vb{r}')}d\theta d\rho,\\
     B_z       &= A\int_0^{1}\frac{2\xi\rho^2 E_0(r)}{(\rho^2+\xi^2)^2}\int_0^{2\pi}
-        \sin\theta e^{iF(\vb{r},\vb{r}')}d\theta dr,
+        \sin\theta e^{iF(\vb{r},\vb{r}')}d\theta d\rho,
   \end{align}
   \end{subequations}
 where $A=8ikfe^{2ikf}$ and
@@ -1445,6 +1465,83 @@ which is allowed since the integrand is periodici with period $2\pi$. After the
 substitution, we can apply power-reduction formul\ae and angle difference identities
 on the trigonometric operators, and then evaluate the integrals by noting
 that $\int_0^{2\pi}\sin(n\theta)F(\cos\theta)d\theta=0$ and keeping Eq.~\eqref{}
+in mind, we have
+to obtain
+  \begin{subequations}
+  \begin{align}
+    E_x      &= 2\pi A\int_0^{1}\frac{\rho E_0(r)}{(\rho^2+\xi^2)^2}
+        \left[\xi^2J_0\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)
+              +\rho^2J_2\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)\cos2\theta'
+        \right]
+        e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho, \\
+    E_y     &= -\pi A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}
+        J_2\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)\sin2\theta'
+        e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho, \\
+    E_z     &= -2\pi iA\int_0^{1}\frac{2\xi\rho^2E_0(r)}{(\rho^2+\xi^2)^2}
+        \cos\theta' J_1\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)
+        e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho
+  \end{align}
+and
+  \begin{align}
+    B_x       &=-\pi A\int_0^{1}\frac{2\rho^3 E_0(r)}{(\rho^2+\xi^2)^2}
+        J_2\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)\sin2\theta'
+       e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho, \\
+    B_y        &= 2\pi A\int_0^{1}\frac{\rho E_0(r)}{(\rho^2+\xi^2)^2}
+        \left[\xi^2J_0\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)
+              -\rho^2J_2\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)\cos2\theta'
+        \right]
+        e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho,\\
+    B_z       &= -2\pi iA\int_0^{1}\frac{2\xi\rho^2 E_0(r)}{(\rho^2+\xi^2)^2}
+       \sin\theta' J_1\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)
+        e^{-ikz'\frac{\rho^2-\xi^2}{\rho^2+\xi^2}} d\rho.
+  \end{align}
+  \end{subequations}
+To the best of my knowledge, this cannot be integrated.
+\todo[inline]{Check April.}
+
+It is however possible to obtain an expressible valid in the vicinity of the
+optical axis, i.e. $kr'\sim0$ by expanding the Bessel functions in a power series.
+First, we apply the substitution $\rho=\xi\sqrt{1-t^2}/t$ and obtain
+  \begin{subequations}
+  \begin{align}
+    E_x      &= -2\pi A\int_1^{1/\sqrt{1+1/\xi^2}}E_0(r)
+        \left[tJ_0\left(2kr't\sqrt{1-t^2}\right)
+              +\frac{1-t^2}{t^3}J_2\left(2kr't\sqrt{1-t^2}\right)\cos2\theta'
+        \right]
+        e^{-ikz'(1-2t^2)} d\rho, \\
+    E_y     &= 2\pi A\sin2\theta'\int_1^{1/\sqrt{1+1/\xi^2}}E_0(r)
+        \frac{1-t^2}{t}J_2\left(2kr't\sqrt{1-t^2}\right)
+        e^{-ikz'(1-2t^2)} d\rho, \\
+    E_z     &= 4\pi iA\cos\theta'\int_1^{1/\sqrt{1+1/\xi^2}}E_0(r)
+         \sqrt{1-t^2}J_1\left(2kr't\sqrt{1-t^2}\right)
+        e^{-ikz'(1-2t^2)} d\rho
+  \end{align}
+  \end{subequations}
+and similarly for the magnetic field.
+
+At this point, we can see that the propagation phase, $e^{-ikz'}$, factors
+out of the integrand. The remaining term, $e^{2ikz't^2}$ can be interpreted
+as the phase incurred by the focusing process.
+
+To integrate this, we substitute the Bessel functions by their ascending series
+representation
+\cite[\S9.1.10]{Abramowitz1965}
+  \begin{equation}
+    J_n(z) = \sum_{m=0}^\infty
+      \frac{(-1)^k\left(\frac{z}{2}\right)^{2m+n}}{m!(n+k)!},
+  \end{equation}
+which converges for $|z|\ll1$ by the alternating series test. This yields
+an expression containing powers of $(1-t^2)$, on which we use the binomial
+theorem
+  \begin{equation}
+    (1-t^2)^n = \sum_{k=0}^n (-1)^k t^{2k},
+  \end{equation}
+such that we can use
+  \begin{equation}
+    \int t^{2k+1}e^{2izt^2}dt = -\frac{1}{2}\frac{\Gamma(k,-izt^2)}{(-iz)^k} +C
+  \end{equation}
+where $\Gamma(a,x)$ is the incomplete gamma function.
+
 
 We can write $B_z$ as
   \begin{equation*}

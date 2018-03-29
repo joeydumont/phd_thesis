@@ -203,7 +203,7 @@ for idx in range(size_loop):
 
   # -- We compute the energy at the reference index.
   energyInt[idx] = ComputeTotalEnergyDensityTemporalRadial(hdf5File,r_dat,z_dat,refIndex)
-  print(energyInt[idx], energyInt[idx]-refEnergy, refEnergy)
+  #print(energyInt[idx], energyInt[idx]-refEnergy, refEnergy)
 
   # -- We compute the difference of the frequency components, but keep only the
   # -- minimum, average and maximum.
@@ -215,6 +215,7 @@ for idx in range(size_loop):
   avgDiffEr[idx]  = np.mean(absDiffEr)
   maxDiffEr[idx]  = np.amax(absDiffEr)
 
+
   minDiffEz[idx]  = np.amin(absDiffEz)
   avgDiffEz[idx]  = np.mean(absDiffEz)
   maxDiffEz[idx]  = np.amax(absDiffEz)
@@ -223,6 +224,7 @@ for idx in range(size_loop):
   avgDiffBth[idx] = np.mean(absDiffBth)
   maxDiffBth[idx] = np.amax(absDiffBth)
 
+  print(maxDiffBth[idx])
   # -- Some bookkeeping for the loop.
   hdf5File.close()
   hdf5Freq.close()
@@ -231,7 +233,7 @@ for idx in range(size_loop):
 
 # -- We check the convergence order of the components.
 minIndexConv = 5
-maxIndexConv = -1
+maxIndexConv = -4
 convXFit      = np.log(area[minIndexConv:maxIndexConv])
 ErConvYFit    = np.log(avgDiffEr[minIndexConv:maxIndexConv])
 EzConvYFit    = np.log(avgDiffEz[minIndexConv:maxIndexConv])
@@ -262,8 +264,8 @@ figCompConv.suptitle("Average cell length [$/\lambda$]", y=0)
 #axErConv    = figCompConv.add_subplot(141)
 #axErConv.plot(np.sqrt(area), minDiffEr)
 #axErConv.plot(np.sqrt(area), avgDiffEr)
-axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEr[minIndexConv:maxIndexConv],       'b^', zorder=3)
-axErConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEr[maxIndexConv:],        'b^', zorder=3, markevery=5)
+axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEr[minIndexConv:maxIndexConv], 'b^', zorder=3,markevery=3)
+axErConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEr[maxIndexConv:],        'b^', zorder=3,)
 axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(ErConvFitted), 'k',  zorder=3)
 
 #axErConv.set_title(r'$E_r$')
@@ -271,6 +273,7 @@ axErConv.set_xscale('log')
 axErConv.set_yscale('log')
 axErConv.set_xlim((10**(1.5),10**(4.5)))
 axErConv.xaxis.set_ticks((1e2,1e3,1e4))
+axErConv.set_ylim((1.0e-12,1.0e-0))
 axErConv.invert_xaxis()
 
 axErConv.set_ylabel("Absolute\n error", rotation='horizontal', va='center', ha='left')
