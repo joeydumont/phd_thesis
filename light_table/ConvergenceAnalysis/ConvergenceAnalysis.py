@@ -45,6 +45,9 @@ import AnalysisStratto as analstrat
 
 #-- We reset the LaTeX parameters to enable XeLaTeX.
 mpl.rcParams.update(vphys.default_pgf_configuration())
+mpl.rcParams['axes.grid'] = True
+mpl.rcParams['grid.color'] = 'gray'
+mpl.rcParams['grid.linestyle'] = 'dashed'
 
 
 # ----------------------------- Argument Parsing ---------------------------- #
@@ -211,18 +214,18 @@ for idx in range(size_loop):
   absDiffEz  = np.abs(refEz-hdf5Freq['/field/Ez-{}/amplitude'.format(refIndexFreq)][:]*np.exp(1j*hdf5Freq['/field/Ez-{}/phase'.format(refIndexFreq)][:]))
   absDiffBth = np.abs(refBth-hdf5Freq['/field/Bth-{}/amplitude'.format(refIndexFreq)][:]*np.exp(1j*hdf5Freq['/field/Bth-{}/phase'.format(refIndexFreq)][:]))
 
-  minDiffEr[idx]  = np.amin(absDiffEr)
-  avgDiffEr[idx]  = np.mean(absDiffEr)
-  maxDiffEr[idx]  = np.amax(absDiffEr)
+  minDiffEr[idx]  = np.amin(absDiffEr) / np.amax(np.abs(refEr))
+  avgDiffEr[idx]  = np.mean(absDiffEr) / np.amax(np.abs(refEr))
+  maxDiffEr[idx]  = np.amax(absDiffEr) / np.amax(np.abs(refEr))
 
 
-  minDiffEz[idx]  = np.amin(absDiffEz)
-  avgDiffEz[idx]  = np.mean(absDiffEz)
-  maxDiffEz[idx]  = np.amax(absDiffEz)
+  minDiffEz[idx]  = np.amin(absDiffEz) / np.amax(np.abs(refEr))
+  avgDiffEz[idx]  = np.mean(absDiffEz) / np.amax(np.abs(refEr))
+  maxDiffEz[idx]  = np.amax(absDiffEz) / np.amax(np.abs(refEr))
 
-  minDiffBth[idx] = np.amin(absDiffBth)
-  avgDiffBth[idx] = np.mean(absDiffBth)
-  maxDiffBth[idx] = np.amax(absDiffBth)
+  minDiffBth[idx] = np.amin(absDiffBth) / np.amax(np.abs(refEr))
+  avgDiffBth[idx] = np.mean(absDiffBth) / np.amax(np.abs(refEr))
+  maxDiffBth[idx] = np.amax(absDiffBth) / np.amax(np.abs(refEr))
 
   print(maxDiffBth[idx])
   # -- Some bookkeeping for the loop.
@@ -232,12 +235,12 @@ for idx in range(size_loop):
 # ------------------------- Plotting the Convergence ------------------------ #
 
 # -- We check the convergence order of the components.
-minIndexConv = 5
-maxIndexConv = -4
+minIndexConv = 0
+maxIndexConv = -2
 convXFit      = np.log(area[minIndexConv:maxIndexConv])
-ErConvYFit    = np.log(avgDiffEr[minIndexConv:maxIndexConv])
-EzConvYFit    = np.log(avgDiffEz[minIndexConv:maxIndexConv])
-BthConvYFit   = np.log(avgDiffBth[minIndexConv:maxIndexConv])
+ErConvYFit    = np.log(maxDiffEr[minIndexConv:maxIndexConv])
+EzConvYFit    = np.log(maxDiffEz[minIndexConv:maxIndexConv])
+BthConvYFit   = np.log(maxDiffBth[minIndexConv:maxIndexConv])
 
 # Polynomial fits.
 ErConvPoly    = np.polyfit(convXFit, ErConvYFit, 1)
@@ -264,8 +267,8 @@ figCompConv.suptitle("Average cell length [$/\lambda$]", y=0)
 #axErConv    = figCompConv.add_subplot(141)
 #axErConv.plot(np.sqrt(area), minDiffEr)
 #axErConv.plot(np.sqrt(area), avgDiffEr)
-axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEr[minIndexConv:maxIndexConv], 'b^', zorder=3,markevery=3)
-axErConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEr[maxIndexConv:],        'b^', zorder=3,)
+axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEr[minIndexConv:maxIndexConv], 'b^', zorder=3)#,markevery=3)
+axErConv.plot(np.sqrt(area_plot)[maxIndexConv:],             maxDiffEr[maxIndexConv:],        'b^', zorder=3,)
 axErConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(ErConvFitted), 'k',  zorder=3)
 
 #axErConv.set_title(r'$E_r$')
@@ -273,10 +276,10 @@ axErConv.set_xscale('log')
 axErConv.set_yscale('log')
 axErConv.set_xlim((10**(1.5),10**(4.5)))
 axErConv.xaxis.set_ticks((1e2,1e3,1e4))
-axErConv.set_ylim((1.0e-12,1.0e-0))
+axErConv.set_ylim((1.0e-13,1.0e-0))
 axErConv.invert_xaxis()
 
-axErConv.set_ylabel("Absolute\n error", rotation='horizontal', va='center', ha='left')
+axErConv.set_ylabel("Relative\n error", rotation='horizontal', va='center', ha='left')
 axErConv.yaxis.set_label_coords(-0.2,1.15)
 axErConv.text(0.03,0.83, "(a)", transform=axErConv.transAxes)#, backgroundcolor='white')
 axErConv.text(0.85,0.83, "$E_r$", transform=axErConv.transAxes)#, backgroundcolor='white')
@@ -287,9 +290,9 @@ axErConv.grid(True,color='gray', zorder=0)
 # axEzConv   = figCompConv.add_subplot(142, sharey=axErConv)
 #axEzConv.plot(np.sqrt(area), minDiffEz)
 #axEzConv.plot(np.sqrt(area), avgDiffEz)
-axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEz[minIndexConv:maxIndexConv],       'b^', zorder=3)
-axEzConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffEz[maxIndexConv:],        'b^', zorder=3, markevery=5)
-axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(EzConvFitted), 'k',  zorder=3)
+axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffEz[minIndexConv:maxIndexConv], 'b^', zorder=3)
+axEzConv.plot(np.sqrt(area_plot)[maxIndexConv:],             maxDiffEz[maxIndexConv:],             'b^', zorder=3)#, markevery=5)
+axEzConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(EzConvFitted),                 'k',  zorder=3)
 
 print(np.sqrt(area_plot))
 
@@ -308,9 +311,9 @@ axEzConv.grid(True, color='gray', zorder=0)
 #axBthConv  = figCompConv.add_subplot(143, sharey=axErConv)
 #axBthConv.plot(np.sqrt(area), minDiffBth)
 #axBthConv.plot(np.sqrt(area), avgDiffBth)
-axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffBth[minIndexConv:maxIndexConv],       'b^', zorder=3)
-axBthConv.plot(np.sqrt(area_plot)[maxIndexConv:],  maxDiffBth[maxIndexConv:],        'b^', zorder=3, markevery=5)
-axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(BthConvFitted), 'k', zorder=3)
+axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], maxDiffBth[minIndexConv:maxIndexConv], 'b^', zorder=3)
+axBthConv.plot(np.sqrt(area_plot)[maxIndexConv:],             maxDiffBth[maxIndexConv:],             'b^', zorder=3)#, markevery=5)
+axBthConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv], np.exp(BthConvFitted),                 'k', zorder=3)
 
 #axBthConv.set_title(r'$B_\theta$')
 axBthConv.set_xscale('log')
@@ -338,7 +341,7 @@ print("Order of convergence of the energy is {}".format(polyno[0]))
 #figConv  = plt.figure(figsize=(3,3))
 #axConv   = figCompConv.add_subplot(144, sharey=axErConv)
 axConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv],np.abs(energyInt-refEnergy)[minIndexConv:maxIndexConv], 'b^', zorder=3)
-axConv.plot(np.sqrt(area_plot)[maxIndexConv:], np.abs(energyInt-refEnergy)[maxIndexConv:],  'b^', zorder=3, markevery=5)
+axConv.plot(np.sqrt(area_plot)[maxIndexConv:], np.abs(energyInt-refEnergy)[maxIndexConv:],  'b^', zorder=3)#, markevery=5)
 axConv.plot(np.sqrt(area_plot)[minIndexConv:maxIndexConv],np.exp(fitplt),                    'k', zorder=3)
 
 #axConv.set_title("Energy")
