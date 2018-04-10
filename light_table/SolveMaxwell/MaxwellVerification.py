@@ -89,8 +89,10 @@ def GaussIntegrals(analysis_obj, field_type, r_index, frequency_index):
                                            x=analysis_obj.coord_theta[:]),
                                            x=analysis_obj.coord_r[0:r_index-1])
 
-  print(np.amax(cylinderIntegrand[r_index,:,:]))
-  return (cylinderContribution+negCircleContribution+posCircleContribution)/np.abs(np.amax(cylinderIntegrand[r_index,:,:]))
+  print(cylinderContribution)
+  print(negCircleContribution)
+  print(posCircleContribution)
+  return (cylinderContribution+negCircleContribution+posCircleContribution)
 
 def SurfaceLineIntegrals(analysis_obj, field_type, r_index, z_index, frequency_index):
   """
@@ -123,8 +125,6 @@ def SurfaceLineIntegrals(analysis_obj, field_type, r_index, z_index, frequency_i
                                        x=analysis_obj.coord_theta[:]),
                                        x=analysis_obj.coord_r[0:r_index-1])
 
-  plt.plot(lineIntegrand[r_index,:,z_index])
-  plt.savefig("lineIntegrand.pdf")
   print(1j*analysis_obj.omega[frequency_index]*analysis_obj.UNIT_TIME*circleContribution)
   return lineContribution-1j*analysis_obj.omega[frequency_index]*analysis_obj.UNIT_TIME*factor*circleContribution
 

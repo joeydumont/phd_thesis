@@ -30,6 +30,7 @@
 \usepackage{todonotes}
 \usepackage{booktabs}
 \usepackage{siunitx}
+\usepackage{subcaption}
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -484,7 +485,7 @@ it is necessary to repeat that calculation for each frequency component that
 makes up the incident beam, and then to add them coherently.
 
 Experimentally, we are usually given the energy of the pulse along
-with its spectral characeristics. In the following paragraph, we will devise
+with its spectral characteristics. In the following paragraph, we will devise
 a normalization scheme that allows us to model arbitrary incident beam models,
 i.e. with arbitrary spatial and temporal dependence. Then, we will discuss
 the details of the numerical evaluation of the integrals involved in the
@@ -584,7 +585,7 @@ beam usually has spatial variations on the order of the centimeter, orders
 of magnitude larger than $\lambda$. In typical electromagnetic computational
 methods, the limitation of a fixed size mesh throughout all space translates
 in unrealistic memory requirements in the tight focusing regime. In the
-Stratton-Chu formalism, the independence of the spatiamaximum laser intensityl domains makes it so
+Stratton-Chu formalism, the independence of the two domains makes it so
 the meshes can be of different sizes.
 
 However, to achieve sub-$\lambda$ resolution, memory requirements can still be
@@ -803,7 +804,7 @@ radius $r_\text{max}$.
 All the relevant parameters are shown in Table \ref{tab:comparison.parameters}.
 \begin{table}
   \centering
-  \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill} }lS[table-number-alignment = center, table-align-exponent = false]c|lSc}
+  \begin{tabular*}{0.5\columnwidth}{@{\extracolsep{\fill} }lS[table-number-alignment = center, table-align-exponent = false]c|lSc}
     \toprule
     \multicolumn{6}{c}{\textbf{Simulation Parameters}} \\
     \midrule
@@ -838,7 +839,7 @@ the cells are of nonuniform area across the mesh. We choose to use the average
 area of the cells as a measure of mesh size, i.e.
   \begin{equation}
     \mean{A}_N = \frac{\Delta\theta(\Delta r)^2}{2}\sum_{n=0}^{N_r} (2n+1)
-               = \frac{\Delta\theta(\Delta r)^2}{2}\frac{(N_r+1)^1}{N_r}
+               = \frac{\Delta\theta(\Delta r)^2}{2}\frac{(N_r+1)^2}{N_r}
   \end{equation}
 
 The computed electromagnetic fields via our implementation converge as
@@ -867,6 +868,13 @@ compare the fields obtained with our method to other field models that appear in
 the literature. We discuss both analytical solutions of Maxwell's equations
 and the Richards-Wolf diffraction formalism.
 
+For the sake of comparison, we will use a incident beam that has a Gaussian
+spatial dependence, a super-Gaussian spectrum, and a parabola with a
+numerical aperture of exactly 1. This produces a focused that is firmly
+in the tight focusing regime, and allows for a comparison with a broad range
+of field categories. See Table \ref{tab:comparison.parameters} for the exact
+parameters.
+
 \subsection{Analytical Field Models}
 
 \todo[inline]{Salamin field model, other ST implementations?}
@@ -878,14 +886,112 @@ is assumed far away from the reflecting surface, i.e. the far-field approximatio
 is used. The second one is less explicit and thus more difficult to trace:
 it assumes that the light rays follow an energy conversation law.
 
+In the focal region, the fields can be expressed as \cite{April2012}
+  \begin{align}
+    \vb{E}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
+        \vb{E}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
+        \sin\alpha d\alpha d\beta \\
+    \vb{B}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
+        \vb{B}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
+        \sin\alpha d\alpha d\beta
+  \end{align}
+where
+  \begin{align}
+    \vb{E}_\text{sph} &= q(\alpha)\left[\vu{e}_\alpha\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
+                                       +\vu{e}_\beta\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
+                                       \right] \\
+    \vb{H}_\text{sph} &= \left(\vu{e}_\alpha\times\vu{e}_\beta\right)\times\vb{E}_\text{sph}\nonumber\\
+                      &= q(\alpha) \left[\vu{e}_\beta\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
+                                        -\vu{e}_\alpha\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
+                                        \right]
+  \end{align}
+where $\vu{e}_\alpha$ and $\vu{e}_\beta$ are the basis vectors of a spherical
+coordinate system centered at the focal point.
+We evaluate these from the parabola described above. We thus have
+$\alpha_\text{max}=\pi/2$ and $q(\alpha)=\sec^2(\alpha/2)$.
+
+We have implemented a simple C++ that evaluates these integrals for a single
+frequency component of the electromagnetic field, but for arbitrary
+apodization functions $q(\alpha)$ and arbitrary $\alpha$ limits.
+
+We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is virtually
+indistinguishable from the Stratton-Chu results (Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}).
+We observe the same ellipticity on the primary components $E_x$ and $B_y$, and
+similar magnitudes of the weaker transverse components and of the longitudinal
+components. On that basis, we could tempted to conclude that both formalism yield
+qualitatively the same results.
+
+\begin{figure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{bin_tmp/RichardsWolf/f0.04375/RichardsWolf_fp.pdf}
+    \caption[Richards-Wolf field components for the HNA.LIN.G.NA1 case.]
+            {Field components in the focal plane computed via the Richards-Wolf
+            formalism for the parameters given in Table \ref{tab:comparison.parameters}}.
+    \label{fig:sc.rw.hna-lin-g-na1}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{bin_tmp/na_vsf_lin_g/stra-vsf-lin_focal0.04375.BQ/StrattonChu_fp.pdf}
+    \caption[Stratton-Chu field components for the HNA.LIN.G.NA1 case.]
+            {Field components in the focal plane computed via the Stratton-Chu
+            formalism for the parameters given in Table \ref{tab:comparison.parameters}.}
+   \label{fig:sc.sc.hna-lin-g-na1}
+  \end{subfigure}
+
+\caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, HNA.LIN.G.NA1.]
+        {Comparison between the fields in the focal plane computed via
+        the Richards-Wolf and the Stratton-Chu formalisms. Each plot represents
+        the squared magnitude of a single Fourier component of the focused
+        electromagnetic field.}
+\label{fig:sc.sc-vs-rw-hna-lin-g-na1}
+\end{figure}
+
+However, when bringing the focal point inside the parabola, i.e. switching
+to the VSF.LIN.G type, the two formalisms start to diverge (Fig.~\ref{}).
+The difference between the results of both formalisms increase with decreasing
+focal length (Fig.~\ref{}. Insofar as we assume that the Stratton-Chu is the correct one,
+an assumption that should be checked through experimentation, it seems that
+the RW formalism underestimates the amount of energy that persist at the
+focal spot, even at very small focal lengths.
+
+\begin{figure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{bin_tmp/RichardsWolf/f0.00875/RichardsWolf_fp.pdf}
+    \caption[Richards-Wolf field components for the VSF.LIN.G.f0.00875 case.]
+            {Field components in the focal plane computed via the Richards-Wolf
+            formalism for the parameters given in Table \ref{tab:comparison.parameters}}.
+    \label{fig:sc.rw.vsf-lin-g-na1}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{bin_tmp/na_vsf_lin_g/stra-vsf-lin_focal0.00875.BQ/StrattonChu_fp.pdf}
+    \caption[Stratton-Chu field components for the VSF.LIN.G.f0.00875 case.]
+            {Field components in the focal plane computed via the Stratton-Chu
+            formalism for the parameters given in Table \ref{tab:comparison.parameters}.}
+   \label{fig:sc.sc.vsf-lin-g-f0.0875}
+  \end{subfigure}
+
+\caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, VSF.LIN.G.f0.00875.]
+        {Comparison between the fields in the focal plane computed via
+        the Richards-Wolf and the Stratton-Chu formalisms. Each plot represents
+        the squared magnitude of a single Fourier component of the focused
+        electromagnetic field.}
+\label{fig:sc.sc-vs-rw-vsf-lin-g-f0.08875}
+\end{figure}
+
+\todo[inline]{Do we know of any reason for this? I would venture that
+not taking into account the exact shape of the mirror would explain
+this, as a spherical shape could maybe explain that effect.
+(Check longitudinal fields https://en.wikipedia.org/wiki/Spherical\_aberration ).}
 
 \todo[inline]{Statement of the RW formalism. Comment on derivation from RW to ST.}
-\todo[inline]{Comparison of results with parabolic mirror in the frequency domain.}
 
 \section{Properties of Tightly Focused Fields}
 
-\todo[inline]{Visualization of the field and comments on important properties.}
-\todo[inline]{Max of the field in time domain, and also in frequency components.}
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
 \todo[inline]{Importance of the longitudinal component as a function of the focal length
