@@ -310,6 +310,9 @@ for idx, i in enumerate(loop_lines):
     By_overlap[idx] = ComputeCorrelation(r_st, th_st, ByST_fp_plot, r_RW_fp, th_RW_fp, ByRW_fp_plot)
     Bz_overlap[idx] = ComputeCorrelation(r_st, th_st, BzST_fp_plot, r_RW_fp, th_RW_fp, BzRW_fp_plot)
 
+    #intensityRW = Ex
+    #IntensityOverlap[idx]
+
     # -- Compute the absolute difference.
     ExAbsDiff = ComputeCorrelation(r_st, th_st, ExST_fp_plot, r_RW_fp, th_RW_fp, ExRW_fp_plot, cor_type="absdiff")
     EyAbsDiff = ComputeCorrelation(r_st, th_st, EyST_fp_plot, r_RW_fp, th_RW_fp, EyRW_fp_plot, cor_type="absdiff")
@@ -318,12 +321,12 @@ for idx, i in enumerate(loop_lines):
     ByAbsDiff = ComputeCorrelation(r_st, th_st, ByST_fp_plot, r_RW_fp, th_RW_fp, ByRW_fp_plot, cor_type="absdiff")
     BzAbsDiff = ComputeCorrelation(r_st, th_st, BzST_fp_plot, r_RW_fp, th_RW_fp, BzRW_fp_plot, cor_type="absdiff")
 
-    ExAbsDiffMax[idx] = np.amax(ExAbsDiff)
-    EyAbsDiffMax[idx] = np.amax(EyAbsDiff)
-    EzAbsDiffMax[idx] = np.amax(EzAbsDiff)
-    BxAbsDiffMax[idx] = np.amax(BxAbsDiff)
-    ByAbsDiffMax[idx] = np.amax(ByAbsDiff)
-    BzAbsDiffMax[idx] = np.amax(BzAbsDiff)
+    ExAbsDiffMax[idx] = np.mean(ExAbsDiff)
+    EyAbsDiffMax[idx] = np.mean(EyAbsDiff)
+    EzAbsDiffMax[idx] = np.mean(EzAbsDiff)
+    BxAbsDiffMax[idx] = np.mean(BxAbsDiff)
+    ByAbsDiffMax[idx] = np.mean(ByAbsDiff)
+    BzAbsDiffMax[idx] = np.mean(BzAbsDiff)
 
 # -- Plot the fields.
 focal_length = np.array(loop_lines,dtype=float)

@@ -147,7 +147,7 @@ class RichardsWolf:
 
   def __RW_Ey(self,beta,alpha):
     """
-    Defines the x component of the Richards-Wolf integrand.
+    Defines the y component of the Richards-Wolf integrand.
     """
     r  = self.r
     th = self.th
@@ -165,7 +165,7 @@ class RichardsWolf:
     Ex = self.Ex(alpha,beta)
     Ey = self.Ey(alpha,beta)
 
-    # -- We compute the integrand x dot E_sph.
+    # -- We compute the integrand y dot E_sph.
     E_sph = self.q(alpha)*(Ex*cosBeta*sinBeta*(cosAlpha-1)+Ey*(cosAlpha*sinBetaSq+cosBetaSq))
     phase = np.exp(1j*self.k*z*cosAlpha)*np.exp(1j*self.k*r*sinAlpha*np.cos(th-beta))
 
@@ -173,7 +173,7 @@ class RichardsWolf:
 
   def __RW_Ez(self,beta,alpha):
     """
-    Defines the x component of the Richards-Wolf integrand.
+    Defines the z component of the Richards-Wolf integrand.
     """
     r  = self.r
     th = self.th
@@ -191,7 +191,7 @@ class RichardsWolf:
     Ex = self.Ex(alpha,beta)
     Ey = self.Ey(alpha,beta)
 
-    # -- We compute the integrand x dot E_sph.
+    # -- We compute the integrand z dot E_sph.
     E_sph = self.q(alpha)*(Ex*sinAlpha*cosBeta+Ey*sinAlpha*sinBeta)
     phase = np.exp(1j*self.k*z*cosAlpha)*np.exp(1j*self.k*r*sinAlpha*np.cos(th-beta))
 
