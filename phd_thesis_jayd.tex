@@ -31,6 +31,7 @@
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{subcaption}
+\usepackage{wrapfig}
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -47,7 +48,9 @@
       linkcolor=red,
       citecolor=blue,
       urlcolor=blue]
- {hyperref}
+           {hyperref}
+
+\usepackage[numbers,square,sort&compress]{natbib}
 
 % ----------------------------------------------------------------- %
 % --                        Customization                        -- %
@@ -201,6 +204,10 @@ While recent laser systems have made significant advances on the first two items
 to be technological difficulties in engineering gratings resistant enough to withstand the extreme
 energy of the laser pulse.
 
+\todo[inline]{Add more background on OPA laser systems. Paraxial propagation for most
+  of laser chain, then non-paraxial effects in the last part of chain, just before
+  the interaction region. Add figure.}
+
 A promising avenue is the focusing of light down to extremely small volumes, on the order
 of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
 does not hold. This approximation can be related to a Taylor expansion in terms
@@ -209,8 +216,9 @@ fields \cite{Borghi2003}.
 
 To see this, simply compare the fields of a ``focused'' paraxial beam with that
 of a fully numerical solution of Maxwell's equations (more on that later).
-\todo{Add figures of the fields separately, then show the overlap integral
-for each. Comment on it.} Even with added terms \todo{Same thing again.}
+\todo[inline]{Add figures of the fields separately, then show the overlap integral
+  for each. Comment on it.}
+Even with added terms, \ldots\todo[inline]{Same thing again.}
 
 There also exists analytical solutions of Maxwell's equations that do not rely
 on the paraxial approximation, such as e-dipole pulses and other models
@@ -218,14 +226,17 @@ on the paraxial approximation, such as e-dipole pulses and other models
 numerically-heavy codes, such as particle-in-cell codes because of their low
 cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
 they do not take into account the minutiae of a given experimental setup
-and thus fail to reproduce some details of tightly focused fields.
-\todo{Argue why this is important.}
+and thus fail to reproduce some details of tightly focused fields. 
+\todo[inline]{Argue why this is important.}
 
 In this chapter, we introduce a fully numerical implementation of the Stratton-Chu
 equations used to model the spatio-temporal focusing properties of large
 bandwidth laser pulses focused by high numerical aperture optics. First, we
 provide a detailed review of the Stratton-Chu integral representation and discuss
 their reduction to a set of diffraction integrals. \todo{Finish division paragraph.}
+It is then possible to write down an iterative solution to these integrals, the
+first term of which is called the physical optics approximation. The resulting
+quadrature is the basis of our model of tightly focused fields. 
 
 \section{Derivation of the Stratton-Chu Diffraction Integrals}
 
@@ -273,11 +284,12 @@ We first take the Fourier transform of the fields, i.e.
     \mathcal{F}\left\{\vb{A}(\vb{r},t)\right\}(\vb{r},\omega)
                       = \int_{-\infty}^\infty \vb{A}(\vb{r},t)e^{-i\omega t }dt
   \end{equation}
-and then take the curl of both equations.\todo{How much of the derivation do I
-actually want to show?}
+and then take the curl of both equations.\todo[inline]{How much of the derivation do I
+  actually want to show? Some key aspects to show off the discontinuity
+problem should be enough, probably.}
 
-Finally, we can derive this representation for the electromagnetic field
-in Fourier space
+Finally, we can derive this representation for the electromagnetic field,
+in Fourier space,
   \begin{subequations}
   \label{eq:sc.field-stratton-chu-sancer}
   \begin{align}
@@ -596,14 +608,24 @@ have broad spectra, requiring a large number of frequency components to properly
 resolve. To mitigate this issue, it is thus necessary to perform the computations
 on multiple machines simultaneously, in parallel.
 
+\begin{wrapfigure}{R}{0.3\textwidth}
+  \centering
+  \includegraphics{light_table/DomainDecomposition/hpc-domaindecomposition.pdf}
+  \caption[Domain decomposition strategy employed in the StrattoCalculator.]
+          {Parallelization strategy used in the StrattoCalculator. The domain
+            over which the integrals are evaluted is distributed among multiple
+            processors, while the mesh over which the integrands are evaluated are
+            global, i.e. they exist in each MPI process' region of memory.}
+          \label{fig:sc.domain-decomposition}
+\end{wrapfigure}
+
 Given that the field at a point $\vb{r}_1$ can be evaluated without any reference
 to another point $\vb{r}_2$, the parallelization strategy is quite simply to
 separate the focal volume into chunks with the same number of points and assign
-these chunks to different processors. Because the numerical cost of evaluating
+these chunks to different processors (Fig.~\ref{fig:sc.domain-decomposition}).
+Because the numerical cost of evaluating
 the integral does not depend on the position at which the field is evaluated
 (in our approach), the workload is thus evenly divided among the processors.
-
-\todo[inline]{Insert figure of domain decomposition.}
 
 \subsubsection{Side note: phase cancellation in the paraboloid case}
 
@@ -624,11 +646,44 @@ that facilitate their evaluation in the case $k\rightarrow\infty$ \cite{Iserles2
 
 We show that, for a paraboloid mirror, a non-trivial cancellation in the phase function
 results in the strength of the oscillations being dictated by the observation
-variables $k|\vb{r}'|\simeq1$ rather than the integration variables $k|\vb{r}|\gg1$.
+variables $k|\vb{r}'|\simeq1$ rather than the integration variables $k|\vb{r}|\gg1$
+(Fig.~\ref{fig:sc.oscillating-phase-with-distance}).
 In this case, it is not necessary to use specialized techniques, nor to use
 sub-$\lambda$ mesh resolution on the integration surface. In our implementation,
 we use simple tensor products of either the Simpson or Gauss-Legendre methods
 \cite[\S4.6]{Press1986}.
+
+\begin{figure}
+  \begin{subfigure}[t]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_0L.pdf}
+    \caption{Integrand for $E_r$ evaluated at the focal point.}
+    \label{fig:sc.oscillating-phase-with-distance.0L}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_10L.pdf}
+    \caption{Integrand for $E_r$ evaluated at a distance $10\lambda$ away from the focal plane.}
+    \label{fig:oscillating-phase-with-distance.10L}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_100L.pdf}
+    \caption{Integrand for $E_r$ evaluated at a distance $100\lambda$ away from the focal plane.}
+    \label{fig:oscillating-phase-with-distance.100L}
+  \end{subfigure}
+  \caption[Illustration of oscillation of the integrand with increasing distance from the focal point.]
+          {Integrand of the $E_r$ component of a radially polarized beam with parameters given in
+            Table \ref{tab:...}, for the frequency component at $\lambda=800\si{\nano\metre}$.
+            \textbf{(a)} In the focal plane, the scale of the oscillations follows those of the incident
+            Gaussian beam. As we increase the observation point further away from the focal point
+            (see \textbf{(b)} and \textbf{(c)}), the strength of the oscillation incrases in
+            accordance with Eq.~\eqref{}.
+          }
+  \label{fig:oscillating-phase-with-distance}
+\end{figure}
 
 The cancellation occurs when we consider the oscillatory behaviour of the
 incoming field. In the paraxial approximation, the incoming field carries
@@ -670,6 +725,9 @@ might be lacking. For most mirrors, there are no uniquely
 defined focal points and the field is diffuse. In these cases, care
 should be taken when numerically evaluating the Stratton-Chu integrals.
 
+\todo[inline]{Show incident field oscillate differently for different
+  distances from the focal plane.}
+
 \subsection{Incident Field Models}
 
 Incident field models should try to replicate the experimental conditions
@@ -700,6 +758,7 @@ Unfortunately, this precludes the direct use of the super-Gaussian function,
 as it typically leads to non-integrable functions. Our strategy, then, will
 be to use general solutions of the paraxial equation as a basis to express
 arbitrary spatial dependence, including super-Gaussian dependence.
+
 
 In vacuum, the electric field, magnetic field and vector potential all obey
 the same differential equation, namely
@@ -735,6 +794,9 @@ yields
     \vb{B}(\vb{r},k) &= \nabla\times\vb{A}.
   \end{align}
 
+\todo[inline]{This can be used as the basis to describe the Lax series
+  that we discuss above. Maybe move this section?}
+
 \todo[inline]{Add normalization in Appendix.}
 
 \subsection{Parallelization and Performance Analysis}
@@ -763,7 +825,7 @@ $s$ and a parallel portion $p$ is given by
   \end{equation}
 This can be misleading, as it is possible that other factors, such as a reduced
 number of cache misses, occur when increasing the number of processors.
-This could even lead to a parallel efficiency that is larger than 1!
+This could even lead to a parallel efficiency that is larger than 1.
 
 The StrattoCalculator has two use cases: (1) we compute the field in the
 focal spot and save it to a file for later analysis and (2) we compute the
@@ -842,6 +904,7 @@ destroy the laser system if they travel back down the chain. There are two
 ways to solve this issue: (1) use a temporal gate to block the reflection
 back into the chain (risky), or (2) remove the part of the parabola that
 creates these backreflections.
+\todo[inline]{Add figure of HNA vs VSF parabolas.}
 
 In this thesis, we implement solution (2) for most of our calculations, as
 it is the one that entails less risk for the laser system. Depending on the focal
@@ -851,7 +914,37 @@ see, this configuration can be very advantageous in the observation of SF-QED
 observables.
 
 Before studying these observables, however, let's took a look at the behaviour
-of the field as a function of $\alpha$. 
+of the field as a function of $\alpha$.
+
+\todo[inline]{Graph of ellipticity of electric intensity as a function of $\alpha$.}
+\todo[inline]{Graph of waist size as a function of $\alpha$.}
+\todo[inline]{Graph of max E and H intensity as a function of $\alpha$.}
+
+  \begin{figure}
+    \begin{subfigure}{0.47\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{bin/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00001.BQ/00001.BQ/ElectricIntensityTimeWaterfall-cropped.pdf}
+      \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=7\si{\milli\metre}$.}
+      \label{fig:sc.electric_intensity_waterfall7}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.47\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{bin/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00010.BQ/00010.BQ/ElectricIntensityTimeWaterfall-cropped.pdf}
+      \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=43.75\si{\milli\metre}$.}
+      \label{fig:sc.electric_intensity_waterfall43}
+    \end{subfigure}
+    \caption[Transverse cut of the electric intensity in the focal plane as a function of time, $x$ plane.]
+            {Electric intensity in the $x$ plane as a function of time for different parabolas.
+      Amplitude in arbitrary units. Each time slice is projected on the back of the figure.
+      The line with the maximum intensity is opaque, and the opacity decreases as time
+      goes away from zero, in both the positive and negative directions. Note that that at
+      low values of $\alpha$, the longitudinal component $E_z$ dominates and the maximum
+      of the intensity is found in lateral lobes and not at the focal point. At
+      larger values of $\alpha$, the more typical Gaussian beam pattern is observed.}
+    \label{fig:sc.electric_intensity_waterfall}
+  \end{figure}
+  
 
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
