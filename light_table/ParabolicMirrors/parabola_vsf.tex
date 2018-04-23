@@ -1,0 +1,60 @@
+% --------------------------------------------------------------------------- %
+% Author:          Joey Dumont                <joey.dumont@gmail.com>         %
+% Date created:    Aug. 14th, 2017                                            %
+% Description:     Prepared for ExHILP 2017.                                  %
+%                  TikZ code to draw the evolution of a VSF parabola.         %
+% License:         CC0                                                        %
+%                  <https://creativecommons.org/publicdomain/zero/1.0>        %
+% --------------------------------------------------------------------------- %
+
+\documentclass[tikz]{standalone}
+\usepackage[charter]{mathdesign}
+\usepackage{amsmath}
+\usepackage{xifthen}
+\usepackage{fontspec}
+\setmainfont{Oswald}
+
+% -- Change this value to change the shape of the parabola.
+\newcommand{\focal}{0.15}
+\newcommand{\rmax}{1}
+
+\newcommand{\parabola}[1]{\pgfmathsetmacro{\myvalue}{#1*#1/(4*\focal)-\focal}}
+\newcommand{\iparabola}[1]{\pgfmathsetmacro{\myivalue}{sqrt(4*\focal*(#1+\focal))}}
+\parabola{\rmax}
+\pgfmathsetmacro{\zmax}{\myvalue}
+\pgfmathsetmacro{\rmin}{2*\focal}
+\pgfmathsetmacro{\zmaxplot}{1.25*\zmax}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=3]
+
+  % -- This draws the parabolic mirror.
+  \draw[domain=-0:\zmax,samples=1000,ultra thick] plot (\x,{sqrt(4*\focal*(\x+\focal))});
+  \draw[domain=-0:\zmax,samples=1000,ultra thick] plot (\x,{-sqrt(4*\focal*(\x+\focal))});
+
+  % -- This draws the position of the focal plane.
+  \draw[dashed] (0,-\rmax) -- (0,\rmax);
+
+  \foreach \x in {-0.95,-0.85,...,-\rmin}
+  {
+    \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);
+  }
+
+  \foreach \x in {0.95,0.85,...,\rmin}
+  {
+  \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);
+  }
+
+  \draw[gray] (-0.3,0) -- (\zmaxplot, 0) node [at end, above left] {Optical axis};
+
+  \parabola{\rmax}
+  \clip (-0.3,\rmax) rectangle (\zmaxplot,-\rmax);
+
+  % -- Draw the lengths.
+  %\draw[<->,>=stealth] (-\focal,0) -- (0,0) node[midway,fill=white] {$f$};
+  %\draw[<->,>=stealth] (\zmax,-\rmax) -- (\zmax,\rmax) node[midway,fill=white] {$r_\text{max}$};
+
+\end{tikzpicture}
+
+\end{document}

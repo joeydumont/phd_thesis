@@ -121,8 +121,8 @@ def ComputeCorrelation(r_field,th_field,field,r_ref,th_ref,ref_field, cor_type="
 loop_file      = open("focal_na.txt")
 loop_lines     = loop_file.read().splitlines()
 
-data_folder_rw = "../../bin_tmp/RichardsWolf/"
-data_folder_sc = "../../bin_tmp/na_vsf_lin_g/"
+data_folder_rw = "../../bin/Fields/RichardsWolf/"
+data_folder_sc = "../../bin/Fields/Stratto/na_vsf_lin_g/"
 
 # -- Overlap data.
 Ex_overlap = np.zeros((len(loop_lines)))

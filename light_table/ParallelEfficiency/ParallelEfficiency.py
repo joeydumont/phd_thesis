@@ -68,7 +68,7 @@ def ReduceDuplicateEntries(data, numpy_callable=np.mean):
 # ------------------------------ MAIN FUNCTION ------------------------------ #
 
 # -- Parallel efficiency on GP3.
-times_gp3 = np.loadtxt("../../bin_tmp/ParallelEfficiency/times_gp3.dat")
+times_gp3 = np.loadtxt("../../bin/ParallelEfficiency/times_gp3.dat")
 nprocs, times_reduced_gp3 = ReduceDuplicateEntries(times_gp3)
 
 parallel_efficiency_gp3 = np.zeros_like(times_reduced_gp3)
@@ -110,9 +110,9 @@ plt.savefig("ParallelEfficiency-gp3.pdf", bbox_inches='tight')
 plt.close()
 
 # ------------------------ Parallel Efficiency on mp2 ------------------------ #
-nprocs, times_mp2_io = np.loadtxt("../../bin_tmp/ParallelEfficiency/times_mp2_io.dat",unpack=True)
+nprocs, times_mp2_io = np.loadtxt("../../bin/ParallelEfficiency/times_mp2_io.dat",unpack=True)
 print(nprocs)
-nprocs, times_mp2_noio = np.loadtxt("../../bin_tmp/ParallelEfficiency/times_mp2_noio.dat",unpack=True)
+nprocs, times_mp2_noio = np.loadtxt("../../bin/ParallelEfficiency/times_mp2_noio.dat",unpack=True)
 
 parallel_efficiency_mp2_io   = np.empty((nprocs.size))
 parallel_efficiency_mp2_noio = np.empty((nprocs.size))

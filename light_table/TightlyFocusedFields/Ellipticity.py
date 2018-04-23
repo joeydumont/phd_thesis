@@ -355,7 +355,7 @@ for idx, folder in enumerate(dirList):
 
     # -- Prepare a LogNorm for colours andalpha.
     norm = mpl.colors.PowerNorm(gamma=0.1,vmin=0.0, vmax=np.amax(np.abs(time)))
-    
+
     # -- Prepare the waterfall plot.
     fig = plt.figure(figsize=(4,4))
     ax  = fig.add_subplot(111, projection='3d')
@@ -368,7 +368,7 @@ for idx, folder in enumerate(dirList):
         ys = np.concatenate([[0],field_xcut_time[:,i],[0]])
         verts.append(list(zip(xs,ys)))
         max_field[i] = np.amax(field_xcut_time[:,i])
-        ax.plot(x_cut_time[:,i],field_xcut_time[:,i], zs=time[-1], zdir='y', zorder=-1, color='C0', alpha=1.0-norm(np.abs(time[i])))
+        ax.plot(x_cut_time[:,i],field_xcut_time[:,i], zs=time[-1], zdir='y', zorder=-1, color='C0', alpha=1.0-norm(np.abs(time[i]-time[time_idx])))
 
  #   def EnvelopeFunction(t,amp,width,power,offset):
  #       return amp*np.exp(-np.power((t-offset)/width,power))
@@ -396,7 +396,7 @@ for idx, folder in enumerate(dirList):
     # -- Further processing of the waterfall figure.
     cmd = 'pdfcrop --margins "35 0 0 0" {0}/ElectricIntensityTimeWaterfall.pdf {0}/ElectricIntensityTimeWaterfall-cropped.pdf'.format(folderName)
     proc = subprocess.call(shlex.split(cmd))
-    print("Waterfall plot done.")    
+    print("Waterfall plot done.")
 
     # -- We plot the electric intensity and its x and y-cuts.
     fig = plt.figure(figsize=(4,4))

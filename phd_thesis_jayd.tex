@@ -31,7 +31,8 @@
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{subcaption}
-\usepackage{wrapfig}
+\let\newfloat\undefined
+\usepackage{floatrow}
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -226,7 +227,7 @@ on the paraxial approximation, such as e-dipole pulses and other models
 numerically-heavy codes, such as particle-in-cell codes because of their low
 cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
 they do not take into account the minutiae of a given experimental setup
-and thus fail to reproduce some details of tightly focused fields. 
+and thus fail to reproduce some details of tightly focused fields.
 \todo[inline]{Argue why this is important.}
 
 In this chapter, we introduce a fully numerical implementation of the Stratton-Chu
@@ -236,7 +237,7 @@ provide a detailed review of the Stratton-Chu integral representation and discus
 their reduction to a set of diffraction integrals. \todo{Finish division paragraph.}
 It is then possible to write down an iterative solution to these integrals, the
 first term of which is called the physical optics approximation. The resulting
-quadrature is the basis of our model of tightly focused fields. 
+quadrature is the basis of our model of tightly focused fields.
 
 \section{Derivation of the Stratton-Chu Diffraction Integrals}
 
@@ -608,16 +609,23 @@ have broad spectra, requiring a large number of frequency components to properly
 resolve. To mitigate this issue, it is thus necessary to perform the computations
 on multiple machines simultaneously, in parallel.
 
-\begin{wrapfigure}{R}{0.3\textwidth}
+
+\begin{figure}
+%  \floatbox[{\capbeside\thisfloatsetup{capbesideposition={inside,top},capbesidewidth=4cm}}]{figure}[\FBwidth]
+%{\caption{A test figure with its caption side by side}\label{fig:test}}
+%{\includegraphics[width=5cm]{name}}
   \centering
-  \includegraphics{light_table/DomainDecomposition/hpc-domaindecomposition.pdf}
-  \caption[Domain decomposition strategy employed in the StrattoCalculator.]
+  \floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},capbesidewidth=0.3\textwidth}}]
+  {figure}[\FBwidth]
+  {\hspace{2cm}\caption[Domain decomposition strategy employed in the StrattoCalculator.]
           {Parallelization strategy used in the StrattoCalculator. The domain
-            over which the integrals are evaluted is distributed among multiple
-            processors, while the mesh over which the integrands are evaluated are
-            global, i.e. they exist in each MPI process' region of memory.}
+          over which the integrals are evaluated is distributed among multiple
+          processors, while the mesh over which the integrands are evaluated are
+          global, i.e. they exist in each MPI process' region of memory.}
           \label{fig:sc.domain-decomposition}
-\end{wrapfigure}
+  }
+  {\includegraphics{light_table/DomainDecomposition/hpc-domaindecomposition.pdf}}
+\end{figure}
 
 Given that the field at a point $\vb{r}_1$ can be evaluated without any reference
 to another point $\vb{r}_2$, the parallelization strategy is quite simply to
@@ -724,9 +732,6 @@ physical motivation of looking at distances not too far away from the focal spot
 might be lacking. For most mirrors, there are no uniquely
 defined focal points and the field is diffuse. In these cases, care
 should be taken when numerically evaluating the Stratton-Chu integrals.
-
-\todo[inline]{Show incident field oscillate differently for different
-  distances from the focal plane.}
 
 \subsection{Incident Field Models}
 
@@ -904,7 +909,25 @@ destroy the laser system if they travel back down the chain. There are two
 ways to solve this issue: (1) use a temporal gate to block the reflection
 back into the chain (risky), or (2) remove the part of the parabola that
 creates these backreflections.
-\todo[inline]{Add figure of HNA vs VSF parabolas.}
+
+\begin{figure}
+  \begin{subfigure}{0.47\textwidth}
+    \centering
+    \includegraphics{figs/parabola_hna.pdf}
+    \caption{Something}
+    \label{fig:vsf-v-hna.hna}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.47\textwidth}
+    \centering
+    \includegraphics{figs/parabola_vsf.pdf}
+    \caption{Something else}
+    \label{fig:vsf-v-hna.vsf}
+  \end{subfigure}
+  \caption[Illustration of the VSF and HNA parabolas.]
+          {Illustrations of typical HNA and VSF parabolas.}
+  \label{fgi:vsf-v-hna}
+\end{figure}
 
 In this thesis, we implement solution (2) for most of our calculations, as
 it is the one that entails less risk for the laser system. Depending on the focal
@@ -936,15 +959,14 @@ of the field as a function of $\alpha$.
     \end{subfigure}
     \caption[Transverse cut of the electric intensity in the focal plane as a function of time, $x$ plane.]
             {Electric intensity in the $x$ plane as a function of time for different parabolas.
-      Amplitude in arbitrary units. Each time slice is projected on the back of the figure.
-      The line with the maximum intensity is opaque, and the opacity decreases as time
-      goes away from zero, in both the positive and negative directions. Note that that at
-      low values of $\alpha$, the longitudinal component $E_z$ dominates and the maximum
-      of the intensity is found in lateral lobes and not at the focal point. At
-      larger values of $\alpha$, the more typical Gaussian beam pattern is observed.}
+            Amplitude in arbitrary units. Each time slice is projected on the back of the figure.
+            The line with the maximum intensity is opaque, and the opacity decreases as time
+            goes away from zero, in both the positive and negative directions. Note that that at
+            low values of $\alpha$, the longitudinal component $E_z$ dominates and the maximum
+            of the intensity is found in lateral lobes and not at the focal point. At
+            larger values of $\alpha$, the more typical Gaussian beam pattern is observed.}
     \label{fig:sc.electric_intensity_waterfall}
   \end{figure}
-  
 
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
@@ -1072,7 +1094,7 @@ qualitatively the same results.
 \begin{figure}
   \begin{subfigure}{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{bin_tmp/RichardsWolf/f0.04375/RichardsWolf_fp.pdf}
+    \includegraphics[width=\textwidth]{figs/RichardsWolf_fpNA1.pdf}
     \caption[Richards-Wolf field components for the HNA.LIN.G.NA1 case.]
             {Field components in the focal plane computed via the Richards-Wolf
             formalism for the parameters given in Table \ref{tab:comparison.parameters}}.
@@ -1081,7 +1103,7 @@ qualitatively the same results.
 
   \begin{subfigure}{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{bin_tmp/na_vsf_lin_g/stra-vsf-lin_focal0.04375.BQ/StrattonChu_fp.pdf}
+    \includegraphics[width=\textwidth]{figs/StrattonChu_fpNA1.pdf}
     \caption[Stratton-Chu field components for the HNA.LIN.G.NA1 case.]
             {Field components in the focal plane computed via the Stratton-Chu
             formalism for the parameters given in Table \ref{tab:comparison.parameters}.}
@@ -1107,7 +1129,7 @@ focal spot, even at very small focal lengths.
 \begin{figure}
   \begin{subfigure}{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{bin_tmp/RichardsWolf/f0.00875/RichardsWolf_fp.pdf}
+    \includegraphics[width=\textwidth]{figs//RichardsWolf_fpVSF.pdf}
     \caption[Richards-Wolf field components for the VSF.LIN.G.f0.00875 case.]
             {Field components in the focal plane computed via the Richards-Wolf
             formalism for the parameters given in Table \ref{tab:comparison.parameters}}.
@@ -1116,7 +1138,7 @@ focal spot, even at very small focal lengths.
 
   \begin{subfigure}{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{bin_tmp/na_vsf_lin_g/stra-vsf-lin_focal0.00875.BQ/StrattonChu_fp.pdf}
+    \includegraphics[width=\textwidth]{figs/StrattonChu_fpVSF.pdf}
     \caption[Stratton-Chu field components for the VSF.LIN.G.f0.00875 case.]
             {Field components in the focal plane computed via the Stratton-Chu
             formalism for the parameters given in Table \ref{tab:comparison.parameters}.}
@@ -1161,18 +1183,18 @@ radius $r_\text{max}$.
 All the relevant parameters are shown in Table \ref{tab:comparison.parameters}.
 \begin{table}
   \centering
-  \begin{tabular*}{0.5\columnwidth}{@{\extracolsep{\fill} }lS[table-number-alignment = center, table-align-exponent = false]c|lSc}
+  \begin{tabular*}{0.6\columnwidth}{@{\extracolsep{\fill} }lSc|lSc}
     \toprule
     \multicolumn{6}{c}{\textbf{Simulation Parameters}} \\
     \midrule
-    \multicolumn{3}{c|}{Parabola}   & \multicolumn{3}{c}{Incident Beam}\\
-    Param.        & {Value}     & Unit        & Param.       & {Value}     & Unit                 \\
+    \multicolumn{3}{c|}{Parabola}  & \multicolumn{3}{c}{Incident Beam}\\
+    Param.           & {Value}     & Unit              & Param.          & {Value}     & Unit                 \\
     \midrule
-    $r_\text{max}$   & 0.08750     & \si{\metre} & $w_0$           & 0.02       & \si{\metre}          \\
-    $f$              & 0.04375     & \si{\metre} & $\lambda_c$     & 800         & \si{\nano\metre}     \\
-                     &             &             & $\Delta\lambda$ & 60          & \si{\nano\metre}     \\
-                     &             &             & $n$             & 4           &  --                  \\
-                     &             &             & $E_\text{tot}$  & 13.5         & \si{\joule}          \\
+    $r_\text{max}$   & 87.50       & \si{\milli\metre} & $w_0$           & 0.02        & \si{\metre}          \\
+    $f$              & 43.75       & \si{\milli\metre} & $\lambda_c$     & 800         & \si{\nano\metre}     \\
+                     &             &                   & $\Delta\lambda$ & 60          & \si{\nano\metre}     \\
+                     &             &                   & $n$             & 4           &  --                  \\
+                     &             &                   & $E_\text{tot}$  & 13.5        & \si{\joule}          \\
     \bottomrule
   \end{tabular*}
   \caption[Simulation parameters used in the convergence tests (radial polarization).]
@@ -2109,7 +2131,7 @@ yields
 %               E_0(r)e^{-ikzz'/R}\sin\theta'\left[-\frac{r^2-4f^2}{r^2+4f^2}\sin^2\theta+\cos^2\theta\right]e^{-ikrr'\cos\theta/R}rdrd\theta \\
 %     E_z' &= 32ikf^2e^{2ikf}\int_0^{r_\text{max}}E_0(r)e^{-ikzz'/R}\cos\theta'\frac{r^2}{(r^2+4f^2)^2}\cos\theta e^{-ikrr'\cos\theta/R}drd\theta
 %   \end{align}
-% Using the power-reduction formulae and the representation of the Bessel functions, 
+% Using the power-reduction formulae and the representation of the Bessel functions,
 % we can simplify this to
 %   \begin{align}
 %     E_x' &= 32\pi ikf^2e^{2ikf}\int_0^{r_\text{max}}\frac{4fr}{(r^2+4f^2)^2}\left(\cos2\theta'J_0()+J_2()\right)dr \\

@@ -25,7 +25,7 @@ LIGHT_TABLE=light_table
 
 # -- Figure generation options (TeX)
 FIG_INPUTDIR=light_table
-FIG_LATEX=pdflatex
+FIG_LATEX=pdflatex -xelatex
 FIG_OUTDIR=figs
 FIG_LATEXFLAGS=-output-directory $(FIG_OUTDIR)/
 
@@ -33,7 +33,8 @@ FIG_LATEXFLAGS=-output-directory $(FIG_OUTDIR)/
 PY_INPUTDIR=light_table
 PY_BINARY=python
 PY_OUTDIR=figs
-PY_FLAGS=--output-directory $(PY_OUTDIR)
+PY_FLAGS=
+BIN_FOLDER=bin
 
 # -- User targets.
 default: $(OUTDIR)/$(PROJECT).pdf
@@ -52,7 +53,6 @@ prune-bib: $(BIB_FILES)
 log: $(OUTDIR)/$(PROJECT).pdf
 	pplatex -i $(OUTDIR)/$(PROJECT).log
 
-
 ### Compilation Flags
 PDFLATEX_FLAGS  = -halt-on-error -output-directory $(OUTDIR)/
 
@@ -63,12 +63,6 @@ TEXMFOUTPUT = $(OUTDIR)/
 TEX_FILES       = $(shell find . -name '*.tex' -or -name '*.sty' -or -name '*.cls')
 BIB_FILES       = $(shell find . -name '*.bib')
 BST_FILES       = $(shell find . -name '*.bst')
-IMG_FILES       = $(shell find . -path '*.jpg' -or -path '*.png' -or \( \! -path './$(OUTDIR)/*.pdf' -path '*.pdf' \) )
-TEX_IMAGE_FILES = $(shell find ./$(FIG_INPUTDIR)/ -name '*.tex')
-PY_IMAGE_FILES  = $(shell find ./$(PY_INPUTDIR)/ -name '*.py')
-BIN_IMAGES      = $(shell find ./$(LIGHT_TABLE)/ -name "*.pdf")
-INKSCAPE_FILES  = $(shell find ./$(LIGHT_TABLE)/ -name "*.svg")
-
 
 ### Standard PDF Viewers
 # Defines a set of standard PDF viewer tools to use when displaying the result
@@ -117,33 +111,51 @@ class:
 $(FIG_OUTDIR)/:
 	mkdir -p $(FIG_OUTDIR)/
 
-#$(PY_OUTDIR)/:
-	#mkdir -p $(PY_OUTDIR)/
+# -------------------- Generation of LaTeX based figures -------------------- #
+LATEX_IMAGES_DEPS := $(LIGHT_TABLE)/DomainDecomposition/hpc-domaindecomposition.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_hna.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_vsf.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/scatteringSystem/scatteringSystem.tex
 
-latex_images: $(TEX_IMAGE_FILES) | $(FIG_OUTDIR)/
-	$(FIG_LATEX) $(FIG_LATEXFLAGS) $(TEX_IMAGE_FILES)
-	#$(foreach file, $(TEX_IMAGE_FILES), $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
+latex_images: $(LATEX_IMAGES_DEPS) | $(FIG_OUTDIR)/
+	$(foreach file, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
 
-python_images: $(PY_IMAGE_FILES) | $(FIG_OUTDIR)/
-	$(foreach file, $(PY_IMAGE_FILES), $(shell $(PY_BINARY) $(file) $(PY_FLAGS) ))
+# ------------------- Generation of Python based figures -------------------- #
+PYTHON_IMAGES_DEPS := $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAnalysis.py
+PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency.py
+PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/RichardsWolf/FastRW_plot.py
+PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/SCIntegrandOscillation/IntegrandOscillation.py
+PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/TightlyFocusedFields/Ellipticity.py
+PYTHON_IMAGES_CMD   = $(cd $$(readlink -f $(file)) && $(PY_BINARY) $$(basename $(file)) && cd $$(basename $(PROJECT).TEX))
+python_images: $(PYTHON_IMAGES_DEPS) | $(FIG_OUTDIR)/
+	# -- Generate the figures.
+	$(foreach file, $^, $(PYTHON_IMAGES_CMD))
 
-%.pdf: %.svg | $(FIG_OUTDIR)/
-	inkscape --file=$< --export-area-drawing --without-gui --export-pdf=$(FIG_OUTDIR)/$(notdir $@)
-	#$(foreach file, $(INKSCAPE_FILES), $(shell inkscape --file=$(file) --export-area-drawing --without-gui --export-pdf=$(basename $(notdir $(file))).pdf))
+	# -- Manually copy them over.
+	cp $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAll.pdf                                     $(FIG_OUTDIR)/
+	cp $(LIGHT_TABLE)/IntensityHistory/figs/IntensityHistory.pdf                                 $(FIG_OUTDIR)/ # No way to automate creation of this fig.
+	cp $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency*                                     $(FIG_OUTDIR)/
+	cp $(BIN_FOLDER)/Fields/RichardsWolf/f0.04375/RichardsWolf_fp.pdf                            $(FIG_OUTDIR)/RichardsWolf_fpNA1.pdf
+	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_focal0.04375.BQ/StrattonChu_fp.pdf $(FIG_OUTDIR)/StrattonChu_fpNA1.pdf
+	cp $(BIN_FOLDER)/Fields/RichardsWolf/f0.00875/RichardsWolf_fp.pdf                            $(FIG_OUTDIR)/RichardsWolf_fpVSF.pdf
+	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_focal0.00875.BQ/StrattonChu_fp.pdf $(FIG_OUTDIR)/StrattonChu_fpVSF.pdf
+	cp $(LIGHT_TABLE)/SCIntegrandOscillation/phase*.pdf                                          $(FIG_OUTDIR)/
 
-light_table: $(BIN_IMAGES) $(INKSCAPE_FILES) | latex_images python_images
-	cp $(BIN_IMAGES) $(FIG_OUTDIR)/
+#%.pdf: %.svg | $(FIG_OUTDIR)/
+#	inkscape --file=$< --export-area-drawing --without-gui --export-pdf=$(FIG_OUTDIR)/$(notdir $@)
+#	$(foreach file, $(INKSCAPE_FILES), $(shell inkscape --file=$(file) --export-area-drawing --without-gui --export-pdf=$(basename $(notdir $(file))).pdf))
 
+# ------------------- Generation of the PDF of the thesis. ------------------ #
 $(OUTDIR)/:
 	mkdir -p $(OUTDIR)/
 
-$(OUTDIR)/$(PROJECT).aux: $(TEX_FILES) $(IMG_FILES) | class $(OUTDIR)/
+$(OUTDIR)/$(PROJECT).aux: $(TEX_FILES) | class $(OUTDIR)/
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
 
 $(OUTDIR)/$(PROJECT).bbl: $(BIB_FILES) | $(OUTDIR)/$(PROJECT).aux
 	bibtex $(OUTDIR)/$(PROJECT)
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT)
 
-$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl) | latex_images #python_images light_table
+$(OUTDIR)/$(PROJECT).pdf: $(OUTDIR)/$(PROJECT).aux $(if $(BIB_FILES), $(OUTDIR)/$(PROJECT).bbl)
 	$(LATEX) $(PDFLATEX_FLAGS) $(PROJECT).tex
 	cp $@ .
