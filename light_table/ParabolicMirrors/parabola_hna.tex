@@ -36,12 +36,12 @@
   % -- This draws the position of the focal plane.
   \draw[dashed] (0,-\rmax) -- (0,\rmax);
 
-  \foreach \x in {-0.98,-0.75,...,0.98,0.98}
+  \foreach \x in {-0.80,-0.70,...,0.80}
   {
     \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);
   }
 
-  \draw[gray] (-0.8,0) -- (\zmaxplot, 0) node [at end, above left=-1pt] {Optical axis};
+  \draw[gray] (-1.2,0) -- (\zmaxplot, 0) node [at start, above right] {Optical axis};
 
   \parabola{\rmax}
   \clip (-0.8,\rmax) rectangle (\zmaxplot,-\rmax);

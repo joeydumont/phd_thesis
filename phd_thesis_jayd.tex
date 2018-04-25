@@ -149,40 +149,69 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 \chapter{Introduction}
 
+\begin{chaptersummary}
+test
+\end{chaptersummary}
+
+\section{High-power lasers}
+
+Historical development of high-power laser chains.
+
+
+
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{figs/IntensityHistory.pdf}
   \caption[Short history of the intensity of laser systems.]
           {Intensity of laser systems as a function of time (approximative).
             Figured adapted from \cite{Mourou2015}.}
+  \label{fig:intro.intensity-history}
 \end{figure}
 
-Basic plan:
-  \begin{itemize}
-    \item Generic introduction to SF-QED, experiments by SLAC and the upcoming
-          high power-laser facilities.
-    \item Motivation to accurately model the tight focusing regime: field inhomogeneities
-          play an important role in the detection of SF-QED observables (cite recent work by Di Piazza).
-    \item Approach based on two steps: modelling the optical side of things, then the quantum side of things.
-    \item Motivation behind the StrattoCalculator (vs Richards-Wolf, vs analytical solutions).
-    \item Mention going with focal point inside parabola.
-    \item Motivation behind SK (vs effective methods, vs analytical solutions). BONUS: inclusive observables.
-    \item Discussion of the use of HPC resources as a driver of future SF-QED experiments?
-  \end{itemize}
+\section{Experimental detection of SF-QED observables}
 
-Stuff to put in appendices:
-  \begin{enumerate}
-    \item Details of the Stratton-Chu formalism, perhaps some stuff on
-          discontinuity ``problem'' \cite{Asvestas1980} and the heuristic argument as to why
-          the physical approximation is correct.
-    \item Expressions of identity operators in Fock space for photons and fermions.
-    \item Proof that disconnected vacuum diagrams vanish identically in the SK formalism.
-    \item Minor results related to the \texttt{StrattoCalculator}:
-      \begin{itemize}
-        \item Gouy phase and its transverse momentum interpretation.
-        \item Work on the generation of pseudo-radially polarized beams with mosaics of half-wave plates?
-      \end{itemize}
-  \end{enumerate}
+SLAC E144, (multiple proposals since then, Karbstein et al), possible
+detection of radiation reaction, proposals at ELI and other HPL facilities.
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/ClassicalLimit.pdf}
+  \caption[Map of non-linearity parameters in intensity-frequency space.]
+          {Value of the $\xi$ parameter as a function of intensity in \si{\watt\per\cm\square}
+          as a function of the frequency of the laser in \si{\eV}.}
+  \label{fig:intro.xi-map}
+\end{figure}
+
+\section{Objectives and organization of this thesis}
+
+
+
+% Basic plan:
+%   \begin{itemize}
+%     \item Generic introduction to SF-QED, experiments by SLAC and the upcoming
+%           high power-laser facilities.
+%     \item Motivation to accurately model the tight focusing regime: field inhomogeneities
+%           play an important role in the detection of SF-QED observables (cite recent work by Di Piazza).
+%     \item Approach based on two steps: modelling the optical side of things, then the quantum side of things.
+%     \item Motivation behind the StrattoCalculator (vs Richards-Wolf, vs analytical solutions).
+%     \item Mention going with focal point inside parabola.
+%     \item Motivation behind SK (vs effective methods, vs analytical solutions). BONUS: inclusive observables.
+%     \item Discussion of the use of HPC resources as a driver of future SF-QED experiments?
+%   \end{itemize}
+
+% Stuff to put in appendices:
+%   \begin{enumerate}
+%     \item Details of the Stratton-Chu formalism, perhaps some stuff on
+%           discontinuity ``problem'' \cite{Asvestas1980} and the heuristic argument as to why
+%           the physical approximation is correct.
+%     \item Expressions of identity operators in Fock space for photons and fermions.
+%     \item Proof that disconnected vacuum diagrams vanish identically in the SK formalism.
+%     \item Minor results related to the \texttt{StrattoCalculator}:
+%       \begin{itemize}
+%         \item Gouy phase and its transverse momentum interpretation.
+%         \item Work on the generation of pseudo-radially polarized beams with mosaics of half-wave plates?
+%       \end{itemize}
+%   \end{enumerate}
 
 \chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
 \label{chapter:stratton-chu}
@@ -911,21 +940,29 @@ back into the chain (risky), or (2) remove the part of the parabola that
 creates these backreflections.
 
 \begin{figure}
-  \begin{subfigure}{0.47\textwidth}
+  \begin{subfigure}[t]{0.47\textwidth}
     \centering
     \includegraphics{figs/parabola_hna.pdf}
-    \caption{Something}
+    \caption{Typical HNA parabola, where the focal plane either intersects or is
+            farther away from the aperture plane of the parabola.}
     \label{fig:vsf-v-hna.hna}
   \end{subfigure}
   \hfill
-  \begin{subfigure}{0.47\textwidth}
+  \begin{subfigure}[t]{0.47\textwidth}
     \centering
     \includegraphics{figs/parabola_vsf.pdf}
-    \caption{Something else}
+    \caption{Typical VSF parabola, where the focal point is inside the
+             mirror. The back of the parabola is cut up to the focal
+             plane to remove to prevent light rays to reflect back
+             into the laser chain.}
     \label{fig:vsf-v-hna.vsf}
   \end{subfigure}
-  \caption[Illustration of the VSF and HNA parabolas.]
-          {Illustrations of typical HNA and VSF parabolas.}
+  \caption[Illustrations of the typical HNA and VSF parabolas.]
+          {Illustrations of typical HNA and VSF parabolas. For each
+          parabola, the focal plane is indicated with a dashed line.
+          The lines represent light rays that are specularly reflected
+          by the surface. We can clearly see the one-point focus property
+          of the parabolic mirror.}
   \label{fgi:vsf-v-hna}
 \end{figure}
 
@@ -1381,7 +1418,13 @@ See previous chapter but with number of pairs through ``secondary'' processes.
 
 \chapter{Conclusion}
 
-%\backmatter
+\section{Summary of contributions}
+
+\section{Further optimization of beam profiles}
+
+\section{Better modeling of noise through plasma simulations}
+
+\backmatter
 
 \bibliographystyle{osajnl}
 \bibliography{phd_thesis}

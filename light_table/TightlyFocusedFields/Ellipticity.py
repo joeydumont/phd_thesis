@@ -61,6 +61,9 @@ parser.add_argument("--output-directory",
                       type=str,
                       default="figs/",
                       help="Directory where the figures will be saved.")
+parser.add_argument("--force",
+                      action="store_true",
+                      help="Forces the recalculation from the original dataset (slow).")
 args = parser.parse_args()
 
 # --------------------------- Function Definition --------------------------- #
@@ -109,13 +112,13 @@ for idx, folder in enumerate(dirList):
 
     # ---------------- FREQUENCY DOMAIN ----------------- #
     # -- We plot the focal plane.
-
     extractedFocalPlaneFreq = DataAlreadyPostProcessed(dataFolder+"ExFocalPlaneFreq.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"EyFocalPlaneFreq.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"EzFocalPlaneFreq.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"BxFocalPlaneFreq.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"ByFocalPlaneFreq.npy") \
-                          and DataAlreadyPostProcessed(dataFolder+"BzFocalPlaneFreq.npy")
+                          and DataAlreadyPostProcessed(dataFolder+"BzFocalPlaneFreq.npy") \
+                          and not args.force
 
     if (not extractedFocalPlaneFreq):
         ExFocalPlaneFreq, EyFocalPlaneFreq, EzFocalPlaneFreq, BxFocalPlaneFreq, ByFocalPlaneFreq, BzFocalPlaneFreq \
@@ -172,7 +175,7 @@ for idx, folder in enumerate(dirList):
     # y-cut of Ex
     axYCut     = plt.subplot2grid((3,3), (0,0), rowspan=2)
     axYCut.set_ylabel(r"$y$ [\si{\micro\metre}]")
-    axYCut.plot(field_ycut*1e3,y_cut*1e6)
+    axYCut.plot(field_ycut,y_cut*1e6)
     plt.locator_params(axis='x', nbins=4)
 
     # Colobar and other decorations.
@@ -191,7 +194,8 @@ for idx, folder in enumerate(dirList):
                                 and DataAlreadyPostProcessed(dataFolder+"EzSagittalPlaneFreq.npy") \
                                 and DataAlreadyPostProcessed(dataFolder+"BxSagittalPlaneFreq.npy") \
                                 and DataAlreadyPostProcessed(dataFolder+"BySagittalPlaneFreq.npy") \
-                                and DataAlreadyPostProcessed(dataFolder+"BzSagittalPlaneFreq.npy")
+                                and DataAlreadyPostProcessed(dataFolder+"BzSagittalPlaneFreq.npy") \
+                                and not args.force
 
     if (not extractedSagittalPlaneFreq):
         ExSagittalPlaneFreq, EySagittalPlaneFreq, EzSagittalPlaneFreq, \
@@ -229,7 +233,8 @@ for idx, folder in enumerate(dirList):
                                 and DataAlreadyPostProcessed(dataFolder+"EzMeridionalPlaneFreq.npy") \
                                 and DataAlreadyPostProcessed(dataFolder+"BxMeridionalPlaneFreq.npy") \
                                 and DataAlreadyPostProcessed(dataFolder+"ByMeridionalPlaneFreq.npy") \
-                                and DataAlreadyPostProcessed(dataFolder+"BzMeridionalPlaneFreq.npy")
+                                and DataAlreadyPostProcessed(dataFolder+"BzMeridionalPlaneFreq.npy") \
+                                and not args.force
 
     if (not extractedMeridionalPlaneFreq):
         ExMeridionalPlaneFreq, EyMeridionalPlaneFreq, EzMeridionalPlaneFreq, \
@@ -267,7 +272,8 @@ for idx, folder in enumerate(dirList):
                               and DataAlreadyPostProcessed(dataFolder+"maxValue.npy")              \
                               and DataAlreadyPostProcessed(dataFolder+"focalPointMaxIdxTime.npy")  \
                               and DataAlreadyPostProcessed(dataFolder+"focalPointTime.npy")        \
-                              and DataAlreadyPostProcessed(dataFolder+"focalPlaneTime.npy")
+                              and DataAlreadyPostProcessed(dataFolder+"focalPlaneTime.npy")        \
+                              and not args.force
 
     if (not extractedTemporalFocalPlane):
         maxIndices, maxValue, focalPointMaxIdxTime, focalPointTime, focalPlaneTime = analysis_obj.FindTemporalFocalPlane(analysis_obj.ElectricEnergyDensity, analysis_obj.ElectricEnergyDensity)
@@ -293,7 +299,8 @@ for idx, folder in enumerate(dirList):
                           and DataAlreadyPostProcessed(dataFolder+"EzFocalPlane.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"BxFocalPlane.npy") \
                           and DataAlreadyPostProcessed(dataFolder+"ByFocalPlane.npy") \
-                          and DataAlreadyPostProcessed(dataFolder+"BzFocalPlane.npy")
+                          and DataAlreadyPostProcessed(dataFolder+"BzFocalPlane.npy") \
+                          and not args.force
 
     if (not extractedFocalPlaneTime):
         ExFocalPlane, EyFocalPlane, EzFocalPlane, BxFocalPlane, ByFocalPlane, BzFocalPlane \
@@ -326,8 +333,8 @@ for idx, folder in enumerate(dirList):
                                              normalization=True)
 
     # -- Compute the focal area.
-    magnetic_intensity = np.abs(BxFocalPlane)**2+np.abs(ByFocalPlane)**2+np.abs(BzFocalPlane)**2
     electric_intensity = np.abs(ExFocalPlane)**2+np.abs(EyFocalPlane)**2+np.abs(EzFocalPlane)**2
+    magnetic_intensity = np.abs(BxFocalPlane)**2+np.abs(ByFocalPlane)**2+np.abs(BzFocalPlane)**2
 
     electric_focal_area = analysis_obj.ComputeFocalArea(electric_intensity[:,:,time_idx],0.5)/(analysis_obj.wavelength[freq_idx]**2)
 
@@ -436,7 +443,8 @@ for idx, folder in enumerate(dirList):
                              and DataAlreadyPostProcessed(dataFolder+"EzSagittalPlane.npy") \
                              and DataAlreadyPostProcessed(dataFolder+"BxSagittalPlane.npy") \
                              and DataAlreadyPostProcessed(dataFolder+"BySagittalPlane.npy") \
-                             and DataAlreadyPostProcessed(dataFolder+"BzSagittalPlane.npy")
+                             and DataAlreadyPostProcessed(dataFolder+"BzSagittalPlane.npy") \
+                             and not args.force
 
     if (not extractedSagittalPlaneTime):
         ExSagittalPlane, EySagittalPlane, EzSagittalPlane, \
@@ -475,7 +483,8 @@ for idx, folder in enumerate(dirList):
                                and DataAlreadyPostProcessed(dataFolder+"EzMeridionalPlane.npy") \
                                and DataAlreadyPostProcessed(dataFolder+"BxMeridionalPlane.npy") \
                                and DataAlreadyPostProcessed(dataFolder+"ByMeridionalPlane.npy") \
-                               and DataAlreadyPostProcessed(dataFolder+"BzMeridionalPlane.npy")
+                               and DataAlreadyPostProcessed(dataFolder+"BzMeridionalPlane.npy") \
+                               and not args.force
 
     if (not extractedMeridionalPlaneTime):
         ExMeridionalPlane, EyMeridionalPlane, EzMeridionalPlane, \

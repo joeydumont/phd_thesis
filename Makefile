@@ -25,9 +25,9 @@ LIGHT_TABLE=light_table
 
 # -- Figure generation options (TeX)
 FIG_INPUTDIR=light_table
-FIG_LATEX=pdflatex -xelatex
+FIG_LATEX=latexmk -xelatex
 FIG_OUTDIR=figs
-FIG_LATEXFLAGS=-output-directory $(FIG_OUTDIR)/
+FIG_LATEXFLAGS=--outdir=$(FIG_OUTDIR)/
 
 # -- Figure generation (Python)
 PY_INPUTDIR=light_table
@@ -121,7 +121,8 @@ latex_images: $(LATEX_IMAGES_DEPS) | $(FIG_OUTDIR)/
 	$(foreach file, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
 
 # ------------------- Generation of Python based figures -------------------- #
-PYTHON_IMAGES_DEPS := $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAnalysis.py
+PYTHON_IMAGES_DEPS := $(LIGHT_TABLE)/ClassicalLimit/ClassicalLimit.py
+PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAnalysis.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/RichardsWolf/FastRW_plot.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/SCIntegrandOscillation/IntegrandOscillation.py
@@ -132,6 +133,7 @@ python_images: $(PYTHON_IMAGES_DEPS) | $(FIG_OUTDIR)/
 	$(foreach file, $^, $(PYTHON_IMAGES_CMD))
 
 	# -- Manually copy them over.
+	cp $(LIGHT_TABLE)/ClassicalLimit/ClassicalLimit.pdf                                          $(FIG_OUTDIR)/
 	cp $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAll.pdf                                     $(FIG_OUTDIR)/
 	cp $(LIGHT_TABLE)/IntensityHistory/figs/IntensityHistory.pdf                                 $(FIG_OUTDIR)/ # No way to automate creation of this fig.
 	cp $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency*                                     $(FIG_OUTDIR)/
