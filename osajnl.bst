@@ -47,6 +47,7 @@ ENTRY
     edition
     editor
     eid
+    doi
     howpublished
     institution
     journal
@@ -99,6 +100,13 @@ FUNCTION {output}
     'pop$
     'output.nonnull
   if$
+}
+FUNCTION {output.doi}
+{
+    doi empty$
+        { skip$ }
+        { "\href{http://dx.doi.org/" doi * "}{\textsc{doi}:" * doi * "}" * output }
+    if$
 }
 FUNCTION {output.check}
 { 't :=
@@ -1046,6 +1054,7 @@ FUNCTION {article}
       format.pages output
     }
   if$
+  output.doi
   new.sentence
   format.note output
   fin.entry

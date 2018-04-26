@@ -67,6 +67,8 @@
 \settocdepth{section}
 \setsecnumdepth{subsection}
 
+\captionsetup[figure]{labelfont=bf,width=0.85\textwidth}
+
 % ----------------------------------------------------------------- %
 % --                       Title Page Info                       -- %
 % ----------------------------------------------------------------- %
@@ -150,14 +152,30 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 \chapter{Introduction}
 
 \begin{chaptersummary}
-test
+  In this chapter, we place the contributions of this thesis in the context
+  of the high-power laser literature and introduces some of the theoretical
+  considerations on which this thesis will focus. We first discuss some recent
+  advances in the development of high-power laser sources and their effect
+  on the design of experimented aimed at measuring quantum electrodynamical
+  effects in the strong field regime. The specific goals of this thesis are
+  enumerated in \S\ref{sec:intro.objectives}.
 \end{chaptersummary}
 
-\section{High-power lasers}
+Quantum electrodynamics (QED) has been called the ``jewel of physics'' by one
+of its most well-known contributor, Richard Feynman. Along with quantum
+chromodynamics and electro-weak theory, which describe the strong and
+weak nuclear force, respectively, QED describes the force that is closer
+to our everyday life: electromagnetism\footnote{Even though it must be
+said that classical electromagnetism should suffice in most
+familiar situations.}.
 
-Historical development of high-power laser chains.
+Precision tests of QED.
 
 
+The advent of the chirped pulse amplification technique (CPA) has catapulted
+the available focused laser intensities in the last three decades
+\cite{Mourou2006}. Indeed, this technique has allowed an increase of about
+6 orders of magnitude in the highest recorded intensity in a very short time.
 
 \begin{figure}
   \centering
@@ -168,7 +186,13 @@ Historical development of high-power laser chains.
   \label{fig:intro.intensity-history}
 \end{figure}
 
-\section{Experimental detection of SF-QED observables}
+HPL as another sector of QED to test. Complementary sector. New theoretical tools
+needed (SF-QED). Insight into traditional QED as well?
+
+Introduction of eta.
+
+Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
+chi << 1, classical trajectories (no recoil).
 
 SLAC E144, (multiple proposals since then, Karbstein et al), possible
 detection of radiation reaction, proposals at ELI and other HPL facilities.
@@ -177,13 +201,20 @@ detection of radiation reaction, proposals at ELI and other HPL facilities.
   \centering
   \includegraphics{figs/ClassicalLimit.pdf}
   \caption[Map of non-linearity parameters in intensity-frequency space.]
-          {Value of the $\xi$ parameter as a function of intensity in \si{\watt\per\cm\square}
+          {Value of the $\xi$ parameter as a function of intensity in \si{\watt\per\cm\squared}
           as a function of the frequency of the laser in \si{\eV}.}
   \label{fig:intro.xi-map}
 \end{figure}
 
 \section{Objectives and organization of this thesis}
+\label{sec:intro.objectives}
 
+\begin{description}
+  \item[Chapter \ref{chapter:stratton-chu} -- Tool 1: The Stratton-Chu Diffraction Integrals] 
+  test
+  \item[Chapter]
+  test
+\end{description}
 
 
 % Basic plan:
@@ -282,7 +313,6 @@ derivation, integrals over these currents will be taken to represent the inciden
 field.
 
   \begin{figure}
-    \label{fig:sc.scatteringSystem}
     \centering
     \includegraphics{figs/scatteringSystem.pdf}
     \caption[Geometry used in the derivation of the Stratton-Chu equations.]
@@ -291,6 +321,7 @@ field.
              support of the electric and magnetic current distribution fonctions.
              $V_\infty$ represents free space, minus the scatterer, i.e.
              $V_\infty=\mathbb{R}^3\backslash V_s$.}
+    \label{fig:sc.scatteringSystem}
   \end{figure}
 
 The starting point is, as usual, the Maxwell equations. Their macroscopic version,
@@ -646,7 +677,8 @@ on multiple machines simultaneously, in parallel.
   \centering
   \floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,center},capbesidewidth=0.3\textwidth}}]
   {figure}[\FBwidth]
-  {\hspace{2cm}\caption[Domain decomposition strategy employed in the StrattoCalculator.]
+  {\hspace{3cm}\captionsetup{width=0.4\textwidth}
+  \caption[Domain decomposition strategy employed in the StrattoCalculator.]
           {Parallelization strategy used in the StrattoCalculator. The domain
           over which the integrals are evaluated is distributed among multiple
           processors, while the mesh over which the integrands are evaluated are
@@ -665,6 +697,7 @@ the integral does not depend on the position at which the field is evaluated
 (in our approach), the workload is thus evenly divided among the processors.
 
 \subsubsection{Side note: phase cancellation in the paraboloid case}
+\label{sec:sc.phase-cancellation}
 
 Typically, diffraction integrals have an highly oscillatory behaviour that
 stems from the propagator, or Green's function of the problem. The Stratton-Chu
@@ -713,13 +746,13 @@ we use simple tensor products of either the Simpson or Gauss-Legendre methods
   \end{subfigure}
   \caption[Illustration of oscillation of the integrand with increasing distance from the focal point.]
           {Integrand of the $E_r$ component of a radially polarized beam with parameters given in
-            Table \ref{tab:...}, for the frequency component at $\lambda=800\si{\nano\metre}$.
+            Table \ref{tab:comparison.parameters}, for the frequency component at $\lambda=800\si{\nano\metre}$.
             \textbf{(a)} In the focal plane, the scale of the oscillations follows those of the incident
             Gaussian beam. As we increase the observation point further away from the focal point
-            (see \textbf{(b)} and \textbf{(c)}), the strength of the oscillation incrases in
-            accordance with Eq.~\eqref{}.
+            (see \textbf{(b)} and \textbf{(c)}), the strength of the oscillation increases in
+            accordance with Eq.~\eqref{eq:sc.parabola-phase-taylor}.
           }
-  \label{fig:oscillating-phase-with-distance}
+  \label{fig:sc.oscillating-phase-with-distance}
 \end{figure}
 
 The cancellation occurs when we consider the oscillatory behaviour of the
@@ -747,6 +780,7 @@ For the specific of a parabolic mirror, for which $z=r^2/4f-f$, the phase functi
 reads
   \begin{equation}
     h(\vb{r},\vb{r}')\simeq 2f - \frac{4rf}{f^2+r^2} r' - \frac{r^2-4f^2}{r^2+4f^2} z' + \cdots
+    \label{eq:sc.parabola-phase-taylor}
   \end{equation}
 The zeroth-order term does not depend on the integration variables, implying
 that the integrand does not oscillate at $\vb{r}'=0$ and oscillates weakly
@@ -1156,11 +1190,11 @@ qualitatively the same results.
 \end{figure}
 
 However, when bringing the focal point inside the parabola, i.e. switching
-to the VSF.LIN.G type, the two formalisms start to diverge (Fig.~\ref{}).
+to the VSF.LIN.G type, the two formalisms start to diverge (Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}).
 The difference between the results of both formalisms increase with decreasing
-focal length (Fig.~\ref{}. Insofar as we assume that the Stratton-Chu is the correct one,
+focal length (Fig.~\ref{}). Insofar as we assume that the Stratton-Chu is the correct one,
 an assumption that should be checked through experimentation, it seems that
-the RW formalism underestimates the amount of energy that persist at the
+the RW formalism underestimates the amount of energy that persists in the
 focal spot, even at very small focal lengths.
 
 \begin{figure}
@@ -1187,7 +1221,7 @@ focal spot, even at very small focal lengths.
         the Richards-Wolf and the Stratton-Chu formalisms. Each plot represents
         the squared magnitude of a single Fourier component of the focused
         electromagnetic field.}
-\label{fig:sc.sc-vs-rw-vsf-lin-g-f0.08875}
+\label{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}
 \end{figure}
 
 \todo[inline]{Do we know of any reason for this? I would venture that
@@ -1753,8 +1787,8 @@ equations, in practice its contribution can be shown to be negligible \cite{SOME
 To go further, it is necessary to specialize these equations a little. We assume
 a paraboloid mirror such that $n_\theta=0$ and $R=\sqrt{r^2+z^2}=r^2/4f+f$.
 We also assume that every field component carries a
-$e^{-ikz}$ phase term. Following the discussion in \ref{section on phase}, we
-see that exponential term $e^{ikR-ikz}=e^{2ikf}$ factors out of the integrand.
+$e^{-ikz}$ phase term. Following the discussion in \ref{sec:sc.phase-cancellation},
+we see that exponential term $e^{ikR-ikz}=e^{2ikf}$ factors out of the integrand.
 We are left with
   \begin{subequations}
   \begin{align}
@@ -1802,6 +1836,7 @@ following two relations
   \begin{equation}
     \stepcounter{equation}
     \int_0^{2\pi} \cos(n\theta)e^{iz\cos\theta}= 2\pi i^n J_n(z). \tag{\theequation,\cite[\S9.1.21]{Abramowitz1965}}
+    \label{eq:app.integral-bessel}
   \end{equation}
 
 \subsection{Radially Symmetric, Linearly Polarized Beam}
@@ -1905,9 +1940,8 @@ To evaluate the $\theta$ integral, we must take $\theta\mapsto\theta-\theta'$,
 which is allowed since the integrand is periodici with period $2\pi$. After the
 substitution, we can apply power-reduction formul\ae and angle difference identities
 on the trigonometric operators, and then evaluate the integrals by noting
-that $\int_0^{2\pi}\sin(n\theta)F(\cos\theta)d\theta=0$ and keeping Eq.~\eqref{}
-in mind, we have
-to obtain
+that $\int_0^{2\pi}\sin(n\theta)F(\cos\theta)d\theta=0$ and keeping
+Eq.~\eqref{eq:app.integral-bessel} in mind, we obtain
   \begin{subequations}
   \begin{align}
     E_x      &= 2\pi A\int_0^{1}\frac{\rho E_0(r)}{(\rho^2+\xi^2)^2}

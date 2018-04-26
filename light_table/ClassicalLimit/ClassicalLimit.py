@@ -52,7 +52,7 @@ ax1.axhline(2.25e29, ls='-', lw=2, color='k')
 ax1.text(0.01,0.94, r"Schwinger pair production $(I=I_S)$", horizontalalignment='left', color='k', transform=ax1.transAxes,fontsize=8)
 
 # -- Draw \xi and the limit \xi = 1
-im = ax1.pcolormesh(O,I,xi, norm=LogNorm(vmin=xi.min(), vmax=xi.max()), cmap='plasma', rasterized=True)
+im = ax1.pcolormesh(O,I,xi, norm=LogNorm(vmin=xi.min(), vmax=xi.max()), cmap=vphys.morgenstemning_cmap, rasterized=True)
 ax1.plot(omega, 1e6*cst.hbar/cst.e*np.sqrt(2e4*intensity/(cst.c*cst.epsilon_0))/(cst.m_e*cst.c), 'k--', lw=2)
 ax1.text(0.4,0.75, r"$\xi=1$", horizontalalignment='center', color='k', rotation=18, transform=ax1.transAxes)
 

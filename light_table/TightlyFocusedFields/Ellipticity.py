@@ -156,8 +156,8 @@ for idx, folder in enumerate(dirList):
     electric_focal_area = analysis_obj.ComputeFocalArea(electric_intensity[:,:,freq_idx],0.5)/(analysis_obj.wavelength[freq_idx]**2)
 
     x_cut, y_cut, field_xcut, field_ycut = analysis_obj.PrepareTransverseCuts(analysis_obj.X_meshgrid,
-                                                                           analysis_obj.Y_meshgrid,
-                                                                           electric_intensity[:,:,freq_idx])
+                                                                              analysis_obj.Y_meshgrid,
+                                                                              electric_intensity[:,:,freq_idx])
 
     # Image at focal plane.
     axPlane  = plt.subplot2grid((3,3), (0,1), colspan=2,rowspan=2)
