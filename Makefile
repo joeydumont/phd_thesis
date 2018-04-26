@@ -141,6 +141,8 @@ python_images: $(PYTHON_IMAGES_DEPS) | $(FIG_OUTDIR)/
 	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_focal0.04375.BQ/StrattonChu_fp.pdf $(FIG_OUTDIR)/StrattonChu_fpNA1.pdf
 	cp $(BIN_FOLDER)/Fields/RichardsWolf/f0.00875/RichardsWolf_fp.pdf                            $(FIG_OUTDIR)/RichardsWolf_fpVSF.pdf
 	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_focal0.00875.BQ/StrattonChu_fp.pdf $(FIG_OUTDIR)/StrattonChu_fpVSF.pdf
+	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00001.BQ/00001.BQ/ElectricIntensityTimeWaterfall-cropped.pdf                                                $(FIG_OUTDIR)/ElectricIntensityTimeWaterfallf0.007.pdf
+	cp $(BIN_FOLDER)/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00010.BQ/00010.BQ/ElectricIntensityTimeWaterfall-cropped.pdf                                                $(FIG_OUTDIR)/ElectricIntensityTimeWaterfallf0.04375.pdf
 	cp $(LIGHT_TABLE)/SCIntegrandOscillation/phase*.pdf                                          $(FIG_OUTDIR)/
 
 #%.pdf: %.svg | $(FIG_OUTDIR)/
