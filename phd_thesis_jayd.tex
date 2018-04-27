@@ -52,6 +52,8 @@
            {hyperref}
 
 \usepackage[numbers,square,sort&compress]{natbib}
+\usepackage{grffile}
+\usepackage{calc}
 
 % ----------------------------------------------------------------- %
 % --                        Customization                        -- %
@@ -115,7 +117,7 @@ Mots-clés:
 
 \chapter{Abstract}
 
-Keyword:
+Keywords:
 
 \chapter{Sommaire récapitulatif}
 \cleardoublepage
@@ -244,7 +246,7 @@ detection of radiation reaction, proposals at ELI and other HPL facilities.
 %       \end{itemize}
 %   \end{enumerate}
 
-\chapter{Tool 1: The Stratton-Chu Diffraction Integrals}
+\chapter{Tool I: The Stratton-Chu Diffraction Integrals}
 \label{chapter:stratton-chu}
 
 \begin{chaptersummary}
@@ -685,7 +687,7 @@ on multiple machines simultaneously, in parallel.
           global, i.e. they exist in each MPI process' region of memory.}
           \label{fig:sc.domain-decomposition}
   }
-  {\includegraphics{light_table/DomainDecomposition/hpc-domaindecomposition.pdf}}
+  {\includegraphics{figs/hpc-domaindecomposition.pdf}}
 \end{figure}
 
 Given that the field at a point $\vb{r}_1$ can be evaluated without any reference
@@ -726,21 +728,21 @@ we use simple tensor products of either the Simpson or Gauss-Legendre methods
 \begin{figure}
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_0L.pdf}
+    \includegraphics[width=\textwidth]{figs/phase_0L.pdf}
     \caption{Integrand for $E_r$ evaluated at the focal point.}
     \label{fig:sc.oscillating-phase-with-distance.0L}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_10L.pdf}
+    \includegraphics[width=\textwidth]{figs/phase_10L.pdf}
     \caption{Integrand for $E_r$ evaluated at a distance $10\lambda$ away from the focal plane.}
     \label{fig:oscillating-phase-with-distance.10L}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{light_table/SCIntegrandOscillation/phase_100L.pdf}
+    \includegraphics[width=\textwidth]{figs/phase_100L.pdf}
     \caption{Integrand for $E_r$ evaluated at a distance $100\lambda$ away from the focal plane.}
     \label{fig:oscillating-phase-with-distance.100L}
   \end{subfigure}
@@ -916,7 +918,7 @@ on GP3.
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.47\textwidth}
-    \includegraphics[width=\textwidth]{light_table/ParallelEfficiency/ParallelEfficiency-mp2.pdf}
+    \includegraphics[width=\textwidth]{figs/ParallelEfficiency-mp2.pdf}
     \caption{Parallel efficiency of the StrattoCalculator on the mp2 Compute
              Canada cluster. 384 processors, or 16 nodes, is the maximum number
              of processors that can be requested on this cluster.}
@@ -924,7 +926,7 @@ on GP3.
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.47\textwidth}
-    \includegraphics[width=\textwidth]{light_table/ParallelEfficiency/ParallelEfficiency-gp3.pdf}
+    \includegraphics[width=\textwidth]{figs/ParallelEfficiency-gp3.pdf}
     \caption{Parallel efficiency of the StrattoCalculator on the GP3, also known
              as Graham, Compute Canada cluster. While 2048 is not the maximum number
              of processors we can ask for, the wait time would have been prohibitely
@@ -1017,14 +1019,14 @@ of the field as a function of $\alpha$.
   \begin{figure}
     \begin{subfigure}{0.47\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{bin/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00001.BQ/00001.BQ/ElectricIntensityTimeWaterfall-cropped.pdf}
+      \includegraphics[width=\textwidth]{figs/ElectricIntensityTimeWaterfallf0.007.pdf}
       \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=7\si{\milli\metre}$.}
       \label{fig:sc.electric_intensity_waterfall7}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.47\textwidth}
       \centering
-      \includegraphics[width=\textwidth]{bin/Fields/Stratto/na_vsf_lin_g/stra-vsf-lin_00010.BQ/00010.BQ/ElectricIntensityTimeWaterfall-cropped.pdf}
+      \includegraphics[width=\textwidth]{figs/ElectricIntensityTimeWaterfallf0.04375.pdf}
       \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=43.75\si{\milli\metre}$.}
       \label{fig:sc.electric_intensity_waterfall43}
     \end{subfigure}
@@ -1412,7 +1414,7 @@ Skeleton (still a rough idea):
     \item Mention intensity measurement stuff? I've worked a little on this\ldots
   \end{itemize}
 
-\chapter{Tool 2: The Schwinger-Keldysh Formalism and SF-QED Observables}
+\chapter{Tool II: The Schwinger-Keldysh Formalism and SF-QED Observables}
 
 % On the mathematical nonexistence of path integrals.
 %Goldstein, 3rd ed. p. 36
@@ -1458,13 +1460,11 @@ See previous chapter but with number of pairs through ``secondary'' processes.
 
 \section{Better modeling of noise through plasma simulations}
 
-\backmatter
-
-\bibliographystyle{osajnl}
-\bibliography{phd_thesis}
-
 \appendix
-
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+%\addtocontents{toc}{\addtolength\cftchapternumwidth{\widthof{Appendix\;}}}
+\renewcommand{\thechapter}{\Alph{chapter}}
+\renewcommand{\thesection}{\Alph{chapter}.\arabic{section}}
 \chapter{Evaluation of the Singular Surface Integrals in the Stratton-Chu Diffraction Integrals}
 \label{app.limits}
 
@@ -2586,5 +2586,10 @@ by iterating through all the possible values of $\sigma_i$ and $n_i$ and
 classifying them according to their $S_1$ and $S_2$ values.
 
 %\chapter{Other stuff to put in appendices}
+
+\backmatter
+
+\bibliographystyle{osajnl}
+\bibliography{phd_thesis}
 
 \end{document}
