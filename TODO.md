@@ -1,1 +1,2 @@
  - [ ] Add information on the AWS Bucket in the README.
+ - [ ] Add the MELLOTRON  in the dependencies for the binary data.
