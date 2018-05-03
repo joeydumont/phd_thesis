@@ -1,0 +1,88 @@
+% --------------------------------------------------------------------------- %
+% Author:          Joey Dumont                <joey.dumont@gmail.com>         %
+% Date created:    Jun 7th, 2016                                              %
+% Date modified:   Jun 7th, 2016                                              %
+% Description:     Prepared for the doctoral exam presentation.               %
+%                  Perturbative expansion of the propagator.                  %
+% License:         CC0                                                        %
+%                  <https://creativecommons.org/publicdomain/zero/1.0>        %
+% --------------------------------------------------------------------------- %
+
+\documentclass{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{feynmp-auto}
+
+\begin{document}
+
+$
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node{
+    \begin{fmffile}{dressed-propagator}
+    \begin{fmfgraph*}(60,20)
+    \fmfleft{i1}
+    \fmfright{o1}
+    \fmf{heavy}{i1,o1}
+    \end{fmfgraph*}
+    \end{fmffile}
+  };
+   \path[use as bounding box] (current bounding box.north east) rectangle (current bounding box.south west);
+\end{tikzpicture}
+=
+\hspace{-0.5cm}
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node{
+    \begin{fmffile}{classical-source-0}
+    \fmfcmd{input feynmp-config;}
+    \begin{fmfgraph}(60,80)
+    \fmfleft{i1}
+    \fmfright{o1}
+    \fmftop{t1}
+    \fmf{fermion}{i1,o1}
+    \end{fmfgraph}
+    \end{fmffile}
+  };
+   \path[use as bounding box] ([shift={(0ex,2.5pt)}]current bounding box.north east) rectangle ([shift={(-2.5ex,-2.5pt)}]current bounding box.south west);
+\end{tikzpicture}
++
+\hspace{-0.5cm}
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node{
+    \begin{fmffile}{classical-source-1}
+    \fmfcmd{input feynmp-config;}
+    \begin{fmfgraph}(60,80)
+    \fmfleft{i1}
+    \fmfright{o1}
+    \fmftop{t1}
+    \fmf{fermion}{i1,v1,o1}
+    \fmffreeze
+    \fmfforce{vloc(__v1) shifted (0,10mm)}{t1}
+    \fmf{crossed,foreground=(0.922,,0.506,,0.106)}{t1,v1}
+    \end{fmfgraph}
+    \end{fmffile}
+  };
+   \path[use as bounding box] ([shift={(0ex,2.5pt)}]current bounding box.north east) rectangle ([shift={(-2.5ex,-2.5pt)}]current bounding box.south west);
+\end{tikzpicture}
++
+\begin{tikzpicture}[baseline=(current bounding box.center)]
+  \node{
+    \begin{fmffile}{classical-source-2}
+    \fmfcmd{input feynmp-config;}
+    \begin{fmfgraph}(60,80)
+    \fmfleft{i1}
+    \fmfright{o1}
+    \fmftop{t1,t2}
+    \fmf{fermion}{i1,v1,v2,o1}
+    \fmffreeze
+    \fmfforce{vloc(__v1) shifted (0,10mm)}{t1}
+    \fmfforce{vloc(__v2) shifted (0,10mm)}{t2}
+    \fmf{crossed,foreground=(0.922,,0.506,,0.106)}{t1,v1}
+    \fmf{crossed,foreground=(0.922,,0.506,,0.106)}{t2,v2}
+    \end{fmfgraph}
+    \end{fmffile}
+  };
+   \path[use as bounding box] ([shift={(0ex,2.5pt)}]current bounding box.north east) rectangle ([shift={(-0ex,-2.5pt)}]current bounding box.south west);
+\end{tikzpicture}
++ \;\cdots
+$
+\end{document}

@@ -18,6 +18,7 @@
 
 # -- Main project options.
 PROJECT=phd_thesis_jayd
+PROJECT_DIR=$(dirname $(readlink -f $(PROJECT).tex))
 CLASS=inrsthesis
 LATEX=pdflatex
 OUTDIR=out
@@ -112,6 +113,13 @@ $(FIG_OUTDIR)/:
 	mkdir -p $(FIG_OUTDIR)/
 
 # -------------------- Generation of LaTeX based figures -------------------- #
+LATEX_IMAGES_LOCAL     := $(LIGHT_TABLE)/FeynmanDiagrams/ResummedPropagator.tex
+LATEX_IMAGES_LOCAL_CMD  = $(cd $$(dirname $$(readlink -f $(file))) && $(FIG_LATEX) -shell-escape $$(basename $(file)) && cp $$(basename $${$(file)} .tex}) $(PROJECT_DIR)/$(FIG_OUTDIR)/ && cd $(PROJECT_DIR))
+
+latex_images_nooutputdir: $(LATEX_IMAGES_LOCAL) | $(FIG_OUTDIR)
+	#$(foreach $file, $^, $(LATEX_IMAGES_LOCAL_CMD))
+	$(foreach  $file, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) -shell-escape $(file)))
+
 LATEX_IMAGES_DEPS := $(LIGHT_TABLE)/DomainDecomposition/hpc-domaindecomposition.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_hna.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_vsf.tex
@@ -127,7 +135,7 @@ PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/RichardsWolf/FastRW_plot.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/SCIntegrandOscillation/IntegrandOscillation.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/TightlyFocusedFields/Ellipticity.py
-PYTHON_IMAGES_CMD   = $(cd $$(readlink -f $(file)) && $(PY_BINARY) $$(basename $(file)) && cd $$(basename $(PROJECT).TEX))
+PYTHON_IMAGES_CMD   = $(cd $$(readlink -f $(file)) && $(PY_BINARY) $$(basename $(file)) && cd $$(basename $(PROJECT).tex))
 python_images: $(PYTHON_IMAGES_DEPS) | $(FIG_OUTDIR)/
 	# -- Generate the figures.
 	$(foreach file, $^, $(PYTHON_IMAGES_CMD))

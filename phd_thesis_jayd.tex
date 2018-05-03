@@ -14,25 +14,67 @@
 % --                       Document Class                        -- %
 % ----------------------------------------------------------------- %
 
+\PassOptionsToPackage{table}{xcolor}
 \documentclass[11pt,SymmetricalJury]{inrsthesis/inrsthesis}
-
+\usepackage{lipsum}
 % ----------------------------------------------------------------- %
 % --                          Packages                           -- %
 % ----------------------------------------------------------------- %
 
-\let\mathfrak\undefined
-\usepackage[charter]{mathdesign}
-\usepackage[scaled=.96]{XCharter}
 
+
+% -- Math symbols and fonts.
+\let\mathfrak\undefined
+\usepackage[charter]{mathdesign}      % Bitstream Charter for best font.
+\usepackage[no-math]{fontspec}
+\setmainfont{EB Garamond}
+\usepackage[varg]{newtxmath}
+% \usepackage{unicode-math}
+
+\usepackage{microtype}   % Fine small typographical details
+\usepackage{realscripts} % Use the font's sub- and superscripts
+\usepackage{multirow}
+
+% %\usepackage[scaled=.96]{XCharter}
+% \setmainfont{XCharter}
+% \setmathfont{XCharter}
+
+% Style and PDF formatting options.
+%\usepackage[compact,sf]{titlesec}     % Use sans serif fonts in section headings.
+\usepackage[bottom,
+            multiple,
+            stable]
+           {footmisc}                % Force les notes de bas de page à être en bas de la page.
+
+\usepackage[switch,mathlines,displaymath]{lineno}
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+ \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+ \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+ \renewenvironment{#1}%
+    {\linenomath\csname old#1\endcsname}%
+    {\csname oldend#1\endcsname\endlinenomath}}%
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+ \patchAmsMathEnvironmentForLineno{#1}%
+ \patchAmsMathEnvironmentForLineno{#1*}}%
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}%
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
+}
+\linenumbers
 \usepackage[showframe,pass]{geometry} % Shows the frame properly when using memoir.
-\usepackage{amsmath}
 \usepackage[theorems=false]{latex-tools/vphys}        % Common LaTeX tools that I use.
+\usepackage{latex-tools/celldraw}
 \usepackage{todonotes}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{subcaption}
 \let\newfloat\undefined
 \usepackage{floatrow}
+
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -69,8 +111,19 @@
 \settocdepth{section}
 \setsecnumdepth{subsection}
 
-\captionsetup[figure]{labelfont=bf,width=0.85\textwidth}
-\captionsetup[table]{labelfont=bf,width=0.85\textwidth}
+%\captionsetup[figure]{labelfont=bf,width=0.85\textwidth}
+%\captionsetup[table]{labelfont=bf,width=0.85\textwidth}
+
+
+% Configuration of subcaptions.
+\renewcommand\thesubfigure{\alph{subfigure}}
+\renewcommand\thesubtable{\alph{subtable}}
+  \captionsetup[figure]{width=0.95\textwidth,labelfont={sf,bf},textfont=sf,font+=small}
+  \captionsetup[subfigure]{width=0.8\linewidth,parskip=0pt,font+=small}
+  \captionsetup[table]{labelfont=sf,textfont=sf,font+=small}
+  \captionsetup[subtable]{width=\linewidth,parskip=0pt,font+=small}
+
+\usetikzlibrary{tikzmark,calc}
 
 % ----------------------------------------------------------------- %
 % --                       Title Page Info                       -- %
@@ -174,6 +227,17 @@ familiar situations.}.
 
 Precision tests of QED.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/IntensityHistory.pdf}
+  \caption[Short history of the intensity of laser systems.]
+          {Intensity of laser systems as a function of time (approximative).
+           Note that CPA has played a big role in accelerating the development
+           of HPLs.
+           Figured adapted from \cite{Mourou2015}.}
+  \label{fig:intro.intensity-history}
+\end{figure}
+
 
 The advent of the chirped pulse amplification technique (CPA) has catapulted
 the available focused laser intensities in the last three decades
@@ -181,18 +245,6 @@ the available focused laser intensities in the last three decades
 6 orders of magnitude in the highest recorded intensity in a very short time
 (Fig.~\ref{fig:intro.intensity-history}). This has opened up the possibility
 of testing QED in a completely new sector of parameters.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\textwidth]{figs/IntensityHistory.pdf}
-  \caption[Short history of the intensity of laser systems.]
-          {Intensity of laser systems as a function of time (approximative).
-            Figured adapted from \cite{Mourou2015}.}
-  \label{fig:intro.intensity-history}
-\end{figure}
-
-HPL as another sector of QED to test. Complementary sector. New theoretical tools
-needed (SF-QED). Insight into traditional QED as well?
 
 Although the availability of high-power lasers ($I\leq10^{22}\si{\watt\per\cm\squared}$)
 is relatively recent, the study of quantum electrodynamics processes in the presence
@@ -221,13 +273,53 @@ to an intensity of
   \end{equation}
 and most planned facilities, such the European Extreme Light Infrastructure (ELI),
 the French APOLLON, the Russian XCELS, the South Korean CoReLS, and (others)
-do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$. 
+do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$ (Fig.~\ref{fig:intro.intensity-history}).
+
+HPL as another sector of QED to test. Complementary sector. New theoretical tools
+needed (SF-QED). Insight into traditional QED as well?
+
+
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/ResummedPropagator.pdf}
+  \caption[Resummation of multiphotonic effects on the fermion propagator.]
+          {When the multilphotonic parameter $\xi\geq1$, all these Feynman
+          diagrams contribute to the same order. It is thus necessary to
+          resum their contributions exactly, i.e. take into account
+          the non-perturbative character of the interaction between the
+          fermion and the laser field.}
+  \label{fig:intro.resummed-propagator}
+\end{figure}
+
+When real electrons are involved in the process, the additional degrees of freedom
+allow for the definition of new dimensionless parameters which govern the dynamics.
+The first is similar to the Keldysh defined in the theory of ionization, as it
+dictates whether multiphotonic are important. It is defined by
+  \begin{equation}
+    \xi = \frac{|e|E_0}{m_e\omega c}.
+  \end{equation}
+At low $\xi$, the probability that an electron interacts with $n$ photons
+during its propagation scales as $P_n\sim\xi^{2n}$. In this regime,
+only a few photons are exchanged between the laser and the electrons, and a
+perturbative treatment makes. However, when $\xi\sim1$, multiphotonic effects
+dominate and we must take into account the effect of the laser exactly.
+In other words, it is necessary to exactly resum the $n$ photon interactions,
+a procedure shown schematically in terms of Feynman diagrams in Fig.~\ref{fig:intro.resummed-propagator}.
+
+The other important parameter is the laser field that the electron experiences
+in its rest frame. It is simply given by
+  \begin{equation}
+    \chi = \frac{|e|\hbar\sqrt{\left(F^{\mu\nu}p_\nu\right)^2}}{c^3m_e^3} = \frac{(pk)}{(m_e c\omega)}\frac{E_0}{E_S}
+  \end{equation}
+where the second quality is valid in a plane wave.
+
+Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
+chi << 1, classical trajectories (no recoil).
 
 SLAC E144, (multiple proposals since then, Karbstein et al), possible
 detection of radiation reaction, proposals at ELI and other HPL facilities.
 
-Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
-chi << 1, classical trajectories (no recoil).
 
 
 \begin{figure}
@@ -242,10 +334,21 @@ chi << 1, classical trajectories (no recoil).
 \section{Objectives and organization of this thesis}
 \label{sec:intro.objectives}
 
+The objectives of this thesis are to provide a flexible numerical tool that
+can model the reflection of ultrashort pulses of arbitrary polarization, having
+arbitrary temporal and spatial dependence off perfect conductors of complicated
+geometry. Once that is done, we look for experimental configurations that either
+optimize the yield of specific SF-QED observables, namely FWM \textit{in vacuo}
+and Schwinger pair production. Using classical electron dynamics simulations, we
+also wish to approximate the noise coming from competing processes in a low
+density environment.
+
 \begin{description}
-  \item[Chapter \ref{chapter:stratton-chu} -- Tool 1: The Stratton-Chu Diffraction Integrals]
+  \item [Chapter \ref{chapter:stratton-chu} -- Tool 1: The Stratton-Chu Diffraction Integrals]
   test
-  \item[Chapter]
+  \item [Chapter \ref{chapter:fwm} -- ]
+  test
+  \item [Chapter \ref{chapter:electron_trajectories} -- ]
   test
 \end{description}
 
@@ -1072,6 +1175,10 @@ of the field as a function of $\alpha$.
     \label{fig:sc.electric_intensity_waterfall}
   \end{figure}
 
+\todo[inline]{Analysis of analytical solutions in Appendix to interpret the tightly focused
+fields.}
+
+
 \todo[inline]{3D visualization of the tranverse part of the beam.}
 \todo[inline]{3D visualization of the longitudinal components of the beam.}
 \todo[inline]{Importance of the longitudinal component as a function of the focal length
@@ -1392,33 +1499,50 @@ Skeleton:
 \end{comment}
 
 \chapter{Application I: Four-Wave Mixing \textit{in vacuo} and Pair Production}
+\label{chapter:fwm}
+
+Application of tightly focused field model on observing SF-QED observables.
+Can model realistic experimental configurations.
 
 \todo[inline]{On the importance of modeling spatial inhomogeneities:
 https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022515}
 
-Skeleton:
-\begin{itemize}
-    \item Simple derivation of the EH Lagrangian.
-    \item How to extract FWM from EH: linearisation + integral solution (WaveMixer)
-    \item How to extract PP from EH: Adiabatic formula.
-    \item MASTER TABLE, or how different field models affect FWM.
-      \begin{itemize}
-        \item Introduction of the different field models.
-        \item Introduction of the transmission parabola.
-        \item Explain the behaviour of yield as a function of 2f/rmax with Lorentz invariants,
-              i.e. the optics of the experiment.
-      \end{itemize}
-    \item Pair production, w/ linear and radial beams.
-      \begin{itemize}
-          \item Show that both polarizations show the same behaviour as a function of f.
-          \item Visualize the 3D fields and explain optimum in terms of the optics (cancellation of the
-                magnetic field in both cases).
-      \end{itemize}
-\end{itemize}
+Usual apparatus of SF-QED can be unwieldy to write down predictions in
+complicated fields. Use of effective field theory to use ``first quantized''
+theory that can easily accommodate complex fields. [Battesti, Dunne].
+
+Most predictions rely on simple field models to be able to evaluate integrals [Karbstein].
+Counterpoint, VEV theory by Karbstien that we should compare against.
+
+% Skeleton:
+% \begin{itemize}
+%     \item Simple derivation of the EH Lagrangian.
+%     \item How to extract FWM from EH: linearisation + integral solution (WaveMixer)
+%     \item How to extract PP from EH: Adiabatic formula.
+%     \item MASTER TABLE, or how different field models affect FWM.
+%       \begin{itemize}
+%         \item Introduction of the different field models.
+%         \item Introduction of the transmission parabola.
+%         \item Explain the behaviour of yield as a function of 2f/rmax with Lorentz invariants,
+%               i.e. the optics of the experiment.
+%       \end{itemize}
+%     \item Pair production, w/ linear and radial beams.
+%       \begin{itemize}
+%           \item Show that both polarizations show the same behaviour as a function of f.
+%           \item Visualize the 3D fields and explain optimum in terms of the optics (cancellation of the
+%                 magnetic field in both cases).
+%       \end{itemize}
+% \end{itemize}
 
 \section{Modelling Four-Wave Mixing in Strong, Classical Fields}
 
+Short introduction of predictions of FWM by Euler, Kochel and Heiserberg.
+Derivations of the effective field theory by Dunne. Corrections to Maxwell
+equations. Limits of formalism and whatnot.
+
 \section{Four-Wave Mixing With Tightly Focused Fields}
+
+Description of the numerical algorithm to compute FWM.
 
 \subsection{First Steps: On-Axis Parabola}
 
@@ -1426,15 +1550,41 @@ Skeleton:
 
 \subsection{Varying the Focal Length}
 
-\todo
+\renewcommand{\chart}[1]{
+  \ChartBox{#1}{55mm/6.09*#1}{blue}
+}
 
-\todo[inline]{Compare results and prensetation with
+\begin{table}
+  \centering
+  \begin{tabular}{llp{10cm}}
+  2.28571E-02 & 1                 & \chart{1.15321E-04}  \\
+  1.14286E-01 & 5                 & \chart{2.07763E-01}  \\
+  2.05714E-01 & 9                 & \chart{1.70786E+00}  \\
+  2.74286E-01 & 12                & \chart{3.64066E+00}  \\
+  3.88571E-01 & 17                & \chart{6.09274E+00}  \\
+  5.02857E-01 & 22                & \chart{5.90221E+00}  \\
+  6.17143E-01 & 27                & \chart{4.11350E+00}  \\
+  7.31429E-01 & 32                & \chart{2.38156E+00}  \\
+  8.45714E-01 & 37                & \chart{1.28552E+00}  \\
+  1.00000E+00 & 43.75             & \chart{5.65765E-01}  \\
+  1.59634E+00 & 69.84             & \chart{3.77655E-02}  \\
+  2.00137E+00 & 84.56             & \chart{8.42140E-03}  \\
+  2.45714E+00 & 107.5             & \chart{1.98551E-03} 
+  \end{tabular}
+  \caption{My caption}
+  \label{my-label}
+\end{table}
+
+\subsection{Maximing the Observable Number of Photons}
+
+\todo[inline]{Compare results and presentation with
 https://journals.aps.org/prd/abstract/10.1103/PhysRevD.97.036022.}
 
 \todo[inline]{Compare results and presentation with
 https://journals.aps.org/prd/pdf/10.1103/PhysRevD.97.036026.}
 
 \chapter{Application II: Radiation Reaction With High Energy Electrons}
+\label{chapter:electron_trajectories}
 
 Skeleton (still a rough idea):
   \begin{itemize}
