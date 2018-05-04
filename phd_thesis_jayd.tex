@@ -34,6 +34,7 @@
 \usepackage{microtype}   % Fine small typographical details
 \usepackage{realscripts} % Use the font's sub- and superscripts
 \usepackage{multirow}
+\usepackage{dcolumn}
 
 % %\usepackage[scaled=.96]{XCharter}
 % \setmainfont{XCharter}
@@ -118,9 +119,9 @@
 % Configuration of subcaptions.
 \renewcommand\thesubfigure{\alph{subfigure}}
 \renewcommand\thesubtable{\alph{subtable}}
-  \captionsetup[figure]{width=0.95\textwidth,labelfont={sf,bf},textfont=sf,font+=small}
+  \captionsetup[figure]{width=0.90\textwidth,labelfont={sf,bf},textfont=sf,font+=small}
   \captionsetup[subfigure]{width=0.8\linewidth,parskip=0pt,font+=small}
-  \captionsetup[table]{labelfont=sf,textfont=sf,font+=small}
+  \captionsetup[table]{width=0.90\textwidth,labelfont={sf,bf},textfont=sf,font+=small}
   \captionsetup[subtable]{width=\linewidth,parskip=0pt,font+=small}
 
 \usetikzlibrary{tikzmark,calc}
@@ -1542,7 +1543,72 @@ equations. Limits of formalism and whatnot.
 
 \section{Four-Wave Mixing With Tightly Focused Fields}
 
+Multiple experimental setups have been proposed in the FWM literature, with
+the most common setup involving the collision of multiple beams at at angle.
+In this thesis, we propose an alternative setup based on the tight focusing
+a single laser pulse. This has the advantage of being simpler, and involving
+less optical elements, and therefore of retaining the most energy in the
+incident laser beam. However, it is much less flexible, as there are less
+degrees of freedom in the control of the emission properties of the radiation
+to be observed.
+
+Our goal is to optimize the number of FWM photons that can readily be detected
+in an all-optical experiment by tweaking the properties of the mirror and the
+spectral and spatial properties of the single incident laser beam. The total
+energy of the beam is fixed by the laser chain, although it is possible to change
+the polarization and the wavefront of the beam, and, to some degree, its spatial
+shape.
+
+This chapter is structured as follows. We first compare the more typical
+experimental setups available for single beam setups: the off-axis and
+on-axis parabolic mirrors. \textbf{Summary of results.} We then explore
+less typical parabolic mirrors, where the focal plane is inside the mirror
+instead of outside. This configuration yields the most photons, but the
+photons are harder to experimentally measure. This configuration has the
+major problem that it creates backreflections that go directly back into the
+laser chain, essentially destroying the laser chain. To avoid that, we remove
+the part of the parabolic mirror that creates those reflections. This still
+yields an optimal focal length, but even fewer photons. Finally, we explore
+masking the incident field to create artifical shadows in the far-field where
+FWM photons are emitted.
+
+
 Description of the numerical algorithm to compute FWM.
+
+\paragraph{Notation used in this chapter}
+
+To simplify the presentation of the results, we will use abbreviations for
+the different configurations we will explore. They are explained in
+Table \ref{tab:fwm.setups-abbreviations}.
+
+\begin{table}
+  \begin{tabular}{cr}
+    \toprule
+    \multicolumn{2}{c}{\textbf{Geometry}} \\
+    \midrule
+    HNA & high numerical aperture parabola \\
+    OFF & off-axis parabolic mirror \\
+    VSF & transmission parabola, i.e. parabola with short focal length and cut at focal plane. \\
+    \midrule
+    \multicolumn{2}{c}{\textbf{Polarization}} \\
+    \midrule
+    LIN & linear polarization \\
+    RAD & radial polarization \\
+    MOS[N] & linearly polarized beam passed through a mosaic with N quadrants \\
+    \midrule
+    \multicolumn{2}{c}{\textbf{Field Shape}} \\
+    \midrule
+    G   & gaussian beam \\
+    SG  & super-gaussian beam \\
+  \bottomrule
+  \end{tabular}
+  \caption{Keys used throughout the chapter to denote the different parameters
+           explored in the simulations.}
+  \label{tab:fwm.setups-abbreviations}
+\end{table}
+
+
+Summary of the notation used in this section. The HNA, VSF, LIN, RAD, etc.
 
 \subsection{First Steps: On-Axis Parabola}
 
@@ -1550,29 +1616,43 @@ Description of the numerical algorithm to compute FWM.
 
 \subsection{Varying the Focal Length}
 
+\definecolor{phd_orange}{HTML}{FFB14E}
 \renewcommand{\chart}[1]{
-  \ChartBox{#1}{55mm/6.09*#1}{blue}
-}
+  \ChartBox{#1}{0.22\textwidth/6.09*#1}{phd_orange}}
+
+
+\todo[inline]{Fix the colours of the chart. Fix the large negative sign.}
 
 \begin{table}
   \centering
-  \begin{tabular}{llp{10cm}}
-  2.28571E-02 & 1                 & \chart{1.15321E-04}  \\
-  1.14286E-01 & 5                 & \chart{2.07763E-01}  \\
-  2.05714E-01 & 9                 & \chart{1.70786E+00}  \\
-  2.74286E-01 & 12                & \chart{3.64066E+00}  \\
-  3.88571E-01 & 17                & \chart{6.09274E+00}  \\
-  5.02857E-01 & 22                & \chart{5.90221E+00}  \\
-  6.17143E-01 & 27                & \chart{4.11350E+00}  \\
-  7.31429E-01 & 32                & \chart{2.38156E+00}  \\
-  8.45714E-01 & 37                & \chart{1.28552E+00}  \\
-  1.00000E+00 & 43.75             & \chart{5.65765E-01}  \\
-  1.59634E+00 & 69.84             & \chart{3.77655E-02}  \\
-  2.00137E+00 & 84.56             & \chart{8.42140E-03}  \\
-  2.45714E+00 & 107.5             & \chart{1.98551E-03} 
-  \end{tabular}
-  \caption{My caption}
-  \label{my-label}
+  \begin{tabularx}{0.66\textwidth}{@{\extracolsep{\fill}}S[table-format=1.5E+2,output-exponent-marker=\text{E},mode=text]%
+                                   @{\extracolsep{\fill}}S[table-format=1.2,mode=text]%
+                                   p{0.22\textwidth}}
+  \toprule
+  \multicolumn{3}{c}{HNA.LIN.G}\\
+  \midrule
+  \multicolumn{1}{c}{$2f/r_\text{max}$} & \multicolumn{1}{l}{$f\;[\si{\mm}]$} & Number of photons (1st) \\
+  \midrule
+  2.28571E-02       & 1                 & \chart{1.15321E-04}  \\
+  1.14286E-01       & 5                 & \chart{2.07763E-01}  \\
+  2.05714E-01       & 9                 & \chart{1.70786E+00}  \\
+  2.74286E-01       & 12                & \chart{3.64066E+00}  \\
+  3.88571E-01       & 17                & \chart{6.09274E+00}  \\
+  5.02857E-01       & 22                & \chart{5.90221E+00}  \\
+  6.17143E-01       & 27                & \chart{4.11350E+00}  \\
+  7.31429E-01       & 32                & \chart{2.38156E+00}  \\
+  8.45714E-01       & 37                & \chart{1.28552E+00}  \\
+  1.00000E+00       & 43.75             & \chart{5.65765E-01}  \\
+  1.59634E+00       & 69.84             & \chart{3.77655E-02}  \\
+  2.00137E+00       & 84.56             & \chart{8.42140E-03}  \\
+  2.45714E+00       & 107.5             & \chart{1.98551E-03}  \\
+  \bottomrule
+  \end{tabularx}
+  \caption{Number of photons as a function of the focal length $f$
+           of a parabolic mirror. The incident field has a Gaussian
+           spatial shape. The aperture size is fixed at $
+           r_\text{max}=87.50\,\si{\mm}$.}
+  \label{tab:fwm.hna-lin-g}
 \end{table}
 
 \subsection{Maximing the Observable Number of Photons}
