@@ -123,6 +123,8 @@ latex_images_nooutputdir: $(LATEX_IMAGES_LOCAL) | $(FIG_OUTDIR)
 LATEX_IMAGES_DEPS := $(LIGHT_TABLE)/DomainDecomposition/hpc-domaindecomposition.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_hna.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_vsf.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/masked_parabola_hna.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/masked_parabola_vsf.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/scatteringSystem/scatteringSystem.tex
 
 latex_images: $(LATEX_IMAGES_DEPS) | $(FIG_OUTDIR)/

@@ -36,6 +36,7 @@
   % -- This draws the position of the focal plane.
   \draw[dashed] (0,-\rmax) -- (0,\rmax);
 
+  % -- This draws the light rays.
   \foreach \x in {-0.95,-0.85,...,-\rmin}
   {
     \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);

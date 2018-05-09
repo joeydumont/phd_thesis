@@ -1,0 +1,97 @@
+% --------------------------------------------------------------------------- %
+% Author:          Joey Dumont                <joey.dumont@gmail.com>         %
+% Date created:    Jun 19th, 2015                                             %
+% Description:     Prepared for my doctoral thesis.                           %
+%                  TikZ code to show the masked parabola.                     %
+% License:         CC0                                                        %
+%                  <https://creativecommons.org/publicdomain/zero/1.0>        %
+% --------------------------------------------------------------------------- %
+
+\documentclass[tikz]{standalone}
+\usepackage[charter]{mathdesign}
+\usepackage{amsmath}
+\usepackage{xifthen}
+\usepackage{fontspec}
+\setmainfont{Oswald}
+
+\usetikzlibrary{calc,intersections,patterns}
+
+% -- Parameters of the parabola.
+\newcommand{\focal}{0.5}
+\newcommand{\rmax}{1}
+
+% -- Functions that compuzte z(r), or r(z).
+\newcommand{\parabola}[1]{\pgfmathsetmacro{\myvalue}{#1*#1/(4*\focal)-\focal}}
+\newcommand{\iparabola}[1]{\pgfmathsetmacro{\myivalue}{sqrt(4*\focal*(#1+\focal))}}
+
+% -- How much of the parabola we plot.
+\parabola{\rmax}
+\pgfmathsetmacro{\zmax}{\myvalue}
+\pgfmathsetmacro{\rmin}{0}
+\pgfmathsetmacro{\zmaxplot}{1.52}
+
+% -- Extract angle between two coordinates. The first
+% -- argument is the output value.
+\newcommand{\pgfextractangle}[3]{%
+    \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}
+                              {\pgfpointanchor{#3}{center}}
+    \global\let#1\pgfmathresult
+}
+
+\begin{document}
+
+\begin{tikzpicture}[scale=3]
+
+  % -- This draws the parabola.
+  \draw[domain=-\focal:\zmax,samples=1000,ultra thick,smooth,name path=parabola1] plot (\x,{sqrt(4*\focal*(\x+\focal))});
+  \draw[domain=-\focal:\zmax,samples=1000,ultra thick,smooth,name path=parabola2] plot (\x,{-sqrt(4*\focal*(\x+\focal))});
+
+  % -- This draws the position of the focal plane.
+  \draw[dashed] (0,-\rmax) -- (0,\rmax);
+
+  % -- Denotes the position of the optical axis.
+  \draw[gray] (-1.2,0) -- (\zmaxplot, 0) node [at start, above right] {Optical axis};
+
+  % -- This draws the light rays on parabola1.
+  \foreach \x in {-0.80,-0.70,...,0.60,0.80}
+  {
+    \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);
+  }
+
+
+  % -- Prepares the endpoints for the shadow.
+  \pgfmathsetmacro{\rmaxsha}{0.75}
+  \path [name path=line2](1.5, \rmaxsha)--(-0.5,\rmaxsha);
+  \path [name path=line2a, name intersections={of=parabola1 and line2}] (1.5, \rmaxsha) -- (intersection-1);
+  \coordinate[] (A2)  at (intersection-1);
+
+  \pgfmathsetmacro{\rminsha}{0.55}
+  \path [name path=line3](1.5, \rminsha)--(-0.5,\rminsha);
+  \path [name path=line3a,name intersections={of=parabola1 and line3}] (1.5, \rminsha) -- (intersection-1);
+  \coordinate[] (A3)  at (intersection-1);
+
+  % -- Draws the shadow from the mask to the parabola.
+  \parabola{\rminsha}\pgfmathsetmacro{\zminsha}{\myvalue}
+  \parabola{\rmaxsha}\pgfmathsetmacro{\zmaxsha}{\myvalue}
+  \draw[domain=\zminsha:\zmaxsha,samples=1000,line width=0.0mm,white,fill=gray,opacity=0.2,draw=none] plot (\x,{sqrt(4*\focal*(\x+\focal))}) -- (1.5, \rmaxsha) -- (1.5, \rminsha) -- (A3) -- cycle;
+
+  % -- Draw the mask.
+  \draw[fill=black!50] (1.30, \rminsha) rectangle (1.35, \rmaxsha);
+
+  % -- Draw the lines ending on the mask.
+  \foreach \x in {0.6,0.7}
+  {
+    \draw (\zmaxplot,\x) -- (1.35, \x);
+  }
+
+  % -- Drwas the shadow from the parabola to the focal spot.
+  \draw[domain=\zminsha:\zmaxsha,samples=1000,line width=0.0mm,white,fill=gray,opacity=0.2,draw=none] plot (\x,{sqrt(4*\focal*(\x+\focal))}) -- (0.0,0.0) -- (A3) -- cycle;
+
+  % -- Draws the shadow from the focal spot to the detector.
+  \coordinate[] (S1)  at ($(0,0)!-1.2cm!(A2)$);
+  \coordinate[] (S2)  at ($(0,0)!-1.2cm!(A3)$);
+  \draw[samples=1000,line width=0.0mm,white,fill=gray,opacity=0.2,draw=none] (0.0,0.0) -- (S1) -- (S2) -- cycle;
+
+\end{tikzpicture}
+
+\end{document}

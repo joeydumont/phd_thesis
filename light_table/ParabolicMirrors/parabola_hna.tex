@@ -14,10 +14,6 @@
 \usepackage{fontspec}
 \setmainfont{Oswald}
 
-
-\definecolor{inrs_blue}{RGB}{20, 107, 182}
-
-
 % -- Change this value to change the shape of the parabola.
 \newcommand{\focal}{0.5}
 \newcommand{\rmax}{1}
@@ -33,16 +29,6 @@
 
 \begin{tikzpicture}[scale=3]
 
-  \parabola{0}
-  \newcommand{\offset}{0.1}
-  \newcommand{\laserLength}{2}
-  \draw[domain=-\focal:-\offset,samples=1000,line width=0.0mm,white,fill=inrs_blue,opacity=0.15,draw=none] plot (\x,{sqrt(4*\focal*(\x+\focal))}) -- ++(\laserLength,0) -- ++(0,2*\myvalue+\offset) -- ++(-\laserLength,0) -- cycle;
-  %\draw[domain=-\focal:-\offset,samples=1000,line width=0.0mm,white,fill=inrs_blue,opacity=0.15,draw=none] plot (\x,{-sqrt(4*\focal*(\x+\focal))}) -- ++(\laserLength,0) -- ++(0,-2*\myvalue-0.53) -- ++(-\laserLength,0) -- cycle;
-
-  %\draw[domain=-\focal:-\offset,samples=1000,line width=0.0mm,white,fill=inrs_blue,opacity=0.15,draw=none] plot (\x,{-sqrt(4*\focal*(\x+\focal))}) -- (0,0) -- (-\focal,0) -- cycle;
-  %\draw[domain=-\focal:-\offset,samples=1000,line width=0.0mm,white,fill=inrs_blue,opacity=0.15,draw=none] plot (\x,{sqrt(4*\focal*(\x+\focal))}) -- (0,0) -- (-\focal,0) -- cycle;
-
-
   % -- This draws the parabolic mirror.
   \draw[domain=-\focal:\zmax,samples=1000,ultra thick] plot (\x,{sqrt(4*\focal*(\x+\focal))});
   \draw[domain=-\focal:\zmax,samples=1000,ultra thick] plot (\x,{-sqrt(4*\focal*(\x+\focal))});
@@ -50,6 +36,7 @@
   % -- This draws the position of the focal plane.
   \draw[dashed] (0,-\rmax) -- (0,\rmax);
 
+  % -- This draws the light rays.
   \foreach \x in {-0.80,-0.70,...,0.80}
   {
     \parabola{\x}\draw (\zmaxplot,\x) -- (\myvalue,\x) -- (0,0);

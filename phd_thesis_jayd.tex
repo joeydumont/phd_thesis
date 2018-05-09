@@ -1609,10 +1609,14 @@ Table \ref{tab:fwm.setups-abbreviations}.
   \label{tab:fwm.setups-abbreviations}
 \end{table}
 
-
-Summary of the notation used in this section. The HNA, VSF, LIN, RAD, etc.
-
 \subsection{First Steps: On-Axis Parabola}
+
+Most high-power lasers are set up with off-axis mirrors, as they are much
+easier to align and cannot possibly reflect the laser beam back into the
+chain. The exact geometry of an off-axis parabolic mirror used in this thesis
+is shown in Fig.~\ref{}.
+
+
 
 \todo[inline]{From off-axis parabola to on-axis parabola for tighter focal spots.}
 
@@ -1621,7 +1625,6 @@ Summary of the notation used in this section. The HNA, VSF, LIN, RAD, etc.
 \definecolor{phd_orange}{HTML}{FFB14E}
 \renewcommand{\chart}[1]{
   \ChartBox{#1}{0.22\textwidth/6.09*#1}{phd_orange}}
-
 
 \todo[inline]{Fix the colours of the chart. Fix the large negative sign.}
 
@@ -1648,6 +1651,10 @@ Summary of the notation used in this section. The HNA, VSF, LIN, RAD, etc.
   1.59634E+00       & 69.84             & \chart{3.77655E-02}  \\
   2.00137E+00       & 84.56             & \chart{8.42140E-03}  \\
   2.45714E+00       & 107.5             & \chart{1.98551E-03}  \\
+  \midrule
+  \multicolumn{3}{c}{OFF.LIN.G}                                \\
+  \midrule
+  9.56363E-01       & 78.9             & \chart{1.22234E-02} \\
   \bottomrule
   \end{tabularx}
   \caption{Number of photons as a function of the focal length $f$
@@ -1658,6 +1665,25 @@ Summary of the notation used in this section. The HNA, VSF, LIN, RAD, etc.
 \end{table}
 
 \subsection{Maximing the Observable Number of Photons}
+
+\begin{figure}
+  \begin{subfigure}[t]{0.47\textwidth}
+    \centering
+    \includegraphics{figs/masked_parabola_hna.pdf}
+    \caption{Masked HNA parabola.}
+    \label{fig:vsf-v-hna.hna}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.47\textwidth}
+    \centering
+    \includegraphics{figs/masked_parabola_vsf.pdf}
+    \caption{Masked VSF parabola.}
+    \label{fig:vsf-v-hna.vsf}
+  \end{subfigure}
+  \caption[Illustrations of the masked HNA and VSF parabolas.]
+          {Illustrations of masked HNA and VSF parabolas.}
+  \label{fgi:vsf-v-hna}
+\end{figure}
 
 \todo[inline]{Compare results and presentation with
 https://journals.aps.org/prd/abstract/10.1103/PhysRevD.97.036022.}
