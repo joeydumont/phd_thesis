@@ -1561,6 +1561,12 @@ energy of the beam is fixed by the laser chain, although it is possible to chang
 the polarization and the wavefront of the beam, and, to some degree, its spatial
 shape.
 
+To this end, we will try to differentiate the total number of \textit{in vacuo}
+FWM photons emitted and the observable number of photons. The exact definition
+of observable will unfortunately depend on the experimental configuration
+under study, but should provide an adequate measure of quality for our
+purposes.
+
 This chapter is structured as follows. We first compare the more typical
 experimental setups available for single beam setups: the off-axis and
 on-axis parabolic mirrors. \textbf{Summary of results.} We then explore
@@ -1573,7 +1579,6 @@ the part of the parabolic mirror that creates those reflections. This still
 yields an optimal focal length, but even fewer photons. Finally, we explore
 masking the incident field to create artifical shadows in the far-field where
 FWM photons are emitted.
-
 
 Description of the numerical algorithm to compute FWM.
 
@@ -1616,6 +1621,34 @@ easier to align and cannot possibly reflect the laser beam back into the
 chain. The exact geometry of an off-axis parabolic mirror used in this thesis
 is shown in Fig.~\ref{}.
 
+However, even at their tighter focus, they yield less photons than their on-axis
+counterparts (Table \ref{tab:fwm.hna-lin-g}). The lack of symmetry of the setup
+is manifest in the angular spectrum angular radiation (Fig.~\ref{}). This could
+be advantageous however, as most of the emission is in the sidelobes around
+the peak of the reflected laser beam.
+
+On-axis configurations, for their part, deliver a highly symmetric emission
+spectrum, but that copropagates with the incident laser beam, complicating
+detection.
+
+Varying the focal length of on-axis parabolic mirrors, allowing the focal
+spot to be inside of the mirror geometry itself ($\alpha\leq1$) reveals that
+there exists an optimum focal length value. Its exact value, of course, depends
+on the parameters of the simulation. However, it seems to robustly lie in the
+range $\alpha\sim0.3--0.5$ for linearly or radially polarized beam, with Gaussian
+or super-Gaussian spatial shape and for HNA and VSF parabolas.
+
+The root cause of this optimum is the interplay between the effective volume
+of photon creation and the maximum values of the polarization and magnetization.
+Indeed, all the relevant quantities that describe vacuum FWM, i.e. the Lorentz
+invariants $\mathcal{F}$ and $\mathcal{G}$, the reduced invariants $\mathcal{E}$
+and $\mathcal{H}$, are all maximum at $\alpha=1$ while the actual number of
+photons increases up to $\alpha\sim0.38$ (in the HNA.LIN.G case).
+
+\begin{figure}
+  \begin{subfigure}{0.47\textwidth}
+    \includegraphics{figs/}
+
 
 
 \todo[inline]{From off-axis parabola to on-axis parabola for tighter focal spots.}
@@ -1633,7 +1666,7 @@ is shown in Fig.~\ref{}.
   \begin{tabularx}{0.66\textwidth}{@{\extracolsep{\fill}}S[table-format=1.5E+2,output-exponent-marker=\text{E},mode=text]%
                                    @{\extracolsep{\fill}}S[table-format=1.2,mode=text]%
                                    p{0.22\textwidth}}
-  \toprule
+  \toprulebegin{subfi
   \multicolumn{3}{c}{HNA.LIN.G}\\
   \midrule
   \multicolumn{1}{c}{$2f/r_\text{max}$} & \multicolumn{1}{l}{$f\;[\si{\mm}]$} & Number of photons (1st) \\
