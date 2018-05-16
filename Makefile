@@ -20,7 +20,7 @@
 PROJECT=phd_thesis_jayd
 PROJECT_DIR=$(dirname $(readlink -f $(PROJECT).tex))
 CLASS=inrsthesis
-LATEX=pdflatex
+LATEX=latexmk
 OUTDIR=out
 LIGHT_TABLE=light_table
 
@@ -55,7 +55,7 @@ log: $(OUTDIR)/$(PROJECT).pdf
 	pplatex -i $(OUTDIR)/$(PROJECT).log
 
 ### Compilation Flags
-PDFLATEX_FLAGS  = -halt-on-error -output-directory $(OUTDIR)/
+PDFLATEX_FLAGS  = -xelatex -halt-on-error --outdir=$(OUTDIR)/
 
 TEXINPUTS = .:$(OUTDIR)/
 TEXMFOUTPUT = $(OUTDIR)/
@@ -126,11 +126,14 @@ LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_vsf.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/masked_parabola_hna.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/masked_parabola_vsf.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/scatteringSystem/scatteringSystem.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/OffAxisSketch/onaxis-parabola.tex
+LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/OffAxisSketch/offaxis-parabola.tex
 
 latex_images: $(LATEX_IMAGES_DEPS) | $(FIG_OUTDIR)/
 	$(foreach file, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) $(file)))
 
 # ------------------- Generation of Python based figures -------------------- #
+FWM_IMAGES_FOLDERS := $(BIN_FOLDER)/
 PYTHON_IMAGES_DEPS := $(LIGHT_TABLE)/ClassicalLimit/ClassicalLimit.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ConvergenceAnalysis/ConvergenceAnalysis.py
 PYTHON_IMAGES_DEPS += $(LIGHT_TABLE)/ParallelEfficiency/ParallelEfficiency.py
