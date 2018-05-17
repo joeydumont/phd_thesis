@@ -186,12 +186,7 @@ Keywords:
 \listoffigures
 \cleardoublepage
 
-% \dedication{To my wife and son.}
-% \cleardoublepage
-
-\epigraph{More important, the formulation in terms of a variational principle is the route
-          that is generally followed when we try to describe apparently nonmechanical systems
-          in the mathematical clothes of classical mechanics, as in the theory of fields.}{Goldstein \textit{et al}, Classical Mechanics, 3rd edition.}
+\dedication{To my wife and son.}
 \cleardoublepage
 
 \epigraph{Whatever you do, do the best you can. The film lives forever!}{Jackie Chan}
@@ -204,6 +199,7 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 \end{flushright}
 
 \cleardoublepage
+
 \mainmatter
 
 \chapter{Introduction}
@@ -239,13 +235,47 @@ Precision tests of QED.
   \label{fig:intro.intensity-history}
 \end{figure}
 
-
 The advent of the chirped pulse amplification technique (CPA) has catapulted
 the available focused laser intensities in the last three decades
 \cite{Mourou2006}. Indeed, this technique has allowed an increase of about
 6 orders of magnitude in the highest recorded intensity in a very short time
 (Fig.~\ref{fig:intro.intensity-history}). This has opened up the possibility
 of testing QED in a completely new sector of parameters.
+
+The observation of strong-field quantum electrodynamics (SF-QED) processes with light
+is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza2012}.
+Reaching higher intensities can be achieved by (1) increasing the pump energy,
+(2) shortening the pulse duration or (3) concentrating the beam in a small volume of space.
+While recent laser systems have made significant advances on the first two items, there seems
+to be technological difficulties in engineering gratings resistant enough to withstand the extreme
+energy of the laser pulse.
+
+\todo[inline]{Add more background on OPA laser systems. Paraxial propagation for most
+  of laser chain, then non-paraxial effects in the last part of chain, just before
+  the interaction region. Add figure. Check Mourou's review for technological issues
+  related to HPLs.}
+
+A promising avenue is the focusing of light down to extremely small volumes, on the order
+of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
+does not hold. This approximation is related to a Taylor expansion in terms
+of the Lax parameter $\epsilon=\lambda/\pi w_0$ \cite{Lax1975}. In tightly focused
+fields, $w_0\sim\lambda$ and the series does not converge \cite{Borghi2003}.
+
+To see this, simply compare the fields of a ``focused'' paraxial beam with that
+of a fully numerical solution of Maxwell's equations (more on that later).
+\todo[inline]{Add figures of the fields separately, then show the overlap integral
+  for each. Comment on it.}
+Even with added terms, \ldots\todo[inline]{Same thing again.}
+\todo[inline]{Applications in QED and other stuff to tightly focused fields.}
+
+There also exists analytical solutions of Maxwell's equations that do not rely
+on the paraxial approximation, such as e-dipole pulses and other models
+\cite{Gonoskov2012,Salamin2015a,Salamin2015b}. They can be incredibly useful when used as part of
+numerically-heavy codes, such as particle-in-cell codes because of their low
+cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
+they do not take into account the minutiae of a given experimental setup
+and thus fail to reproduce some details of tightly focused fields.
+\todo[inline]{Argue why this is important.}
 
 Although the availability of high-power lasers ($I\leq10^{22}\si{\watt\per\cm\squared}$)
 is relatively recent, the study of quantum electrodynamics processes in the presence
@@ -381,51 +411,18 @@ density environment.
 %       \end{itemize}
 %   \end{enumerate}
 
-\chapter{Tool I: The Stratton-Chu Diffraction Integrals}
+\chapter{Eletromagnetic Fields in the Tight Focusing Regime: The Stratton-Chu Diffraction Integrals}
 \label{chapter:stratton-chu}
 
-\begin{chaptersummary}
-This chapter discusses the problem of properly modelling electromagnetic fields
-in the tight focusing regime. We first lay the foundation of electromagnetic
-scattering and justify the choice of the Stratton-Chu formalism. Our numerical
-implementation of this formalism is then discussed at length, and our results
-are benchmarked against analytical results and results from the literature.
-We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
-to the Stratton-Chu formulation.
-\end{chaptersummary}
-
-The observation of strong-field quantum electrodynamics (SF-QED) processes with light
-is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza2012}. Achieving
-these high intensities can be achieved either by (1) increasing the pump energy,
-(2) shortening the pulse duration or (3) concentrating the beam in a small volume of space.
-While recent laser systems have made significant advances on the first two items, there seems
-to be technological difficulties in engineering gratings resistant enough to withstand the extreme
-energy of the laser pulse.
-
-\todo[inline]{Add more background on OPA laser systems. Paraxial propagation for most
-  of laser chain, then non-paraxial effects in the last part of chain, just before
-  the interaction region. Add figure.}
-
-A promising avenue is the focusing of light down to extremely small volumes, on the order
-of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
-does not hold. This approximation can be related to a Taylor expansion in terms
-of the $\epsilon=\lambda/\pi w_0$ \cite{Lax1975}, which diverges for tightly focused
-fields \cite{Borghi2003}.
-
-To see this, simply compare the fields of a ``focused'' paraxial beam with that
-of a fully numerical solution of Maxwell's equations (more on that later).
-\todo[inline]{Add figures of the fields separately, then show the overlap integral
-  for each. Comment on it.}
-Even with added terms, \ldots\todo[inline]{Same thing again.}
-
-There also exists analytical solutions of Maxwell's equations that do not rely
-on the paraxial approximation, such as e-dipole pulses and other models
-\cite{Gonoskov2012,Salamin2015a,Salamin2015b}. They can be incredibly useful when used as part of
-numerically-heavy codes, such as particle-in-cell codes because of their low
-cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
-they do not take into account the minutiae of a given experimental setup
-and thus fail to reproduce some details of tightly focused fields.
-\todo[inline]{Argue why this is important.}
+% \begin{chaptersummary}
+%   This chapter discusses the problem of properly modelling electromagnetic fields
+%   in the tight focusing regime. We first lay the foundation of electromagnetic
+%   scattering and justify the choice of the Stratton-Chu formalism. Our numerical
+%   implementation of this formalism is then discussed at length, and our results
+%   are benchmarked against analytical results and results from the literature.
+%   We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
+%   to the Stratton-Chu formulation.
+% \end{chaptersummary}
 
 In this chapter, we introduce a fully numerical implementation of the Stratton-Chu
 equations used to model the spatio-temporal focusing properties of large
@@ -2997,6 +2994,11 @@ by iterating through all the possible values of $\sigma_i$ and $n_i$ and
 classifying them according to their $S_1$ and $S_2$ values.
 
 \chapter{Tool II: The Schwinger-Keldysh Formalism and SF-QED Observables}
+
+\epigraph{More important, the formulation in terms of a variational principle is the route
+          that is generally followed when we try to describe apparently nonmechanical systems
+          in the mathematical clothes of classical mechanics, as in the theory of fields.}{Goldstein \textit{et al}, Classical Mechanics, 3rd edition.}
+\cleardoublepage
 
 % On the mathematical nonexistence of path integrals.
 %Goldstein, 3rd ed. p. 36

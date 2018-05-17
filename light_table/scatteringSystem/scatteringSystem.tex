@@ -35,11 +35,11 @@
 
 \begin{tikzpicture}[scale=0.20]
 
-   \draw [yshift=-2cm,interface] (0, 0) 
+   \draw [yshift=-2cm,interface] (0, 0)
   .. controls ++(165:-1) and ++(240: 1) .. ( 4, 3)
   .. controls ++(240:-1) and ++(165:-1) .. ( 3, 6)
   .. controls ++(165: 1) and ++(175:-2) .. (-2, 4)
-  .. controls ++(175: 2) and ++(165: 1) .. ( 0, 0);
+  .. controls ++(175: 2) and ++(165: 1) .. ( 0, 0) coordinate (A);
   \draw[smooth,rounded corners=1mm] (15,0) \irregularcircle{3cm}{3mm};
   \draw[smooth,rounded corners=1mm] (21,3) \irregularcircle{3cm}{3mm};
   \draw[gray] (10, 0) circle (16);
@@ -47,6 +47,8 @@
   \node at (1,0.75) {\Large $V_s$};
   \node at (15,0) {\Large $V_e$};
   \node at (21,3) {\Large $V_m$};
+
+  \draw[->,shorten >=0.1cm] (1,-5) -- (A) node[at start, below right] {\Large $S=\partial V_s$};
 
   \node at (10, 13) {\Large $V_\infty$};
 
