@@ -204,7 +204,6 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 \chapter{Introduction}
 
-\begin{chaptersummary}
   In this chapter, we place the contributions of this thesis in the context
   of the high-power laser literature and introduces some of the theoretical
   considerations on which this thesis will focus. We first discuss some recent
@@ -212,7 +211,9 @@ action sequences, but for every artistic, cultural or scientific endeavour.
   on the design of experimented aimed at measuring quantum electrodynamical
   effects in the strong field regime. The specific goals of this thesis are
   enumerated in \S\ref{sec:intro.objectives}.
-\end{chaptersummary}
+
+
+\section{Tightly Focused Electromagnetic Fields}
 
 Quantum electrodynamics (QED) has been called the ``jewel of physics'' by one
 of its most well-known contributor, Richard Feynman. Along with quantum
@@ -259,14 +260,32 @@ A promising avenue is the focusing of light down to extremely small volumes, on 
 of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
 does not hold. This approximation is related to a Taylor expansion in terms
 of the Lax parameter $\epsilon=\lambda/\pi w_0$ \cite{Lax1975}. In tightly focused
-fields, $w_0\sim\lambda$ and the series does not converge \cite{Borghi2003}.
+fields, the spatiial extension of the field is on the same order as its wavelength,
+i.e. $w_0\sim\lambda$, where the waist $w_0$ is usually a good measure of the beam's
+spatial extension, and the series does not converge \cite{Borghi2003}. In addition,
+the vector nature of the fields should be retained throughout the analysis.
+In our case, we are also interested in determining the effect of the shape of
+the reflecting surface on the fields at the focal spot, an effect that is hard to
+be model within the paraxial framework \cite{Tkaczyk2012}.
 
 To see this, simply compare the fields of a ``focused'' paraxial beam with that
 of a fully numerical solution of Maxwell's equations (more on that later).
-\todo[inline]{Add figures of the fields separately, then show the overlap integral
+\todo{Add figures of the fields separately, then show the overlap integral
   for each. Comment on it.}
-Even with added terms, \ldots\todo[inline]{Same thing again.}
+Even with added terms, \ldots\todo{Same thing again.}
+
 \todo[inline]{Applications in QED and other stuff to tightly focused fields.}
+
+Multiple methods that consider the vector character of the beam has been
+developed and used before. One of the first examples we could find
+dates back to beginning of the 20th century, when Ignatowski solved Maxwell's
+equations in parabolic cylindrical coordinates \cite{Ignatowsky1907,Ignatowsky1908}.
+A little more than a decade later, Kottler formulated the problem as an
+integral equation using Green's functions techniques for, as far as we know,
+the first time \cite{Kottler1923a,Kottler1923b}.
+The derivation, based on potential theory, was a little obtuse.
+The often-cited Stratton and Chu paper from 1939 generalized Kottler's result
+and streamlined his derivation \cite{Stratton1939}.
 
 There also exists analytical solutions of Maxwell's equations that do not rely
 on the paraxial approximation, such as e-dipole pulses and other models
@@ -277,12 +296,43 @@ they do not take into account the minutiae of a given experimental setup
 and thus fail to reproduce some details of tightly focused fields.
 \todo[inline]{Argue why this is important.}
 
+In this thesis, we are primarily interested in developing numerical tools for the
+study of electromagnetic fields in the tight focusing regime in typical experimental
+conditions in high-power laser sources. The theoretical framework needs to be
+flexible enough to take into account
+  \begin{itemize}
+    \item the complicated power spectra and phase relations
+          typical of these types of sources \cite{Jeong2015};
+    \item multiple mirror geometries, for instance, most setups contain both
+          off-axis and on-axis parabolic mirrors, and ellipsiodal mirrors;
+    \item various types of incident fields, such as linearly or radially polarized beams;
+    \item the possibility that the incident fields contain aberrations.
+  \end{itemize}
+In addition to these ``physical'' requirements on the theoretical framework,
+we also require that the resulting software implementation satisfies some
+properties. As this software project forms the basis for our future work
+on the computation of strong-field QED observables, we must make sure that
+the code is modular enough to accommodate the demands of each target observable.
+We also require that the resulting framework that a software implementation
+can run in a reasonable amount of time on a computing cluster.
+\todo{Fix large space in itemize.}
+
+Both RW and SC take an incident field as an input, and output the reflected
+field at the focal spot (or wherever). In this respect, these two techniques
+tick off all the ``physical'' requirements we need. They also satisfy
+the computing requirements. We go through each of these requirements in detail
+in section \ref{}.
+
+
+
+\section{Strong-Field QED and Tightly Focused Fields}
+
 Although the availability of high-power lasers ($I\leq10^{22}\si{\watt\per\cm\squared}$)
 is relatively recent, the study of quantum electrodynamics processes in the presence
 of strong fields, a technical term to be defined a little later in this introcution,
 dates back to the tail end of the 1920s. Klein's 1929's publication \cite{Klein1929} on a paradox
 that now bears his name paved the way to the modelization of relatistivic
-quantum effects. Sauter, in his 1931 paper \cite{SAU1931}, showed that the scale at which
+quantum effects. Sauter, in his 1931 paper \cite{Sauter1931}, showed that the scale at which
 these non-linear effects become important is given by what is now called
 the Schwinger field,
   \begin{equation}
@@ -373,6 +423,9 @@ optimize the yield of specific SF-QED observables, namely FWM \textit{in vacuo}
 and Schwinger pair production. Using classical electron dynamics simulations, we
 also wish to approximate the noise coming from competing processes in a low
 density environment.
+
+To this end, we have developed multiple high-performance computing (HPC) tools
+geared towards execution on super-computing clusters.
 
 \begin{description}
   \item [Chapter \ref{chapter:stratton-chu} -- Tool 1: The Stratton-Chu Diffraction Integrals]
@@ -520,7 +573,8 @@ where $g$ is the scalar Green's function
   \begin{equation}
     g(\vb{r},\vb{r}') = \frac{e^{ik|\vb{r}-\vb{r}'|}}{4\pi|\vb{r}-\vb{r}'|}.
   \end{equation}
-The crux of the derivation lies in the formation of the product
+From now on, primed quantities will be assumed to depend on $\vb{r}'$ and
+unprimed quantities on $\vb{r}$. The crux of the derivation lies in the formation of the product
   \begin{equation}
     \vb{E}\cdot L\left(\dyad{G}\cdot\vb{V}'\right) - \left(\dyad{G}\cdot\vb{V}'\right)\cdot L\vb{E}
      = \nabla\cdot\left\{\left[\nabla\times(\dyad{G}\cdot\vb{V}')\right]\times\vb{E}-\left[\nabla\times\vb{E}\right]\times\left(\dyad{G}\cdot\vb{V}'\right)\right\}
@@ -534,13 +588,13 @@ the r.h.s. of Eqs.~\ref{eq:sc.inhomogeneous-wave-equations}. Due to their
 compact support, the integral over the sources get limited to the volume $V_e+V_m$.
 We take this integral to be the definition of the incident field
   \begin{equation}
-    \vb{V}'\cdot\vb{E}_\text{inc}' \equiv \vb{V}'\cdot\int_{V_e+V_m}\dyad{G}\cdot\left(-ik\vb{J}_e+\nabla\times\vb{J}_m\right)dV
+    \vb{V}'\cdot\vb{E}_\text{inc}' \equiv \vb{V}'\cdot\int_{V_e+V_m}\dyad{G}\cdot\left(-ik\vb{J}_e+\nabla\times\vb{J}_m\right)dV.
   \end{equation}
 By using the divergence theorem, the r.h.s becomes a surface integral over
 $S_\infty+S$, where $S_\infty$ is the surface of a sphere whose radius tends
 to infinity. This integral at infinity vanishes by virtue of the Sommerfeld
 radiation condition, and we are left only with an integral over the surface
-of the scatterer $S$. Judiciously using vector calculus identities and noting
+of the scatterer $S$. Judiciously using vector calculus identities \cite{Tai1997} and noting
 that the equations are valid for arbitrary $\vb{V}'$ , we can
 finally write down an integration representation of the electromagnetic field,
 in Fourier space,
@@ -628,37 +682,6 @@ for $\vb{r}\in S$. Note that there are no more primed coordinates, as the integr
 equations (\ref{eq:sc.field-stratton-chu-sancer-hypersingular})
 are valid only for points on $S$.
 
-Although it may seem surprising for the
-physical electromagnetic fields to be represented by hypersingular integrals,
-the singularity is actually caused by the physical discontinuity in the reflecting surface.
-The hypersingularity in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
-disappears if the surface $S$ is closed. Applying Stokes' theorem to the double gradient
-term in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer} yields the usual Stratton-Chu
-representation for the fields in $V_\infty$
-  \begin{subequations}
-  \label{eq:sc.field.stratton-chu}
-  \begin{align}
-    \vb{E}'   &= \vb{E}_\text{inc}'+\frac{1}{ik}\oint_{\partial S} \nabla g \vb{B}\cdot d\vb{\ell}
-                  + \int_S\left\{ ik(\vu{n}\times\vb{B})g
-                  + (\vu{n}\times\vb{E})\times\nabla g
-                  + (\vu{n}\cdot\vb{E})\nabla g
-                 \right\} dS, \\
-    \vb{B}'   &= \vb{B}_\text{inc}'-\frac{1}{ik}\oint_{\partial S} \nabla g \vb{E}\cdot d\vb{\ell}
-                  + \int_S\left\{ ik(\vu{n}\times\vb{E})g
-                  + (\vu{n}\times\vb{B})\times\nabla g
-                  + (\vu{n}\cdot\vb{B})\nabla g
-                 \right\} dS.
-  \end{align}
-  \end{subequations}
-Taking the limit $\vb{r}'\rightarrow S$ as before reveals that all terms diverge
-at most as $1/R^2$. This divergence can be readily integrated using the Cauchy
-principal value for the terms inside the surface integral as the integration
-measure cancels the divergence. However, this is not true for the terms contained in the line integral,
-as the integration measure, $R$, does not cancel the divergence and the integral
-is thus hypersingular. It can be shown that, before we take the limit $\vb{r}'\rightarrow S$,
-the line integral itself vanishes identically
-for a closed surface \cite{Sancer1968}, thus removing the hypersingularity.
-
 Let us now go back to Eq.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
 and solve them.
 To properly model the material properties of the scatterer, we impose the
@@ -735,7 +758,46 @@ The double gradient term has been replaced by two terms: a surface term with a
 single gradient and an additional line integral term  which also contains
 a single gradient. The single gradient results in a $1/R$ behavior of the integrands,
 compared to the $1/R^2$ of the double gradient. This weakens the oscillations of
-the integrands.
+the integrands without compromising on the regime of validity.
+
+Although it may seem surprising for the
+physical electromagnetic fields to be represented by hypersingular integrals,
+the singularity is actually caused by the physical discontinuity in the reflecting surface.
+The hypersingularity in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
+disappears if the surface $S$ is closed. Applying Stokes' theorem to the double gradient
+term in Eqs.~\eqref{eq:sc.field-stratton-chu-sancer} yields the usual Stratton-Chu
+representation for the fields in $V_\infty$
+  \begin{subequations}
+  \label{eq:sc.field.stratton-chu}
+  \begin{align}
+    \vb{E}'   &= \vb{E}_\text{inc}'+\frac{1}{ik}\oint_{\partial S} \nabla g \vb{B}\cdot d\vb{\ell}
+                  + \int_S\left\{ ik(\vu{n}\times\vb{B})g
+                  + (\vu{n}\times\vb{E})\times\nabla g
+                  + (\vu{n}\cdot\vb{E})\nabla g
+                 \right\} dS, \\
+    \vb{B}'   &= \vb{B}_\text{inc}'-\frac{1}{ik}\oint_{\partial S} \nabla g \vb{E}\cdot d\vb{\ell}
+                  + \int_S\left\{ ik(\vu{n}\times\vb{E})g
+                  + (\vu{n}\times\vb{B})\times\nabla g
+                  + (\vu{n}\cdot\vb{B})\nabla g
+                 \right\} dS.
+  \end{align}
+  \end{subequations}
+Taking the limit $\vb{r}'\rightarrow S$ as before reveals that all terms diverge
+at most as $1/R^2$. This divergence can be readily integrated using the Cauchy
+principal value for the terms inside the surface integral as the integration
+measure cancels the divergence. However, this is not true for the terms contained in the line integral,
+as the integration measure, $R$, does not cancel the divergence and the integral
+is thus hypersingular. It can be shown that, before we take the limit $\vb{r}'\rightarrow S$,
+the line integral itself vanishes identically
+for a closed surface \cite{Sancer1968}, thus removing the hypersingularity.
+
+The hypersingular behaviour can lead to mathematical inconsistencies in
+the Stratton-Chu framework \cite{Asvestas1980}, if not dealt with properly.
+For conductors of infinite conductivity, these issues are not relevant, as
+the magnetic field integral equation is of Fredholm type. For open surfaces
+with finite conductivity, the MFIE would also show the hypersingular, and
+compactness of the resulting operator would need to be rigorously proven
+before assuming the validity of the Liouville-Neumann expansion.
 
 In practice, Eqs.~\eqref{eq:sc.stratton-chu-poa-og} should be expressed in some
 coordinate system. In our implementation, we use a cylindrical coordinate system,
@@ -746,16 +808,24 @@ expressions of the Stratton-Chu equations can be found in Appendix \ref{app.expl
 
 Equations \eqref{eq:sc.stratton-chu-poa-og} describe a spectral component
 of frequency $k$ of the reflected field at a given position $\vb{r}'$ as an integral
-of the incident field on the surface of the mirror. They are valid for arbitrary
+of the incident field over the surface of the mirror. They are valid for arbitrary
 mirror geometries, even open surfaces. There are no assumptions on any of the
 properties of the incident fields, either on their spatial or temporal dependence.
 We only require that the curvature of the mirror is much larger than the wavelength
 of the light that reflects off it.
-The next section
-will be devoted to the efficient numerical evaluatio of Eqs.~\eqref{eq:sc.stratton-chu-poa-og}
-for arbitrary incident fields $\{\vb{E}_\text{inc},\vb{B}_\text{inc}\}$ with
-complex time-dependence and for arbitrary mirror geometries $S$.
 
+Given our goal of modeling broadband pulses
+In this section, we discuss the evaluation of Eqs­.~\eqref{eq:sc.stratton-chu-poa-og}
+in parallel. The implementation is based on OpenMPI, a C software library that
+provides facilities to pass messages between processes as a means of executing
+tasks in parallel.
+
+\todo[inline]{List of software requirements: Modular. In next section we wish to compute
+an integral over a predefined region of space for each \textbf{frequency} of the beam.
+In other section we wish to compute the field at discrete points of space
+and \textbf{time}. This is possible via modularity.}
+
+\todo[inline]{Discuss unit testing.}
 
 Flowchart: Define the number of processors --> Define incident beam (spectral shape+total energy, spatial dependence) --> Define geometry of the mirror (S) --> Define region for integration. --> Start the calculation
 in Fourier space --> (Optionnally) Computee the field in time. --> Output the fields.
@@ -903,7 +973,7 @@ Because the numerical cost of evaluating
 the integral does not depend on the position at which the field is evaluated
 (in our approach), the workload is thus evenly divided among the processors.
 
-\subsubsection{Side note: phase cancellation in the paraboloid case}
+\subsection{Numerical integration: phase cancellation in the paraboloid case}
 \label{sec:sc.phase-cancellation}
 
 Typically, diffraction integrals have an highly oscillatory behaviour that
