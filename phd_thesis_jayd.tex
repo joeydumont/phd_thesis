@@ -204,12 +204,12 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 \chapter{Introduction}
 
-  In this chapter, we place the contributions of this thesis in the context
+  In this chapter, we place the contributions of this dissertation in the context
   of the high-power laser literature and introduces some of the theoretical
-  considerations on which this thesis will focus. We first discuss some recent
+  considerations on which this dissertation will focus. We first discuss some recent
   advances in the development of high-power laser sources and their effect
   on the design of experimented aimed at measuring quantum electrodynamical
-  effects in the strong field regime. The specific goals of this thesis are
+  effects in the strong field regime. The specific goals of this dissertation are
   enumerated in \S\ref{sec:intro.objectives}.
 
 
@@ -296,7 +296,7 @@ they do not take into account the minutiae of a given experimental setup
 and thus fail to reproduce some details of tightly focused fields.
 \todo[inline]{Argue why this is important.}
 
-In this thesis, we are primarily interested in developing numerical tools for the
+In this dissertation, we are primarily interested in developing numerical tools for the
 study of electromagnetic fields in the tight focusing regime in typical experimental
 conditions in high-power laser sources. The theoretical framework needs to be
 flexible enough to take into account
@@ -412,10 +412,10 @@ detection of radiation reaction, proposals at ELI and other HPL facilities.
   \label{fig:intro.xi-map}
 \end{figure}
 
-\section{Objectives and organization of this thesis}
+\section{Objectives and organization of this dissertation}
 \label{sec:intro.objectives}
 
-The objectives of this thesis are to provide a flexible numerical tool that
+The objectives of this dissertation are to provide a flexible numerical tool that
 can model the reflection of ultrashort pulses of arbitrary polarization, having
 arbitrary temporal and spatial dependence off perfect conductors of complicated
 geometry. Once that is done, we look for experimental configurations that either
@@ -548,7 +548,7 @@ We first take the Fourier transform of the fields, defined as
   \end{equation}
 for an arbitrary vector field $\vb{A}(\vb{r},t)$.
 Note that we use $\omega$ and $k$ interchangeably in this section, and in most of
-this thesis, as vacuum is non-dispersive. We thus have
+this dissertation, as vacuum is non-dispersive. We thus have
   \begin{subequations}
   \begin{align}
     \nabla\times\vb{E} - i\omega\vb{B} &= \vb{J}_m, \\
@@ -585,7 +585,7 @@ Upon integration over $V_\infty$, the first term on the l.h.s. yields
 $\vb{V}'\cdot\vb{E}'$ due to the definition of the dyad Green's function.
 In the second term, the differential operator applied to the field yields
 the r.h.s. of Eqs.~\ref{eq:sc.inhomogeneous-wave-equations}. Due to their
-compact support, the integral over the sources get limited to the volume $V_e+V_m$.
+compact support, the integral over the sources gets limited to the volume $V_e+V_m$.
 We take this integral to be the definition of the incident field
   \begin{equation}
     \vb{V}'\cdot\vb{E}_\text{inc}' \equiv \vb{V}'\cdot\int_{V_e+V_m}\dyad{G}\cdot\left(-ik\vb{J}_e+\nabla\times\vb{J}_m\right)dV.
@@ -682,16 +682,16 @@ for $\vb{r}\in S$. Note that there are no more primed coordinates, as the integr
 equations (\ref{eq:sc.field-stratton-chu-sancer-hypersingular})
 are valid only for points on $S$.
 
-Let us now go back to Eq.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
-and solve them.
-To properly model the material properties of the scatterer, we impose the
-appropriate boundary conditions. In this thesis, we take the boundary conditions
-for  a perfectly conducting mirror \cite[Eq. (1.18)]{Stratton1941}:
+To properly model the material properties of the scatterer, and to put this
+integral equation in a form that we can actually solve, we impose the
+appropriate boundary conditions. In this dissertation, we take the boundary conditions
+for a perfectly conducting mirror \cite[Eq. (1.18)]{Stratton1941}:
   \begin{equation}
     \label{eq:sc.boundaryConditions}
     \vu{n}\times\vb{E}=0;\qquad \vu{n}\times\vb{B}=\vb{J}.
   \end{equation}
-Extracting the tangential components of Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular}
+Extracting the tangential components of Eqs.~\eqref{eq:sc.field-stratton-chu-sancer-hypersingular},
+i.e. multiplying by $\vu{n}\times$ on both sides,
 and imposing these conditions yields
   \begin{subequations}
   \begin{align}
@@ -814,22 +814,39 @@ properties of the incident fields, either on their spatial or temporal dependenc
 We only require that the curvature of the mirror is much larger than the wavelength
 of the light that reflects off it.
 
-Given our goal of modeling broadband pulses
-In this section, we discuss the evaluation of Eqs­.~\eqref{eq:sc.stratton-chu-poa-og}
-in parallel. The implementation is based on OpenMPI, a C software library that
-provides facilities to pass messages between processes as a means of executing
-tasks in parallel.
+The following sections will be dedicated to a detailed discussion of an implementation
+of the Stratton-Chu formalism in a numerical code. In the implementation, we
+introduce some additional simplifications that are not stricly necessary
+in the formalism, but streamline the software implementation. In doing so,
+we must keep in mind the physical and software requirements that we listed
+in the introduction and not break them.
 
-\todo[inline]{List of software requirements: Modular. In next section we wish to compute
-an integral over a predefined region of space for each \textbf{frequency} of the beam.
-In other section we wish to compute the field at discrete points of space
-and \textbf{time}. This is possible via modularity.}
+{Insert discussion on SC vs other methods from paper here. Discuss the
+need for a parallel implementation.}
 
-\todo[inline]{Discuss unit testing.}
+The first simplification lies in the generality of the geometry. While mature
+numerical quadrature, such as Cuba, the GSL quadrature routines and the
+Boost quadrature routines, would allow us, given some work, to perform integrations
+of the type
+  \begin{equation}
+    I=\int_a^b\int_{\alpha(x)}^{\beta(x)}f(x,y)dxdy,
+  \end{equation}
+for generic functions $\alpha$ and $\beta$, and could even provide adaptive
+integration methods, the API layer between our implementation and this
+code would complicate memory management and the efficient parallelization
+of our code. In our implementation, we choose to limit ourselves to integrals
+of the type
+  \begin{equation}
+    I=\int_a^b\int_c^d f(x,y)dxdy.
+  \end{equation}
+This greatly simplifies the layout of the data structures, and simplifies
+their distribution among multiple processors.
 
-Flowchart: Define the number of processors --> Define incident beam (spectral shape+total energy, spatial dependence) --> Define geometry of the mirror (S) --> Define region for integration. --> Start the calculation
-in Fourier space --> (Optionnally) Computee the field in time. --> Output the fields.
-
+The other assumption comes in the specification of the incident field.
+To handle temporally short pulses, we have to repeat the calculation
+of the Stratton-Chu integrals for a range of frequency values $k$, then
+add the result coherently. This is valid due to the linearity of the Maxwell
+equations.
 Experimentally, we are usually given the energy of the pulse along
 with its spectral characteristics. In the following paragraph, we will devise
 a normalization scheme that allows us to model arbitrary incident beam models,
@@ -841,93 +858,113 @@ mirrors: indeed, if the field is evaluated in a region close to the focal volume
 the Stratton-Chu integrands do not exhibit the highly oscillatory behaviour
 typical of diffraction integrals.
 
+\todo[inline]{List of software requirements: Modular. In next section we wish to compute
+an integral over a predefined region of space for each \textbf{frequency} of the beam.
+In other section we wish to compute the field at discrete points of space
+and \textbf{time}. This is possible via modularity.}
+
+\todo[inline]{Discuss unit testing.}
+
+\todo[inline]{Flowchart: Define the number of processors --> Define incident beam (spectral shape+total energy, spatial dependence) --> Define geometry of the mirror (S) --> Define region for integration. --> Start the calculation
+in Fourier space --> (Optionnally) Computee the field in time. --> Output the fields.}
+
 In the last sections, we provide a detailed numerical verification of our
 C++ implementation. This is crucial, as the author is not aware of any useful
 analytical solutions to the Stratton-Chu equations that would allow an easy
 verification of the implementation.
 
-
 \subsection{Handling the Temporal Dynamics}
 
-The derivation above holds for a single component of the Fourier decomposition
-of our assumed ultrashort pulse. To model the reflection of a short pulse, then,
+As mentioned earlier, the Stratton-Chu equations above hold for a single component of the Fourier decomposition
+of our supposed ultrashort pulse. To model the reflection of a short pulse,
 it is necessary to repeat that calculation for each frequency component that
-makes up the incident beam, and then to add them coherently.
+makes up the incident beam, and to add them coherently.
 
 To properly model the temporal dynamics of the beam at focus, it is in principle
 only necessary to know the temporal dynamics of the incident beam. However, in
 an experimental setting, a complete temporal cartography of the field is usually
-not readily available. Rather, the power spectrum and the (possibly spatially
-dependent) spectral phase is available. To map these quantities to the input
+not readily available. Rather, a spectral characterization of the beam is
+used. To map this characterization to the input
 of our Stratton-Chu equations, we will use the Poynting theorem to relate
 the energy density of the pulse to the spatiotemporal characteristics of the
 incident beam.
 
-We assume that a quantity known as the spectral energy density (to be defined later),
+We assume that a quantity known as the spectral energy density and spectral phase
+(to be defined later), the
 the total energy, and the spectral phase are known. The total energy of the
 beam can be computed via the Poynting theorem
   \begin{equation}
     E_\text{beam}
       =
       \int_{-\infty}^\infty \oiint_A
-        \left[\vb{E}(\vb{r},t)\times\vb{B}(\vb{r},t)\right]\cdot d\vb{A}dt.
+        \left[\vb{E}_\text{inc}(\vb{r},t)\times\vb{B}_\text{inc}(\vb{r},t)\right]\cdot d\vb{A}dt.
   \end{equation}
 Substituting the Fourier transform of the fields, i.e.
   \begin{align}
-    \vb{E}(\vb{r},t) &=
+    \vb{E}_\text{inc}(\vb{r},t) &=
       \int_{-\infty}^\infty
-        \vb{E}(\vb{r},\omega)e^{i\varphi(\omega)}e^{-i\omega t} d\omega \\
-    \vb{B}(\vb{r},t) &=
+        \vb{E}_\text{inc}(\vb{r},k)e^{i\varphi(k)}e^{-ik t} dk \\
+    \vb{B_\text{inc}}(\vb{r},t) &=
       \int_{-\infty}^\infty
-        \vb{B}(\vb{r},\omega)e^{i\varphi(\omega)}e^{-i\omega t} d\omega
+        \vb{B}_\text{inc}(\vb{r},k)e^{i\varphi(k)}e^{-ik t} dk
   \end{align}
-where $\varphi(\omega)$ is some phase that only depends on the frequency.
+where $\varphi(k)$ is some phase that only depends on the frequency.
 The total energy can then be written as
   \begin{equation}
     E_\text{beam} = 4\pi \oiint_A \int_0^\infty
-        \real{\vb{E}(\vb{r},\omega)\times\vb{B}(\vb{r},\omega)}\cdot d\vb{A}d\omega
+        \real{\vb{E}_\text{inc}(\vb{r},k)\times\vb{B}_\text{inc}^*(\vb{r},k)}\cdot d\vb{A}dk
   \end{equation}
-From this we define the spectral energy density,
+where we have used the fact that $\vb{B}_\text{inc}(\vb{r},-k)=\vb{B}_\text{inc}^*(\vb{r},k)$.
+From this we define the spectral energy density,  $\epsilon=dE_\text{beam}/dk$
   \begin{equation}
-    \epsilon(\omega)
-      = 4\pi\oiint_A \real{\vb{E}(\vb{r},\omega)\times\vb{B}(\vb{r},\omega)}\cdot d\vb{A}
+    \epsilon(k)
+      = 4\pi\oiint_A \real{\vb{E}_\text{inc}(\vb{r},k)\times\vb{B}_\text{inc}^*(\vb{r},k)}\cdot d\vb{A}
   \end{equation}
 Now, due to the linearity of Maxwell's equations, we can multiply the field
 by an arbitrary complex number and still be solutions of the differential
 equations. We thus write
   \begin{equation}
-    \vb{E}(\vb{r},\omega) = E_0\vb{f}_E(\vb{r},\omega); \qquad
-    \vb{B}(\vb{r},\omega) = E_0\vb{f}_B(\vb{r},\omega)
+    \vb{E}(\vb{r},k) = E_0\vb{f}_E(\vb{r},k); \qquad
+    \vb{B}(\vb{r},k) = E_0\vb{f}_B(\vb{r},k)
   \end{equation}
-and rescale the fields according to
+where $\vb{f}_E$ and $\vb{f})B$ are some functions that contain the whole
+spatial dependence of the incident fields. In what follows, we will refer
+to these functions as the \textit{incident field model}.
+Using these convenience functions, we can rescale the fields, for each
+frequency component, with:
   \begin{equation}
     E_0 \mapsto \sqrt{%
-      \frac{\epsilon_\text{exp}(\omega)}
-           {4\pi\oiint_A\real{\vb{f}_E(\vb{r},\omega)\times\vb{f}_B(\vb{r},\omega)}\cdot d\vb{A}}
-    }
+      \frac{\epsilon_\text{exp}(k)}
+           {4\pi\oiint_A\real{\vb{f}_E(\vb{r},k)\times\vb{f}_B^*(\vb{r},k)}\cdot d\vb{A}}
+    },
     \label{eq:sc.normalization}
   \end{equation}
-where $\epsilon_\text{exp}(\omega)$ is the experimentally known spectral density,
-or power spectrum.
+where $\epsilon_\text{exp}(k)$ is the experimentally known spectral density.
 
-\todo[inline]{Add note on the fact that, experimentally, the spectral density
-is actually integrated over a small frequency range? This fixes the units...}
-
+In the implementation, the renormalization is performed by specifying the
+total energy of the beam $E_\text{beam}$ and a functional form for $\epsilon(k)$. First,
+$\epsilon(k)$ itself is normalized such that its integral, or summation, yields
+$E_\text{beam}$. Then, this information is passed on to the field model, where
+\eqref{eq:sc.normalization} is computed for each frequency
+component.
 
 \subsection{Spatial Discretization}
 
 The Stratton-Chu equations (Eqs~\eqref{eq:sc.stratton-chu-poa-og}) reference two
-separate spatial domains, the integration surface $S$ that the $\vb{r}$ variable
-references, and the point at which the field is evaluated, $\vb{r}'$. There are
+separate spatial domains, the integration surface $S$ where the unprimed coordinates
+$\vb{r}$ reside, and the points at which the field is evaluated, $\vb{r}'$.
+Numerically, these two regions are discretized independently. There are
 multiple advantages that stem form this: (1) the typical length scales of the
-unfocused of the unfocused and focused fields can differ by orders of magnitude,
+unfocused and focused fields can differ by orders of magnitude,
 hence, their natural separation in the integral formulation makes their meshing
 much easier, (2)  the field can be evaluated at any point of our choosing:
 the method is not limited to a specific type of mesh.
 
-In the implementation, we provide two modes of operation. Either we compute the
+\todo[inline]{Link this discussion with the other methods discussion elsewhere.}
+
+\todo[inline]{Find place for this comment: In the implementation, we provide two modes of operation. Either we compute the
 field at a user-specified point, or on a predefined mesh of points suitable
-for integration for later use.
+for integration for later use.}
 
 In the tight focusing regime, the electromagnetic field shows features that
 are similar in size to the wavelength $\lambda$ of the radiation. Numerically,
@@ -941,11 +978,10 @@ the meshes can be of different sizes.
 
 However, to achieve sub-$\lambda$ resolution, memory requirements can still be
 prohibitive for a single machine, typically a few gigabytes for each frequency
-component. This is of course compounded by the fact that temporally short pulses
+component. This is compounded by the fact that temporally short pulses
 have broad spectra, requiring a large number of frequency components to properly
-resolve. To mitigate this issue, it is thus necessary to perform the computations
+represent. To mitigate this issue, it is thus necessary to perform the computations
 on multiple machines simultaneously, in parallel.
-
 
 \begin{figure}
 %  \floatbox[{\capbeside\thisfloatsetup{capbesideposition={inside,top},capbesidewidth=4cm}}]{figure}[\FBwidth]
@@ -976,10 +1012,10 @@ the integral does not depend on the position at which the field is evaluated
 \subsection{Numerical integration: phase cancellation in the paraboloid case}
 \label{sec:sc.phase-cancellation}
 
-Typically, diffraction integrals have an highly oscillatory behaviour that
-stems from the propagator, or Green's function of the problem. The Stratton-Chu
-integrals (or even the Richards-Wolf integrals, for that matter, although they
-use a trick) are not exception. The diffraction integrals are of the generic form
+ONe issue that typically arises in the numerical evaluation of diffraction integrals
+is that they have an highly oscillatory behaviour, which stems from the
+propagator, or Green's function of the problem. The Stratton-Chu
+integrals are no exception. The integrals are of the generic form
   \begin{equation}
     I = \int f(\vb{r})e^{ikh(\vb{r},\vb{r}')}d\vb{r}
   \end{equation}
@@ -988,7 +1024,7 @@ is the phase function, typically the distance between the points $\vb{r}$ and
 $\vb{r}'$, i.e. $h=|\vb{r}-\vb{r}'|$. In an optical setting, we expect this integrand to oscillate rapidly
 as the wavelength of the radiation is much smaller than the size of the reflecting
 mirror, i.e. $k|\vb{r}|\gg1$. Rapidly oscillating integrals of the form above
-are difficult to evaluate numerically, although there are some techniques
+are difficult to evaluate numerically, although there are some Filon-type techniques
 that facilitate their evaluation in the case $k\rightarrow\infty$ \cite{Iserles2004,Ganesh2007}.
 
 We show that, for a paraboloid mirror, a non-trivial cancellation in the phase function
@@ -999,6 +1035,14 @@ In this case, it is not necessary to use specialized techniques, nor to use
 sub-$\lambda$ mesh resolution on the integration surface. In our implementation,
 we use simple tensor products of either the Simpson or Gauss-Legendre methods
 \cite[\S4.6]{Press1986}.
+
+The use of simple tensor products of one-dimensional method is important in
+our implementation, as it allows for tailored memory management and, therefore,
+higher performance. It also guarantees a good load balance of our simulation tasks,
+as each processor is given a homogeneous, pre-determined fraction of the work to do. On the other hand,
+the use of non-adaptive method entails that the mesh size should be chosen
+in a such a way the finest details of the integrands be resolved properly, leading
+to potentially heavier workloads for each processor.
 
 \begin{figure}
   \begin{subfigure}[t]{0.32\textwidth}
@@ -1044,7 +1088,7 @@ Expanding the phase function in a Taylor series, we have
     h(\vb{r},\vb{r}') = \sqrt{r^2+z^2}-z
                   -\frac{r\cos(\theta-\theta')}{\sqrt{r^2+z^2}} r'
                   -\frac{z}{\sqrt{r^2+z^2}}z'
-                  + \mathcal{O}\left[\left(\frac{r',z'}{|\vb{r}|}\right)^2\right]
+                  + \mathcal{O}\left[\left(\frac{r',z'}{|\vb{r}|}\right)^2\right].
   \end{equation}
 Near the focal spot, then, the first-order terms oscillate slowly, because the prefactor
 of each term has range $[-1,1]$ and $r'$ and $z'$
@@ -1078,24 +1122,25 @@ should be taken when numerically evaluating the Stratton-Chu integrals.
 Incident field models should try to replicate the experimental conditions
 as close as possible. As the goal of the StrattoCalculator is to explore
 and identify the most promising experimental designs, its free parameters
-should be set as close as possible as those of the experiment. This limits
-our set of approximations that we can use.
+should be set as close as possible to those of the experiment. This limits
+the set of approximations we can use.
 
 With that mind, we will use two main approximations. One, the incident field
 is a solution of the paraxial wave equation. This is not a restricting approximation,
 as the fields that modern laser systems output are highly collimated. Moreover,
-the output through a hole restricts the waist of each of the frequency components
-to be the same. In fact, most laser systems can be well-approximated by a
+the waist of each of the frequency components is expected to be similar because
+of the use of a fixed size pinhole.
+An often used approximation for the spatial profile of a laser beam is a
 superposition of super-Gaussian beams, i.e. beams with the shape
   \begin{equation}
-    f(r,\theta) \propto \exp\left[-\left(\frac{r}{w_0}\right)^{2n}\right]
+    f(r,\theta) \propto \exp\left[-\left(\frac{r}{w_0}\right)^{2n}\right],
   \end{equation}
 where $n$ is the order of the super-Gaussian and $w_0$ is the beam waist.
-$n=1$ refers to a standard Gaussian beam, of course.
+$n=1$ refers to a standard Gaussian beam.
 
 While the Stratton-Chu equations do not explicitly require any assumption on
 the incident field, it is useful to introduce some. In particular, we will be
-interested in field models where the normalization constant [\eqref{eq:sc.normalization}]
+interested in field models where the normalization constant, $E_0$ in [\eqref{eq:sc.normalization}],
 can be computed analytically, as this can drastically reduce the setup time
 of the computation. \todo{Why?}
 
@@ -1103,46 +1148,12 @@ Unfortunately, this precludes the direct use of the super-Gaussian function,
 as it typically leads to non-integrable functions. Our strategy, then, will
 be to use general solutions of the paraxial equation as a basis to express
 arbitrary spatial dependence, including super-Gaussian dependence.
-
-
-In vacuum, the electric field, magnetic field and vector potential all obey
-the same differential equation, namely
-  \begin{equation}
-    \left(\nabla^2-\partial_t^2\right)\vb{F}(\vb{r},t) = 0
-  \end{equation}
-where $\vb{F}$ is any of the fields mentioned above. Solving this
-in the Fourier domain and applying the paraxial approximation
-yields
-  \begin{equation}
-    \left(\nabla_\perp^2-2ik\partial_z\right)\psi(r,\theta,z) = 0
-  \end{equation}
-where
-  \begin{equation}
-    \vb{F}(\vb{r},t) = \psi(r,\theta,z)e^{-i\omega t - ikz} \vu{z}.
-  \end{equation}
-The general solution reads \cite{Allen1992}
-  \begin{multline}
-    \psi(r,\theta,z) = \sum_{\ell=-\infty}^\infty\sum_{n=0}^\infty
-      \frac{c_{n\ell}}{\sqrt{1+\left(\frac{z}{z_R}\right)^2}}
-      \left(\frac{\sqrt{2}r}{w(z)}\right)
-      L_p^\ell\left(\frac{2r^2}{w^2(z)}\right)\exp\left(-\frac{r^2}{w^2(z)}\right)
-      \exp\left(-\frac{ikr^2}{2R(z)}\right)e^{-i\ell\theta}\\
-      \times\exp\left[i\left(2n+\ell+1\right)\arctan\frac{z}{z_R}\right].
-  \end{multline}
-
-This equation can be used to describe both linearly and radially polarized
-beams. Indeed, choosing $\vb{E}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t -ikz}\vu{x}$,
-we can describe a linearly polarized beam. Choosing $\vb{A}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t - ikz}\vu{z}$
-yields
-  \begin{align}
-    \vb{E}(\vb{r},k) &= ik\vb{A}+\frac{i}{k}\nabla\left(\nabla\cdot\vb{A}\right) \\
-    \vb{B}(\vb{r},k) &= \nabla\times\vb{A}.
-  \end{align}
-
-\todo[inline]{This can be used as the basis to describe the Lax series
-  that we discuss above. Maybe move this section?}
-
-\todo[inline]{Add normalization in Appendix.}
+This approach allows us to implement field models as classes that contain
+a function that computes the denominator of \eqref{eq:sc.normalization}
+directly from its own parameters and that of the spectral density, instead
+of relying on a numerical integration to do so, drastically reducing the
+setup time. The bases that we use, and the algorithm that we use to determine
+the coefficients of the expansion, are detailed in Appendix 
 
 \subsection{Parallelization and Performance Analysis}
 
@@ -1277,7 +1288,7 @@ creates these backreflections.
   \label{fgi:vsf-v-hna}
 \end{figure}
 
-In this thesis, we implement solution (2) for most of our calculations, as
+In this dissertation, we implement solution (2) for most of our calculations, as
 it is the one that entails less risk for the laser system. Depending on the focal
 length, this can greatly reduce the proportion of the energy of the incident
 beam that ends up in the focal spot, due to clipping. However, as we will
@@ -1688,7 +1699,7 @@ equations. Limits of formalism and whatnot.
 
 Multiple experimental setups have been proposed in the FWM literature, with
 the most common setup involving the collision of multiple beams at at angle.
-In this thesis, we propose an alternative setup based on the tight focusing
+In this dissertation, we propose an alternative setup based on the tight focusing
 a single laser pulse. This has the advantage of being simpler, and involving
 less optical elements, and therefore of retaining the most energy in the
 incident laser beam. However, it is much less flexible, as there are less
@@ -1773,7 +1784,7 @@ to reflect the beam back the same propagation axis regardless of focal length,
 while the off-axis configurations to reflect at an angle that depends on the focal
 length of the parabola and on the shift of the beam relative to the symmetry
 axis of the full parabola.
-The exact geometry of an off-axis parabolic mirror used in this thesis
+The exact geometry of an off-axis parabolic mirror used in this dissertation
 is shown in Fig.~\ref{fig:fwm.geometry-of-off-axis-setup}.
 
 \begin{figure}
@@ -2016,6 +2027,7 @@ https://arxiv.org/abs/1805.01762}
 %\addtocontents{toc}{\addtolength\cftchapternumwidth{\widthof{Appendix\;}}}
 \renewcommand{\thechapter}{\Alph{chapter}}
 \renewcommand{\thesection}{\Alph{chapter}.\arabic{section}}
+
 \chapter{Evaluation of the Singular Surface Integrals in the Stratton-Chu Diffraction Integrals}
 \label{app.limits}
 
@@ -2780,6 +2792,51 @@ representation, and the incomplete gamma function expressions}
 
 \subsection{Radially Symmetric, Radially Polarized Beam}
 
+\chapter{General Solutions of the Paraxial Wave Equation}
+
+In this Appendix, we show the general solutions of the paraxial wave equations
+that we use as a basis to describe incident fields of arbitrary spatial shapes.
+We also evaluate the spectral density integral analytically, the denominator
+of Eq.\eqref{eq:sc.normalization}, for use with the Stratton-Chu implementation.
+
+In vacuum, the electric field $\vb{E}$, magnetic field $\vb{B}$ and vector
+potential $\vb{A}$ all obey the same differential equation, namely
+  \begin{equation}
+    \left(\nabla^2-\partial_t^2\right)\vb{F}(\vb{r},t) = 0
+  \end{equation}
+where $\vb{F}$ is any of the fields mentioned above. Solving this
+in the Fourier domain and applying the paraxial approximation
+yields
+  \begin{equation}
+    \left(\nabla_\perp^2-2ik\partial_z\right)\psi(r,\theta,z) = 0
+  \end{equation}
+where
+  \begin{equation}
+    \vb{F}(\vb{r},t) = \psi(r,\theta,z)e^{-i\omega t - ikz} \vu{z}.
+  \end{equation}
+The general solution reads \cite{Allen1992}
+  \begin{multline}
+    \psi(r,\theta,z) = \sum_{\ell=-\infty}^\infty\sum_{n=0}^\infty
+      \frac{c_{n\ell}}{\sqrt{1+\left(\frac{z}{z_R}\right)^2}}
+      \left(\frac{\sqrt{2}r}{w(z)}\right)
+      L_p^\ell\left(\frac{2r^2}{w^2(z)}\right)\exp\left(-\frac{r^2}{w^2(z)}\right)
+      \exp\left(-\frac{ikr^2}{2R(z)}\right)e^{-i\ell\theta}\\
+      \times\exp\left[i\left(2n+\ell+1\right)\arctan\frac{z}{z_R}\right].
+  \end{multline}
+
+This equation can be used to describe both linearly and radially polarized
+beams. Indeed, choosing $\vb{E}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t -ikz}\vu{x}$,
+we can describe a linearly polarized beam. Choosing $\vb{A}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t - ikz}\vu{z}$
+yields
+  \begin{align}
+    \vb{E}(\vb{r},k) &= ik\vb{A}+\frac{i}{k}\nabla\left(\nabla\cdot\vb{A}\right) \\
+    \vb{B}(\vb{r},k) &= \nabla\times\vb{A}.
+  \end{align}
+
+\todo[inline]{This can be used as the basis to describe the Lax series
+  that we discuss above. Maybe move this section?}
+
+\todo[inline]{Add normalization in Appendix.}
 
 \chapter{Explicit Expressions for Four-Wave Mixing from the Euler-Heisenberg Lagrangian}
 
