@@ -1153,7 +1153,7 @@ a function that computes the denominator of \eqref{eq:sc.normalization}
 directly from its own parameters and that of the spectral density, instead
 of relying on a numerical integration to do so, drastically reducing the
 setup time. The bases that we use, and the algorithm that we use to determine
-the coefficients of the expansion, are detailed in Appendix 
+the coefficients of the expansion, are detailed in Appendix \ref{app:solution-paraxial-equation}.
 
 \subsection{Parallelization and Performance Analysis}
 
@@ -1164,41 +1164,56 @@ is used to perform computations. When we are confident that the chosen algorithm
 will provide the better scaling, it is useful to verify this scaling by measuring
 the performance of the code as a function of the number of processors.
 
-An important measure of scalability is the parallel efficiency, defined by the
+A useful measure of scalability is the parallel efficiency, defined by the
 formula
   \begin{equation}
     E_n = \frac{t_1}{nt_n}
   \end{equation}
-where $E_n$ is the efficiency at $n$ processors and $t_m$ is the time for a typical
-simulation run to execute on $m$ processors. Ideally, we would like
-$E_n\equiv1\forall n$.
+where $E_n$ is the efficiency at $n$ processors and $t_n$ is the time for a typical
+simulation run to execute on $n$ processors. Ideally, we would like
+$E_n\equiv1\forall n$, which is the definition of an embarrassingly parallel problem.
 
-Of course, the performance increase is capped by Amdahl's law, which states that
-the theoretical speedup of parallel program that is divided into a serial portion
-$s$ and a parallel portion $p$ is given by
+The performance increase is capped by Amdahl's law, which states that the
+theoretical speedup $S$ of a parallel program that is divided into a serial
+portion $s$ and a parallel portion $p$ is given by
   \begin{equation}
     S = \frac{1}{1-p+\frac{p}{s}}
   \end{equation}
 This can be misleading, as it is possible that other factors, such as a reduced
-number of cache misses, occur when increasing the number of processors.
-This could even lead to a parallel efficiency that is larger than 1.
+number of cache misses, occur when increasing the number of processors. The
+latter could even lead to a parallel efficiency that is larger than 1.
 
-The StrattoCalculator has two use cases: (1) we compute the field in the
-focal spot and save it to a file for later analysis and (2) we compute the
-field in the focal spot and use the field available in memory to compute
-other observables. The former typically outputs large files, up to hundreds
-of gigabytes in size. In turn, we expect its parallel efficiency to decrease
-substantially, as the parallel I/O portion of the code will make up a larger
-proportion of the runtime, and parallel I/O is very hard to scale. \todo{Citation.}
-The latter is expected to scale perfectly, as the underlying algorithm is
-embarrassingly parallel.
+The StrattoCalculator has two use cases: (1) we compute the field in the focal
+spot and save it to a file for later analysis and (2) we compute the field in
+the focal spot and use the field available in memory to compute other
+observables. The former typically requires outputting large files to disk, up to
+hundreds of gigabytes in size. In turn, we expect its parallel efficiency to
+decrease substantially, as the parallel I/O portion of the code will make up a
+larger proportion of the runtime, and parallel I/O is very hard to scale
+efficiently. \todo{Citation.} In the second case, we expect the code to scale
+perfectly, as the underlying algorithm is embarrassingly parallel, up to the
+requirement that each processor contains a minimum number of points.
+
+\begin{table}
+  \begin{tabular}{cc}
+  \end{tabular}
+  \caption{Summary of the properties of the MP2 and GP3 Compute Canada supercomputing clusters.}
+  \label{tab:sc.summary-of-cc-clusters}
+\end{table}
 
 Running tests on two different clusters reveals that the parallel efficiency
-greatly depends on the underlying hardware. In mp2, the test simulation
-with data output does not scale well beyond 8 nodes, or 192 processors (Fig.~\ref{fig:sc.parallel-efficiency.mp2}.
+greatly depends on the underlying hardware. We ran tests on Mammouth parallèle II (MP2)
+and Graham (GP3), two Compute Canada clusters geared towards parallel workflows,
+especially programs based on MPI and OpenMP. A summary of their properties can be found
+in Table On MP2, the test simulation
+with data output does not scale well beyond 8 nodes, or 192 processors (Fig.~\ref{fig:sc.parallel-efficiency.mp2}).
+We could test beyond 384 processors, as it is the maximum number of processors
+that can be requested at a time on MP2, but we can already that, for the parameters
+chosen in our test simulation, the implementation takes \textit{longer} to run
+on 384 processors than on 192.
 On GP3, the implementation scales well, even at 1024 processors. We surmise that
 the faster InfiniBand interconnects and a properly Lustre-optimized Parallel HDF5
-module explains the much more efficient I/O, and therefore overall parallel efficiency
+module explains the much more efficient I/O, and therefore the overall better parallel efficiency
 on GP3.
 
 \begin{figure}
@@ -1214,52 +1229,53 @@ on GP3.
   \begin{subfigure}[t]{0.47\textwidth}
     \includegraphics[width=\textwidth]{figs/ParallelEfficiency-gp3.pdf}
     \caption{Parallel efficiency of the StrattoCalculator on the GP3, also known
-             as Graham, Compute Canada cluster. While 2048 is not the maximum number
-             of processors we can ask for, the wait time would have been prohibitely
-             long for a higher number of processors, given our low priority.}
+             as Graham, Compute Canada cluster.}
     \label{fig:sc.parallel-efficiency.gp3}
   \end{subfigure}
-  \caption{Parallel efficiency of the StrattoCalculator on different clusters.
-           Notice that the efficiency is highly dependent on the cluster.}
+  \caption[Parallel efficiency of the StrattoCalculator on different clusters.]
+          {Parallel efficiency of the StrattoCalculator on \textbf{(a)} MP2
+          and \textbf{(b)} GP3. Notice that the efficiency is highly dependent on the cluster.}
   \label{fig:sc.parallel-efficiency}
 \end{figure}
 
 \section{Properties of Tightly Focused Fields}
 
-In this section, we explore some properties of the fields in the focal
+In this section, we present some numerical results obtained with the
+StrattoCalculator. We explore some properties of the fields in the focal
 spot as a function of the focusing strength of the optics, i.e. the
 focal length of the parabola.
 
 Our main finding is that while the maximum intensity increase and the spot
-size decreases with decreasing $\alpha=2f/r_\text{max}$, as expected, this behaviour
-reverses when $\alpha$ goes below 1. We show that this can be explained by the
-progressive increase in strength of the longitudinal components of the field, which
-present two lobes in the focal plane, instead of the usual Gaussian dependence.
-While this result is expected, what is more interesting is the effect this has
-on SF-QED observables, to be discussed in the next chapter.
+size decreases with decreasing $\alpha=2f/r_\text{max}$, as expected, this
+behaviour reverses when $\alpha$ goes below 1. We show that this can be
+explained by the progressive increase in strength of the longitudinal components
+of the field, which exhibit two lobes in the focal plane, instead of the usual
+Gaussian dependence. While this result is expected, what is more interesting is
+the effect this has on SF-QED observables, to be discussed in the next chapter.
 
-Typical optical setups use relatively long focal length parabolic mirrors
-to transport the beam throughout the experiment chamber, and also
-to focus it in some region of space where some experiment takes place.
-A useful parameter that can be used to characterize the focusing of the parabola
-is $\alpha=2f/r_\text{max}$, where $f$ is the focal length and $r_\text{max}$
-is the radius of the aperture of the parabola. The usual parameter, the numerical
-aperture, is defined geometrically as $NA=\sin\theta$, where $\theta$ is the
-angle between the optical axis and the line that goes from the focal point
-to the aperture. Our parameter has the advantage of being monotonic
-in the focal length. Indeed, we will study configuration where the focal
-point is \textit{inside} the paraboloid mirror, where the angle $\theta$
-starts to decrease again. $\alpha$ is exactly 1 when the focal plane is aligned
-with the aperture, smaller than one is the focal point is inside, and greater
-than one if it is outside.
+Typical optical setups use relatively long focal length parabolic mirrors to
+transport the beam throughout the experiment chamber, and also to focus it in
+some region of space where some experiment takes place. The usual parameter that
+describes the geometries of these parabolic mirrors is the numerical aperture,
+or NA­ It is defined as $\text{NA}=\sin\theta$, where $\theta$ is the angle
+between the optical axis and the line that goes from the focal point to the
+aperture of the parabola. It can also be related to the waist of the incident
+field. However, for very short focal lengths, the NA is not an appropriate
+parameter, as $\theta$ goes beyond $\pi$, and the NA strats to decrease again.
+In other words, the function $\textit{NA}(\theta)$ is non-bijective. Instead, we
+introduce the parameter $\alpha=2f/r_ \text{max}$,where $f$ is the focal length
+and $r_\text{max}$ is the radius of the aperture of the parabola. This parameter
+has the advantage of being bijective and monotonic in the focal length. $\alpha$
+is exactly 1 when the focal plane is aligned with the aperture, smaller than one
+is the focal point is inside, and greater than one if it is outside.
 
-As mentioned in the introduction, the issue of bringing the focal plane
-inside the parabola is that there exists rays that are reflected back into
-the laser chain. These rays are extremely dangerous, as they could easily
-destroy the laser system if they travel back down the chain. There are two
-ways to solve this issue: (1) use a temporal gate to block the reflection
-back into the chain (risky), or (2) remove the part of the parabola that
-creates these backreflections.
+As mentioned in the introduction, the issue of bringing the focal plane inside
+the parabola is that there exists rays that are reflected back into the laser
+chain. These rays are extremely dangerous, as they could easily destroy the
+laser system if they travel back down the chain. There are two ways to solve
+this issue: (1) use a temporal gate to block the reflection back into the chain
+(risky), or (2) remove the part of the parabola that creates these
+retroflections.
 
 \begin{figure}
   \begin{subfigure}[t]{0.47\textwidth}
@@ -1289,13 +1305,13 @@ creates these backreflections.
 \end{figure}
 
 In this dissertation, we implement solution (2) for most of our calculations, as
-it is the one that entails less risk for the laser system. Depending on the focal
-length, this can greatly reduce the proportion of the energy of the incident
-beam that ends up in the focal spot, due to clipping. However, as we will
-see, this configuration can be very advantageous in the observation of SF-QED
-observables.
+it is the one that entails less risk for the laser system. Depending on the
+focal length, this can greatly reduce the proportion of the energy of the
+incident beam that ends up in the focal spot, due to clipping. However, as we
+will see, this configuration can be very advantageous in the observation of SF-
+QED observables.
 
-Before studying these observables, however, let's took a look at the behaviour
+Before studying these observables, however, let's take a look at the behaviour
 of the field as a function of $\alpha$.
 
 \todo[inline]{Graph of ellipticity of electric intensity as a function of $\alpha$.}
@@ -1306,14 +1322,16 @@ of the field as a function of $\alpha$.
     \begin{subfigure}{0.47\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figs/ElectricIntensityTimeWaterfallf0.007.pdf}
-      \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=7\si{\milli\metre}$.}
+      \caption{Electric intensity in the $x$ plane as a function of time for a
+               parabola of $\alpha=0.16$.}
       \label{fig:sc.electric_intensity_waterfall7}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.47\textwidth}
       \centering
       \includegraphics[width=\textwidth]{figs/ElectricIntensityTimeWaterfallf0.04375.pdf}
-      \caption{Electric intensity in the $x$ plane as a function of time for a parabola of $f=43.75\si{\milli\metre}$.}
+      \caption{Electric intensity in the $x$ plane as a function of time for a
+               parabola of $\alpha=1$.}
       \label{fig:sc.electric_intensity_waterfall43}
     \end{subfigure}
     \caption[Transverse cut of the electric intensity in the focal plane as a function of time, $x$ plane.]
@@ -1362,68 +1380,103 @@ can be done with the unfocused beams, so probably not interesting.)}
 
 \section{Comparisons with Other Field Models}
 
-As implied in the sections above, calculations using our Stratton-Chu implementation
-can be quite long, in some cases taking up to five days! It is thus necessary
-to make sure that the use of our formalism is indeed warranted. We will thus
-compare the fields obtained with our method to other field models that appear in
-the literature. We discuss both analytical solutions of Maxwell's equations
-and the Richards-Wolf diffraction formalism.
+In the previous section, we have shown some properties of electromagnetic fields
+in the tight focusing regime. Now, we show that the use of the rather
+complicated Stratton-Chu formalism was warranted. We proceed by implementing
+other field models and showing that all other well-known models do not reproduce
+the most salient features of tightly focused fields. We discuss both analytical
+solutions of Maxwell's equations and the Richards-Wolf diffraction formalism.
 
-For the sake of comparison, we will use a incident beam that has a Gaussian
-spatial dependence, a super-Gaussian spectrum, and a parabola with a
-numerical aperture of exactly 1. This produces a focused that is firmly
-in the tight focusing regime, and allows for a comparison with a broad range
-of field categories. See Table \ref{tab:comparison.parameters} for the exact
+This section can also serve as a guide to a cost-analysis benefit of using the
+StrattoCalculator in a given situation. Computing the fields in a volume around
+the focal spot can take quite a long time using the StrattoCalculator. In the
+worst cases considered in this thesis, a single simulation can take as long as
+five days on MP2. It is thus necessary to make sure that the use of our
+formalism is indeed warranted. If, for a given application, it is expected, or
+it can be shown that the properties listed above can affect the design of an
+experiment, or the properties of some quantity of interest, then it makes sense
+to invest the numerical power needed to run the StrattoCalculator. On the other
+hand, if the properties described above are expected to have little effect, or
+if the numerical code used is already heavy, then it might not make sense to use
+the StrattoCalculator.
+
+For the sake of comparison, we will use an incident beam that has a Gaussian
+spatial dependence, a super-Gaussian spectrum, and a parabola with a numerical
+aperture of exactly 1, or $\alpha=1$. This produces a focused that is firmly in
+the tight focusing regime, and allows for a comparison with a broad range of
+field categories. See Table \ref{tab:comparison.parameters} for the exact
 parameters.
+
+\subsection{Gaussian Optics Limit}
 
 \subsection{Analytical Field Models}
 
-Another class of useful field models are vacuum solutions of the Maxwell equations.
-In typical optical regimes, this is usually done via the paraxial approximation.
-However, as we know, this approximation in invalid in the tight focusing regime.
-It is possible, if more difficult, to write down solutions of Maxwell's equations
-without this approximation. In this section, we will compare our StrattoCalculator
-fields with those of the Salamin field model \cite{Salamin2015b}. This model purports to approximate
-thtightly focused fields with only three free parameters: the central wavelength
-of the radiation, its axial length, a parameter related to its temporal duration,
-and the waist size.
+Another class of useful field models are vacuum solutions of the Maxwell
+equations. In typical optical regimes, this is usually done via the paraxial
+approximation. However, as we know, this approximation in invalid in the tight
+focusing regime. It is possible, if more difficult, to write down solutions of
+Maxwell's equations without this approximation. In this section, we will compare
+our StrattoCalculator fields with those of the Salamin field model
+\cite{Salamin2015b} for a short, tightly focused linearly polarized field in
+vacuum. This model purports to approximate tightly focused fields with only
+three free parameters: the central wavelength of the radiation $\lambda_c$, its
+waist size $w_0$ and its axial length $L$, a parameter related to its temporal
+duration.
 
-The analytical expressions are relatively easy to numerically evaluate, although
-there are two prominent issues. First, there doesn't seem to be a simple way
-to evaluate the energy integral of these fields. Therefore, to fix the energy
-content in this model, it is necessary to numerically integrate the field
-over its whole spatial support with sufficient precision. In fact, for $w_0\ll L$,
-fixing the energy content takes longer than subsequently evaluating the field.
-Second, the expressions have singular behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus
-be taken when evaluating the Salamin model in these regions.
+The analytical expressions are relatively easy to evaluate numerically, although
+there are two prominent issues. First, there doesn't seem to be a simple way to
+evaluate the energy integral, defined as
+  \begin{equation}
+    E = \frac{1}{2}\int_V \left(\vb{E}^2+\vb{B}^2\right) dV,
+  \end{equation}
+of these fields. Therefore, to fix the energy content of the beam in this model,
+it is necessary to numerically integrate the field over its whole spatial
+support with sufficient precision. In fact, for $w_0\ll L$, fixing the energy
+content takes longer than subsequently evaluating the field in a $\lambda^3$
+volume. Second, some of the intermediate terms of the field expressions show a
+singular behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus be
+taken when evaluating the Salamin model in these regions.
 
 Computing the fields in the focal plane, it is immediately apparent that this
 model does not reproduce the high ellipticity that we observe in the fields
 computed via the StrattoCalculator. Moreover, the relative strength of the
-longitudinal components is much weaker than in the StrattoCalculator fields.
-The origin of these discrepancies is quite simple: the analytical solution
-cannot take into account the parabolic structure of the mirror. The phase
-structures that the parabola imparts on the field has important consequences for
-its focused properties.
+longitudinal components is much weaker than in the StrattoCalculator fields. The
+origin of these discrepancies lies in the fact that the analytical solution
+cannot take into account the parabolic structure of the mirror. The spatial
+phase structure that the parabola imparts on the field has important
+consequences for its focused properties.
 
-Moreover, the Salamin model inherently cannot reproduce the fields produced
-at $\alpha\ll1$. In this case, the parabolic shape is quite dramatic (in
-more rigorous terms, it strongly diverges from a spherical mirror).
-If we reduce the waist parameter, the longitudinal components become stronger,
-but the primary field components never exhibit any ellipticity.
+Moreover, the Salamin model inherently cannot reproduce the fields produced at
+$\alpha\ll1$. In this case, the parabolic shape is quite dramatic (in more
+rigorous terms, it strongly diverges from a spherical mirror). Reducing the
+waist of the beam in the model does not help: the longitudinal components become
+somewhat stronger, but the primary field components never exhibit any
+ellipticity.
 
 \subsection{The Richards-Wolf Formalism}
 
-The Richards-Wolf formalism rests on two approximations. First, the focal point
-is assumed far away from the reflecting surface, i.e. the far-field approximation
-is used. The second one is less explicit and thus more difficult to trace:
-it assumes that the light rays follow an energy conversation law.
+The Richards-Wolf (RW) formalism is very similar to the Stratton-Chu formalism.
+Both are based on vector diffraction integrals. They differ in that the RW
+formalism uses two additional approximations. First, the focal point is assumed
+far away from the reflecting surface, i.e. the far-field approximation is used.
+In practice, this is almost universally valid, and does not cause problems here.
+The second approximation is less explicit and thus more difficult to trace: it
+assumes that the light rays follow an energy conversation law on a reference
+sphere. Following this approximation, an integral of the incident fields over
+the reference is set up, and the geometrical characteristics of the mirror are
+taken into account via a scalar factor called the apodization factor. While the
+Richards-Wolf equation have been derived from the Stratto-Chu integrals in the
+past \cite{} for the case of a spherical mirror, we have not found such a
+derivation for arbitrary surfaces $S$. It is this lack of a limit to the
+Richards-Wolf integrals that make us think that the Stratton-Chu equations have
+a wider range of validity than the RW formalism.
 
-In the focal region, the fields can be expressed as \cite{April2012}
+In the RW formalism, the fields in the focal region can be expressed as
+\cite{April2012}:
   \begin{align}
     \vb{E}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
         \vb{E}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
-        \sin\alpha d\alpha d\beta \\
+        \sin\alpha d\alpha d\beta, \\
     \vb{B}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
         \vb{B}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
         \sin\alpha d\alpha d\beta
@@ -1439,20 +1492,23 @@ where
                                         \right]
   \end{align}
 where $\vu{e}_\alpha$ and $\vu{e}_\beta$ are the basis vectors of a spherical
-coordinate system centered at the focal point.
-We evaluate these from the parabola described above. We thus have
-$\alpha_\text{max}=\pi/2$ and $q(\alpha)=\sec^2(\alpha/2)$.
+coordinate system centered at the focal point (not to be confused with the
+$\alpha=2f/r_\text{max}$). We evaluate these from the parabola described above.
+We thus have $\alpha_\text{max}=\pi/2$ and $q(\alpha)=\sec^2(\alpha/2)$.
 
-We have implemented a simple C++ that evaluates these integrals for a single
-frequency component of the electromagnetic field, but for arbitrary
+We have implemented a simple C++ program that evaluates these integrals for a
+single frequency component of the electromagnetic field, but for arbitrary
 apodization functions $q(\alpha)$ and arbitrary $\alpha$ limits.
 
-We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is virtually
-indistinguishable from the Stratton-Chu results (Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}).
-We observe the same ellipticity on the primary components $E_x$ and $B_y$, and
-similar magnitudes of the weaker transverse components and of the longitudinal
-components. On that basis, we could tempted to conclude that both formalism yield
-qualitatively the same results.
+\todo[inline]{Fix the multiply defined $\alpha$ issue.}
+
+We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is
+virtually indistinguishable from the Stratton-Chu results
+(Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}). We observe the same ellipticity on
+the primary components $E_x$ and $B_y$, and similar magnitudes of the weaker
+transverse components and of the longitudinal components. On that basis, we
+could tempted to conclude that both formalism yield qualitatively the same
+results.
 
 \begin{figure}
   \begin{subfigure}{\textwidth}
@@ -1481,13 +1537,14 @@ qualitatively the same results.
 \label{fig:sc.sc-vs-rw-hna-lin-g-na1}
 \end{figure}
 
-However, when bringing the focal point inside the parabola, i.e. switching
-to the VSF.LIN.G type, the two formalisms start to diverge (Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}).
-The difference between the results of both formalisms increase with decreasing
-focal length (Fig.~\ref{}). Insofar as we assume that the Stratton-Chu is the correct one,
-an assumption that should be checked through experimentation, it seems that
-the RW formalism underestimates the amount of energy that persists in the
-focal spot, even at very small focal lengths.
+However, when bringing the focal point inside the parabola, i.e. switching to
+the VSF.LIN.G type, the two formalisms start to diverge
+(Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}). The difference between the
+results of both formalisms increase with decreasing focal length (Fig.~\ref{}).
+Insofar as we assume that the Stratton-Chu is the correct one, an assumption
+that should be checked through experimentation, it seems that the RW formalism
+underestimates the amount of energy that persists in the focal spot, even at
+very small focal lengths.
 
 \begin{figure}
   \begin{subfigure}{\textwidth}
@@ -1523,27 +1580,28 @@ this, as a spherical shape could maybe explain that effect.
 
 \todo[inline]{Statement of the RW formalism. Comment on derivation from RW to ST.}
 
-\subsection{Numerical Verifications}
+\section{Numerical Verifications}
 
-In this section, we study the convergence properties of our numerical implementation,
-specifically in the evaluation of the integrals in Eq.~\eqref{eq:sc.stratton-chu-poa}.
-We also verify that the reflected field have the same energy content as the incident
-field, and that they obey Maxwell's equations.
+In this section, we study the convergence properties of our numerical
+implementation, specifically in the evaluation of the integrals in
+Eq.~\eqref{eq:sc.stratton-chu-poa}. We also verify that the reflected field have
+the same energy content as the incident field, and that they obey Maxwell's
+equations.
 
-These last two verifications are crucical in our case, as I am not aware of any
-useful closed-form solutions of the Stratton-Chu equations that could be used
-to compare to our numerically computed fields.
+These last two verifications are crucical in our case, as the author am not
+aware of any useful closed-form solutions of the Stratton-Chu equations that
+could be used to compare to our numerically computed fields.
 
-To study the convergence properties, we use our code to model the reflection
-of a temporally short, radially polarized beam Gaussian beam with beam waist
-$w_0$ and central wavelength $\lambda_c$. Its power spectrum is assumed to
-have a super-Gaussian shape
+To study the convergence properties, we use our code to model the reflection of
+a temporally short, radially polarized beam Gaussian beam with beam waist $w_0$
+and central wavelength $\lambda_c$. Its power spectrum is assumed to have a
+super-Gaussian shape
   \begin{equation}
     \epsilon(\lambda) \propto \exp\left[-\left(\frac{\lambda-\lambda_c}{\Delta\lambda}\right)^{2n}\right].
   \end{equation}
-The reflecting mirror is a paraboloid with focal length $f$ and aperture
-radius $r_\text{max}$.
-All the relevant parameters are shown in Table \ref{tab:comparison.parameters}.
+The reflecting mirror is a paraboloid with focal length $f$ and aperture radius
+$r_\text{max}$. All the relevant parameters are shown in Table
+\ref{tab:comparison.parameters}.
 \begin{table}
   \centering
   \begin{tabular*}{0.6\columnwidth}{@{\extracolsep{\fill} }lSc|lSc}
@@ -1568,26 +1626,27 @@ All the relevant parameters are shown in Table \ref{tab:comparison.parameters}.
 \end{table}
 
 To gauge the convergence of our code, we compute the fields in the focal spot
-for different mesh sizes on the paraboloid mirror. We use the finest mesh
-as a reference and study the evolution of the relative difference between
-the results as a function of the mesh size, i.e.
+for different mesh sizes on the paraboloid mirror. We use the finest mesh as a
+reference and study the evolution of the relative difference between the results
+as a function of the mesh size, i.e.
   \begin{equation}
     e_\text{rel}(N) = \frac{\max_{\vb{r}'}|F_{N_{r,\text{max}}}-F_{N}|}
                             {\max_{\vb{r}'}|F_{N_{r,\text{max}}}|}
   \end{equation}
-where $\vb{F}_{N_r}$ is the electromagnetic field computed with $N_r$
-radial discretization points. In cylindrical coordinates, unfortunately,
-the cells are of nonuniform area across the mesh. We choose to use the average
-area of the cells as a measure of mesh size, i.e.
+where $\vb{F}_{N_r}$ is the electromagnetic field computed with $N_r$ radial
+discretization points. In cylindrical coordinates, unfortunately, the cells are
+of nonuniform area across the mesh. We choose to use the average area of the
+cells as a measure of mesh size, i.e.
   \begin{equation}
     \mean{A}_N = \frac{\Delta\theta(\Delta r)^2}{2}\sum_{n=0}^{N_r} (2n+1)
-               = \frac{\Delta\theta(\Delta r)^2}{2}\frac{(N_r+1)^2}{N_r}
+               = \frac{\Delta\theta(\Delta r)^2}{2}\frac{(N_r+1)^2}{N_r}.
   \end{equation}
 
 The computed electromagnetic fields via our implementation converge as
-$(\text{average cell length})^4$, corresponding to the order of the
-integration routine used in the test (Fig.~\ref{fig:sc.convergence-radial}).
-The energy of the incident beam is also conserved by our code (Fig.~\ref{fig:sc.convergence-radial}d).
+$\mean{A}_N^4$, corresponding to the order of the integration
+routine used in the test (Fig.~\ref{fig:sc.convergence-radial}). The energy of
+the incident beam is also conserved by our code
+(Fig.~\ref{fig:sc.convergence-radial}d).
 
 \begin{figure}
   \centering
@@ -1595,7 +1654,7 @@ The energy of the incident beam is also conserved by our code (Fig.~\ref{fig:sc.
   \caption[Convergence pro
   perties of our Stratton-Chu implementation (radial polarization).]
   {Convergence properties of our Stratton-Chu implementation for a radially polarized
-  incident beam. All components converge with $(\text{average cell length})^4$,
+  incident beam. All components converge with $\mean{A}_N^4$,
   i.e. with the order of the integration used in this test.}
   \label{fig:sc.convergence-radial}
 \end{figure}
@@ -1697,21 +1756,21 @@ equations. Limits of formalism and whatnot.
 
 \section{Four-Wave Mixing With Tightly Focused Fields}
 
-Multiple experimental setups have been proposed in the FWM literature, with
-the most common setup involving the collision of multiple beams at at angle.
-In this dissertation, we propose an alternative setup based on the tight focusing
-a single laser pulse. This has the advantage of being simpler, and involving
-less optical elements, and therefore of retaining the most energy in the
-incident laser beam. However, it is much less flexible, as there are less
-degrees of freedom in the control of the emission properties of the radiation
-to be observed.
+Multiple experimental setups have been proposed in the FWM literature, with the
+most common setup involving the collision of multiple beams at at angle. In this
+dissertation, we propose an alternative setup based on the tight focusing a
+single laser pulse. This has the advantage of being simpler, and involving less
+optical elements, and therefore of retaining the most energy in the incident
+laser beam. However, it is much less flexible, as there are less degrees of
+freedom in the control of the emission properties of the radiation to be
+observed.
 
 Our goal is to optimize the number of FWM photons that can readily be detected
 in an all-optical experiment by tweaking the properties of the mirror and the
 spectral and spatial properties of the single incident laser beam. The total
-energy of the beam is fixed by the laser chain, although it is possible to change
-the polarization and the wavefront of the beam, and, to some degree, its spatial
-shape.
+energy of the beam is fixed by the laser chain, although it is possible to
+change the polarization and the wavefront of the beam, and, to some degree, its
+spatial shape.
 
 To this end, we will try to differentiate the total number of \textit{in vacuo}
 FWM photons emitted and the observable number of photons. The exact definition
@@ -2793,6 +2852,7 @@ representation, and the incomplete gamma function expressions}
 \subsection{Radially Symmetric, Radially Polarized Beam}
 
 \chapter{General Solutions of the Paraxial Wave Equation}
+\label{app:solution-paraxial-equation}
 
 In this Appendix, we show the general solutions of the paraxial wave equations
 that we use as a basis to describe incident fields of arbitrary spatial shapes.
