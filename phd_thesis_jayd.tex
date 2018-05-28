@@ -79,7 +79,7 @@
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
-      pdftitle={},
+      pdftitle={Strong-field quantum electrodynamics in tightly focused fields},
       bookmarks=true,
       bookmarksnumbered=true,
       bookmarksopen=true,
@@ -130,7 +130,8 @@
 % --                       Title Page Info                       -- %
 % ----------------------------------------------------------------- %
 \title{Strong-field quantum electrodynamics \\ in tightly focused fields}
-%\subtitle{Towards a Realitnatbibic Modelling of High-Power \\Laser Systems in the Quantum Theory}
+%\subtitle{Towards a Realistic Modelling of High-Power \\Laser Systems in the
+% Quantum Theory}
 \author{Joey Dumont}
 \year{2018}
 \program{Sciences de l'énergie et des matériaux}
@@ -1262,7 +1263,7 @@ between the optical axis and the line that goes from the focal point to the
 aperture of the parabola. It can also be related to the waist of the incident
 field. However, for very short focal lengths, the NA is not an appropriate
 parameter, as $\theta$ goes beyond $\pi$, and the NA strats to decrease again.
-In other words, the function $\textit{NA}(\theta)$ is non-bijective. Instead, we
+In other words, the function $\text{NA}(\theta)$ is non-bijective. Instead, we
 introduce the parameter $\alpha=2f/r_ \text{max}$,where $f$ is the focal length
 and $r_\text{max}$ is the radius of the aperture of the parabola. This parameter
 has the advantage of being bijective and monotonic in the focal length. $\alpha$
@@ -1283,7 +1284,7 @@ retroflections.
     \includegraphics{figs/parabola_hna.pdf}
     \caption{Typical HNA parabola, where the focal plane either intersects or is
             farther away from the aperture plane of the parabola.}
-    \label{fig:vsf-v-hna.hna}
+    \label{fig:fwm.vsf-v-hna.hna.geom}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.47\textwidth}
@@ -1293,7 +1294,7 @@ retroflections.
              mirror. The back of the parabola is cut up to the focal
              plane to remove to prevent light rays to reflect back
              into the laser chain.}
-    \label{fig:vsf-v-hna.vsf}
+    \label{fig:fwm.vsf-v-hna.vsf.geom}
   \end{subfigure}
   \caption[Illustrations of the typical HNA and VSF parabolas.]
           {Illustrations of typical HNA and VSF parabolas. For each
@@ -1301,7 +1302,7 @@ retroflections.
           The lines represent light rays that are specularly reflected
           by the surface. We can clearly see the one-point focus property
           of the parabolic mirror.}
-  \label{fgi:vsf-v-hna}
+  \label{fig:fwm.vsf-v-hna.geom}
 \end{figure}
 
 In this dissertation, we implement solution (2) for most of our calculations, as
@@ -1429,13 +1430,13 @@ evaluate the energy integral, defined as
   \begin{equation}
     E = \frac{1}{2}\int_V \left(\vb{E}^2+\vb{B}^2\right) dV,
   \end{equation}
-of these fields. Therefore, to fix the energy content of the beam in this model,
-it is necessary to numerically integrate the field over its whole spatial
-support with sufficient precision. In fact, for $w_0\ll L$, fixing the energy
-content takes longer than subsequently evaluating the field in a $\lambda^3$
-volume. Second, some of the intermediate terms of the field expressions show a
-singular behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus be
-taken when evaluating the Salamin model in these regions.
+of these fields. To fix the energy content of the beam in this model, it is
+necessary to numerically integrate the field over its whole spatial support with
+sufficient precision. In fact, for $w_0\ll L$, fixing the energy content takes
+longer than subsequently evaluating the field in a $\lambda^3$ volume. Second,
+some of the intermediate terms of the field expressions show a singular
+behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus be taken when
+evaluating the Salamin model in these regions.
 
 Computing the fields in the focal plane, it is immediately apparent that this
 model does not reproduce the high ellipticity that we observe in the fields
@@ -1447,8 +1448,7 @@ phase structure that the parabola imparts on the field has important
 consequences for its focused properties.
 
 Moreover, the Salamin model inherently cannot reproduce the fields produced at
-$\alpha\ll1$. In this case, the parabolic shape is quite dramatic (in more
-rigorous terms, it strongly diverges from a spherical mirror). Reducing the
+$\alpha\ll1$. In this case, the parabolic shape is quite dramatic. Reducing the
 waist of the beam in the model does not help: the longitudinal components become
 somewhat stronger, but the primary field components never exhibit any
 ellipticity.
@@ -1471,8 +1471,9 @@ derivation for arbitrary surfaces $S$. It is this lack of a limit to the
 Richards-Wolf integrals that make us think that the Stratton-Chu equations have
 a wider range of validity than the RW formalism.
 
-In the RW formalism, the fields in the focal region can be expressed as
-\cite{April2012}:
+In the RW formalism, the fields in the focal region can be expressed as, where
+in this section, we take $\alpha$ to the polar angle of a spherical coordinate
+system\cite{April2012}:
   \begin{align}
     \vb{E}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
         \vb{E}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
@@ -2033,14 +2034,14 @@ We will hence try circular or elliptical masks.
     \centering
     \includegraphics{figs/masked_parabola_hna.pdf}
     \caption{Masked HNA parabola.}
-    \label{fig:vsf-v-hna.hna}
+    \label{fig:fwm.vsf-v-hna.hna}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.47\textwidth}
     \centering
     \includegraphics{figs/masked_parabola_vsf.pdf}
     \caption{Masked VSF parabola.}
-    \label{fig:vsf-v-hna.vsf}
+    \label{fig:fwm.vsf-v-hna.vsf}
   \end{subfigure}
   \caption[Illustrations of the masked HNA and VSF parabolas.]
           {Illustrations of masked HNA and VSF parabolas.}
