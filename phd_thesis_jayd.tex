@@ -1269,6 +1269,8 @@ of the field, which exhibit two lobes in the focal plane, instead of the usual
 Gaussian dependence. While this result is expected, what is more interesting is
 the effect this has on SF-QED observables, to be discussed in the next chapter.
 
+\todo[inline]{Connection to: https://www.osapublishing.org/josaa/abstract.cfm?uri=josaa-35-6-985}
+
 Typical optical setups use relatively long focal length parabolic mirrors to
 transport the beam throughout the experiment chamber, and also to focus it in
 some region of space where some experiment takes place. The usual parameter that
@@ -1368,6 +1370,29 @@ The detailed parameters of the incident beam are shown in Table
   \label{tab:sc.comparison.parameters.linear}
 \end{table}
 
+Before embarking on the analysis of numerical results, it is possible to draw
+some general conclusions from a mathematical analysis of the Stratton-Chu
+equations in the presence of a linear polarized beam. Our starting point is
+\eqref{eq:app.sc.analytic-expressions.linear}. Immediately, we can see the
+$\pi/2$ phase difference between the transverse and longitudinal components, as
+seen by the additional $i$ factor in the longitudinal components. Both
+longitudinal components have a similar structure, with only their orientation
+changing ($\sin\theta'$ vs $\cos\theta'$). We also note that $E_y\equiv B_x$,
+regardless of the geometrical parameters. Both show a four-lobe structure,
+apparent in their $2\theta'$ dependence. The dominant components, $E_x$ and
+$B_y$, also show a similar structure, with only a sign difference between the
+two Bessel functions. This is what leads to their different orientations.
+
+The numerical results confirm this behaviour, and also shows other behaviour with
+$\alpha$.
+
+  \begin{figure}
+    \centering
+    \includegraphics{/opt/data/thesis-data/Fields/Stratto/na_vsf_lin_g/Ex_ellipticity.pdf}
+    \caption[Ellipticity of the $E_x$ component in a linearly polarized, tightly focused beam.]
+            {Test.}
+    \label{fig:sc.Ex_ellipticity}
+  \end{figure}
 
 \todo[inline]{Graph of ellipticity of electric intensity as a function of $\alpha$.}
 \todo[inline]{Graph of waist size as a function of $\alpha$.}
@@ -2499,6 +2524,8 @@ following two relations
   \end{equation}
 
 \subsection{Radially Symmetric, Linearly Polarized Beam}
+\label{subsec:app.sc.analytic-expressions.linear}
+
 For a linearly polarized beam, we have
   \begin{subequations}
   \begin{align}
@@ -2602,6 +2629,7 @@ on the trigonometric operators, and then evaluate the integrals by noting
 that $\int_0^{2\pi}\sin(n\theta)F(\cos\theta)d\theta=0$ and keeping
 Eq.~\eqref{eq:app.integral-bessel} in mind, we obtain
   \begin{subequations}
+  \label{eq:app.sc.analytic-expressions.linear}
   \begin{align}
     E_x      &= 2\pi A\int_0^{1}\frac{\rho E_0(r)}{(\rho^2+\xi^2)^2}
         \left[\xi^2J_0\left(2kr'\frac{\xi\rho}{\rho^2+\xi^2}\right)

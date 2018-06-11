@@ -1246,7 +1246,7 @@ FUNCTION {phdthesis}
   format.title
   "title" output.check
   end.quote.title
-  bbl.phdthesis format.thesis.type output.nonnull
+  bbl.phdthesis output.nonnull
   school "school" bibinfo.warn output
   address "address" bibinfo.check output
   format.date "year" output.check

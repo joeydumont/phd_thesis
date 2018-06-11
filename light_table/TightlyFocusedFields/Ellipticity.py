@@ -67,6 +67,7 @@ parser.add_argument("--force",
 args = parser.parse_args()
 
 # --------------------------- Function Definition --------------------------- #
+
 def DataAlreadyPostProcessed(variable_name_str):
     """
     We check whether the data we wish to extract from our HDF5 file has already
@@ -77,38 +78,78 @@ def DataAlreadyPostProcessed(variable_name_str):
     path = variable_name_str
     return os.path.isfile(path)
 
+def ComputeEllipcity(a,c):
+  """
+  Computes the ellipticity as sqrt(1-(min(a,c)/max(a,c))**2).
+  """
+  smajor = a if a>c else c
+  sminor = c if a>c else a
+
+  return np.sqrt(1-(sminor/smajor)**2)
+
 
 # ------------------------------ MAIN FUNCTION ------------------------------ #
 
 # -- Some generic parametres.
-bin_folder = "../../bin/Fields/Stratto/na_vsf_lin_g/"
+bin_folder = "/opt/data/thesis-data/Fields/Stratto/na_vsf_lin_g/"
 configFile = "stratto-linear.ini"
 dirList = vphys.ListSimulationDirectories(bin_folder)
 
 ratio_analyzed_frequency = 2
 
+# -- Geometric properties
+focal_length_f           = np.zeros((len(dirList)))
+rmax_f                   = np.zeros((len(dirList)))
+alpha_f                  = np.zeros((len(dirList)))
 
 # -- Properties to keep track of as a function of the focal length.
-intensity_E              = np.empty((len(dirList)))
-intensity_E_waist_x      = np.empty((len(dirList)))
-intensity_E_waist_y      = np.empty((len(dirList)))
-intensity_E_ellipticity  = np.empty((len(dirList)))
-max_EzEx                 = np.empty((len(dirList)))
+intensity_E              = np.zeros((len(dirList)))
+intensity_E_waist_x      = np.zeros((len(dirList)))
+intensity_E_waist_y      = np.zeros((len(dirList)))
+intensity_E_ellipticity  = np.zeros((len(dirList)))
+max_EzEx                 = np.zeros((len(dirList)))
 
-intensity_B              = np.empty((len(dirList)))
-intensity_B_waist_x      = np.empty((len(dirList)))
-intensity_B_waist_y      = np.empty((len(dirList)))
-intensity_B_ellipticity  = np.empty((len(dirList)))
-max_BzBx                 = np.empty((len(dirList)))
+intensity_B              = np.zeros((len(dirList)))
+intensity_B_waist_x      = np.zeros((len(dirList)))
+intensity_B_waist_y      = np.zeros((len(dirList)))
+intensity_B_ellipticity  = np.zeros((len(dirList)))
+max_BzBx                 = np.zeros((len(dirList)))
 
 for idx, folder in enumerate(dirList):
     # -- We open the proper files.
     folderName = bin_folder+folder
     dataFolder = folderName+"/data/"
     vphys.mkdir_p(folderName+"/data")
-    analysis_obj = analstrat.Analysis3D(freq_field=folderName+"/Field_reflected.hdf5",time_field=folderName+"/Field_reflected_time.hdf5")
+
+    try:
+      analysis_obj = analstrat.Analysis3D(freq_field=folderName+"/Field_reflected.hdf5",time_field=folderName+"/Field_reflected_time.hdf5")
+    except:
+      intensity_E[idx]              = None
+      intensity_E_waist_x[idx]      = None
+      intensity_E_waist_y[idx]      = None
+      intensity_E_ellipticity[idx]  = None
+      max_EzEx[idx]                 = None
+
+      intensity_B[idx]              = None
+      intensity_B_waist_x[idx]      = None
+      intensity_B_waist_y[idx]      = None
+      intensity_B_ellipticity[idx]  = None
+      max_BzBx[idx]                 = None
+
+      continue
     freq_idx = analysis_obj.size_freq//ratio_analyzed_frequency
     time_idx = analysis_obj.size_time//ratio_analyzed_frequency
+
+    config = configparser.ConfigParser(inline_comment_prefixes=";")
+    config.read(folderName+"/"+configFile)
+
+    focal_length     = float(config['Parabola']['focal_length'])
+    rmax             = float(config['Parabola']['r_max'])
+    alpha            = 2*focal_length/rmax
+
+    focal_length_f[idx] = focal_length
+    rmax_f[idx]         = rmax
+    alpha_f[idx]        = alpha
 
     # ---------------- FREQUENCY DOMAIN ----------------- #
     # -- We plot the focal plane.
@@ -148,6 +189,10 @@ for idx, folder in enumerate(dirList):
                                              np.transpose(np.abs(BzFocalPlaneFreq[:,:,freq_idx]))**2,
                                              folderName+"/FocalPlaneFreq.pdf",
                                              normalization=True)
+
+    # Find the maximum of Ex and Ez, and compute their ratios.
+    # We do this in the freq domain to sidestep the pi/2 delay in time.
+    max_EzEx[idx] = np.amax(np.abs(ExFocalPlaneFreq[:,:,freq_idx]))/np.amax(np.abs(EzFocalPlaneFreq[:,:,freq_idx]))
 
     # -- Compute the focal area.
     electric_intensity = np.abs(ExFocalPlaneFreq)**2+np.abs(EyFocalPlaneFreq)**2+np.abs(EzFocalPlaneFreq)**2
@@ -331,6 +376,18 @@ for idx, folder in enumerate(dirList):
                                              np.transpose(np.abs(BzFocalPlane[:,:,time_idx]))**2,
                                              folderName+"/FocalPlaneTime.pdf",
                                              normalization=True)
+
+    # -- Compute the waist in each direction and determine the ellipticity of the
+    # -- E_x component.
+    intensity_E_waist_x[idx], intensity_E_waist_y[idx], intensityE_waist = \
+      analysis_obj.ComputeBeamWaist(ExFocalPlane[:,:,time_idx]**2,0.5)
+
+    print("Waist in the x direction: {}".format(intensity_E_waist_x[idx]))
+    print("Waist in the y direction: {}".format(intensity_E_waist_y[idx]))
+
+    intensity_E_ellipticity[idx] = ComputeEllipcity(intensity_E_waist_x[idx],intensity_E_waist_y[idx])
+
+    print("Ellipticity: {}".format(intensity_E_ellipticity[idx]))
 
     # -- Compute the focal area.
     electric_intensity = np.abs(ExFocalPlane)**2+np.abs(EyFocalPlane)**2+np.abs(EzFocalPlane)**2
@@ -518,4 +575,30 @@ for idx, folder in enumerate(dirList):
                                              folderName+"/MeridionalPlaneTime.pdf",
                                              normalization=True)
 
+# -- Plot global properties.
+# Plot only those that are finite.
+ellipse_mask = np.isfinite(intensity_E_ellipticity)
 
+fig = plt.figure(figsize=(4,3))
+ax  = fig.add_subplot(111)
+
+ax.plot(alpha_f[ellipse_mask],intensity_E_ellipticity[ellipse_mask])
+ax.set_xlabel(r"$\alpha$")
+ax.set_ylabel("Ellipticity $e$", rotation='horizontal', ha='left', va='bottom')
+ax.yaxis.set_label_coords(0.00, 1.05)
+
+
+plt.savefig(bin_folder+"/Ex_ellipticity.pdf", bbox_inches='tight', dpi=500)
+plt.close()
+
+ratio_mask = np.isfinite(max_EzEx)
+
+fig = plt.figure(figsize=(4,3))
+ax  = fig.add_subplot(111)
+
+ax.plot(alpha_f[ratio_mask], max_EzEx[ratio_mask])
+ax.set_xlabel(r"$\alpha$")
+ax.set_ylabel("Ratio of $E_x$ to $E_z$", rotation='horizontal', ha='left')
+ax.yaxis.set_label_coords(0.00, 1.05)
+
+plt.savefig(bin_folder+"/ExEzRatio.pdf", bbox_inches='tight', dpi=500)
