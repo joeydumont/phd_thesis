@@ -206,26 +206,16 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 \chapter{Introduction}
 
-  In this chapter, we place the contributions of this dissertation in the context
-  of the high-power laser literature and introduces some of the theoretical
-  considerations on which this dissertation will focus. We first discuss some recent
-  advances in the development of high-power laser sources and their effect
-  on the design of experimented aimed at measuring quantum electrodynamical
-  effects in the strong field regime. The specific goals of this dissertation are
-  enumerated in \S\ref{sec:intro.objectives}.
+In this chapter, we place the contributions of this dissertation in the context
+of the high-power laser literature and introduces some of the theoretical
+considerations on which this dissertation will focus. We first discuss some recent
+advances in the development of high-power laser sources and their effect
+on the design of experimented aimed at measuring quantum electrodynamical
+effects in the strong field regime. The specific goals of this dissertation are
+enumerated in \S\ref{sec:intro.objectives}.
 
 
-\section{Tightly Focused Electromagnetic Fields}
-
-Quantum electrodynamics (QED) has been called the ``jewel of physics'' by one
-of its most well-known contributor, Richard Feynman. Along with quantum
-chromodynamics and electro-weak theory, which describe the strong and
-weak nuclear force, respectively, QED describes the force that is closer
-to our everyday life: electromagnetism\footnote{Even though it must be
-said that classical electromagnetism should suffice in most
-familiar situations.}.
-
-Precision tests of QED.
+\section{High-Power Laser Systems}
 
 \begin{figure}
   \centering
@@ -242,7 +232,10 @@ The advent of the chirped pulse amplification technique (CPA) has catapulted
 the available focused laser intensities in the last three decades
 \cite{Mourou2006}. Indeed, this technique has allowed an increase of about
 6 orders of magnitude in the highest recorded intensity in a very short time
-(Fig.~\ref{fig:intro.intensity-history}). This has opened up the possibility
+(Fig.~\ref{fig:intro.intensity-history}). \todo{Add applications of HPL other than
+QED stuff. Wakefield acceleration as catalyst of other applications (also QED).
+Probably cite JCK's work on phase contrast imaging.}
+This has opened up the possibility
 of testing QED in a completely new sector of parameters.
 
 The observation of strong-field quantum electrodynamics (SF-QED) processes with light
@@ -430,12 +423,57 @@ To this end, we have developed multiple high-performance computing (HPC) tools
 geared towards execution on super-computing clusters.
 
 \begin{description}
-  \item [Chapter \ref{chapter:stratton-chu} -- Tool 1: The Stratton-Chu Diffraction Integrals]
-  test
-  \item [Chapter \ref{chapter:fwm} -- ]
-  test
-  \item [Chapter \ref{chapter:electron_trajectories} -- ]
-  test
+  \item [Chapter \ref{chapter:methods} -- Tightly Focused Electromagnetic Field Models]
+  This chapter describes the portions of electromagnetic theory that underpins
+  the results of this thesis. In section \ref{}, we discuss the paraxial optics
+  framework, its use in the description of beam transport and other areas, and
+  the limits of its basic approximation. We show that for \textit{tightly focused fields},
+  the paraxial framework breaks down and new models are needed. In the following sections,
+  we discuss analytical solutions of Maxwell's equations that are valid in the tight
+  focusing regime, and diffraction integral formulations of the same equations.
+
+  In section \ref{}, we discuss the Stratton-Chu diffraction integrals. Their
+  numerical evaluation is a central part of this thesis, and underpins most of
+  our research contributions. We review the mathematical derivation of the
+  diffraction integrals, and discuss some specific features of the integrals.
+
+  \item [Chapter \ref{chapter:stratton-chu} -- The Stratton-Chu Diffraction Integrals]
+  In this chapter, we discuss our parallel implementation of a computer code that
+  evaluates the Stratton-CHu diffraction integrals for generic incident
+  electromagnetic fields and for arbitrary geometries. This tool is used as the
+  basic tool to investigate light-matter interactions in tightly focused fields,
+  our main research contribution. The design and features
+  of the MPI-based code is thoroughly presented Section \ref{}.
+
+  Then, in Section
+  \ref{}, we study the properties of a short, linearly polarized Gaussian beam
+  after focusing through a parabolic mirror. We show that, in this geometry,
+  the focused beam has an elliptical spot shape, and that there exists a focal
+  length value for which the longitudinal components dominate over the transverse
+  ones, in the focal region.
+
+  As an appendix to this chapter, we verify that our numerical implementation
+  obeys some key requirements, such as convergence and energy conservation.
+
+  \item [Chapter \ref{chapter:fwm} -- Four-Wave Mixing \textit{in vacuo}]
+  In this chapter, we apply our newly-developed tool to study four-wave mixing
+  \textit{in vacuo}, a strong-field QED process. In Section \ref{}, we review
+  the Euler-Heisenberg Lagrangian and the derivation of a non-linear modification
+  to Maxwell's equations from it.
+
+  In the next section, we detail the development of a physics module to the
+  StrattoCalculator meant to evaluate FWM \textit{in vacuo} in arbitrary
+  electromagnetic fields.
+
+  In Section {}, we study FWM \textit{in vacuo} in different geometries. We start
+  from typical parabolic mirror geomeetries, such as the off-axis mirror, to
+  less common geometries such as on-axis mirrors, and parabolic mirrors where the
+  focal point is inside the aperture of the mirror. We show that there is parametric
+  maximum in the number of FWM photons when varying the focal length of such mirrors.
+
+  In the last section, we show that this same maximum is observed in a completely
+  different physical process: Schwinger pair production.
+
 \end{description}
 
 
@@ -466,7 +504,10 @@ geared towards execution on super-computing clusters.
 %       \end{itemize}
 %   \end{enumerate}
 
-\chapter{Eletromagnetic Fields in the Tight Focusing Regime: The Stratton-Chu Diffraction Integrals}
+\chapter{Methods: Tightly Focused Electromagnetic Field Models}
+\label{chapter:methods}
+
+\chapter{Parallel Implementation of the Stratton-Chu Diffraction Integrals}
 \label{chapter:stratton-chu}
 
 % \begin{chaptersummary}
@@ -2118,22 +2159,22 @@ https://journals.aps.org/prd/pdf/10.1103/PhysRevD.97.036026.}
 
 \todo[inline]{Comparison with dynamical assistance. https://journals.aps.org/prd/pdf/10.1103/PhysRevD.97.096004}
 
-\chapter{Radiation of Charged Particles in Tightly Focused Fields}
-\label{chapter:electron_trajectories}
+% \chapter{Radiation of Charged Particles in Tightly Focused Fields}
+% \label{chapter:electron_trajectories}
 
-\section{The Lorentz Force Equation and Radiation Reaction}
+% \section{The Lorentz Force Equation and Radiation Reaction}
 
-\section{Generic Implementation}
+% \section{Generic Implementation}
 
-\section{Measuring the Intensity of High-Power Lasers}
+% \section{Measuring the Intensity of High-Power Lasers}
 
-\section{Radiation Fields as a Possible Source of Noise}
+% \section{Radiation Fields as a Possible Source of Noise}
 
-\todo[inline]{See https://journals-aps-org.acces.bibl.ulaval.ca/prd/pdf/10.1103/PhysRevD.97.105001
-for important parameters.}
+% \todo[inline]{See https://journals-aps-org.acces.bibl.ulaval.ca/prd/pdf/10.1103/PhysRevD.97.105001
+% for important parameters.}
 
-\todo[inline]{Perspectives: QED transition amplitudes in plasmas.
-https://arxiv.org/abs/1805.01762}
+% \todo[inline]{Perspectives: QED transition amplitudes in plasmas.
+% https://arxiv.org/abs/1805.01762}
 
 \chapter{Conclusion}
 
