@@ -116,6 +116,10 @@
 %\captionsetup[figure]{labelfont=bf,width=0.85\textwidth}
 %\captionsetup[table]{labelfont=bf,width=0.85\textwidth}
 
+% Caption fix with new TexLive version.
+\makeatletter
+\renewcommand{\counterwithin}{\@ifstar{\@csinstar}{\@csin}}
+\makeatother
 
 % Configuration of subcaptions.
 \renewcommand\thesubfigure{\alph{subfigure}}
@@ -1768,6 +1772,8 @@ experimental settings. Most easily used with fast SF-QED observable codes
 in constract with PIC codes due to their high numerical cost.
 
 Alternatives: propagation equations, transformation optics?}
+
+\todo[inline]{Cite conclusion of https://journals.aps.org/prx/abstract/10.1103/PhysRevX.8.031004.}
 
 \begin{comment}
 
