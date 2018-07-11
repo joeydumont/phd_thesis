@@ -511,54 +511,120 @@ geared towards execution on super-computing clusters.
 \chapter{Methods: Tightly Focused Electromagnetic Field Models}
 \label{chapter:methods}
 
-\chapter{Parallel Implementation of the Stratton-Chu Diffraction Integrals}
-\label{chapter:stratton-chu}
+In the tight focusing regime, electromagnetic fields are characterized
+by a waist size similar to its Rayleigh length or, in other words, a strong
+divergence angle. In this chapter, we review the paraxial field model and its
+important use in the description of beam transport inside a laser chain and show
+how it fails to describe tightly focused fields. We then review other approaches
+of modeling tightly focused fields: (1) analytical solutions of Maxwell's equations
+in vacuum, specifically the Salamin solutions \cite{Salamin2015a,Salamin2015b},
+the e-dipole models \cite{Gonoskov2012} and the complex source method \cite{April2012}.
+We show that to properly account for the local details of tightly focused fields,
+it is necessary to model the reflection off the focusing optics. This leads us to
+(2) diffraction integral frameworks. We review the Richards-Wolf and Stratton-Chu
+formalisms. By comparing fields from different models, we show that the Stratton-Chu
+formalisms shows features unique to the tight focusing regime that the analytical
+models fail to show. We also discuss a discrepancy between the Richards-Wolf and
+Stratton-Chu formalisms. The question of which formalism is correct should be
+resolved by comparison with experimental data. In the end, we settle on the
+Stratton-Chu formalism to model fields in the tight focusing regime for its
+generality.
+We thus review the derivation of the Stratton-Chu formalism in depth, and provide
+ideas for a more rigorous handling of the hypersingularities that arise in the
+modelization of open surfaces.
 
-% \begin{chaptersummary}
-%   This chapter discusses the problem of properly modelling electromagnetic fields
-%   in the tight focusing regime. We first lay the foundation of electromagnetic
-%   scattering and justify the choice of the Stratton-Chu formalism. Our numerical
-%   implementation of this formalism is then discussed at length, and our results
-%   are benchmarked against analytical results and results from the literature.
-%   We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
-%   to the Stratton-Chu formulation.
-% \end{chaptersummary}
+\section{Paraxial Optics}
 
-In this chapter, we introduce a fully numerical implementation of the Stratton-Chu
-equations used to model the spatio-temporal focusing properties of large
-bandwidth laser pulses focused by high numerical aperture optics. First, we
-provide a detailed review of the Stratton-Chu integral representation and discuss
-their reduction to a set of diffraction integrals. \todo{Finish division paragraph.}
-It is then possible to write down an iterative solution to these integrals, the
-first term of which is called the physical optics approximation. The resulting
-quadrature is the basis of our model of tightly focused fields.
+\todo[inline]{Introduction of approximation (Lax series), and cite other attempts.}
+\todo[inline]{Short discussion of propagation methods because of first-order in $z$.}
+\todo[inline]{Failure of the approximation for large divergences (tight focusing), but maybe
+other propagation methods? (cite literature).}
 
-\section{Derivation of the Stratton-Chu Diffraction Integrals}
+\section{Closed-Form Solutions of Maxwell Equations in Vacuum}
+
+\todo[inline]{Short introduction on vacuum solutions, then mention specific
+for tight focusing (e-dipole, Salamin). CSBs?}
+
+\todo[inline]{Mention difficulty in handling complicated spectral profiles,
+necessary in modeling local details of the fields.}
+
+\section{Vector Diffraction Integrals}
+
+\subsection{Richards-Wolf}
+
+The Richards-Wolf (RW) formalism is very similar to the Stratton-Chu formalism.
+Both are based on vector diffraction integrals. They differ in that the RW
+formalism uses two additional approximations. First, the focal point is assumed
+far away from the reflecting surface, i.e. the far-field approximation is used.
+In practice, this is almost universally valid, and does not cause problems here.
+The second approximation is less explicit and thus more difficult to trace: it
+assumes that the light rays follow an energy conversation law on a reference
+sphere. Following this approximation, an integral of the incident fields over
+the reference sphere is set up, and the geometrical characteristics of the
+mirror are taken into account via a scalar factor called the apodization factor,
+to be computed via geometrical optics method. While the Richards-Wolf equation
+have been derived from the Stratto-Chu integrals in the past \cite{Sheppard1977}
+within this approximation, for the case of a reference spherical surface, we
+have not found such a derivation for arbitrary surfaces $S$. It is this lack of
+a limit to the Richards-Wolf integrals that make us think that the Stratton-Chu
+formalism has a wider range of validity than the RW formalism.
+
+In the RW formalism, the fields in the focal region can be expressed as, where
+in this section, we take $\alpha$ to the polar angle of a spherical coordinate
+system\cite{April2012}:
+  \begin{align}
+    \vb{E}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
+        \vb{E}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
+        \sin\alpha d\alpha d\beta, \\
+    \vb{B}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
+        \vb{B}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
+        \sin\alpha d\alpha d\beta
+  \end{align}
+where
+  \begin{align}
+    \vb{E}_\text{sph} &= q(\alpha)\left[\vu{e}_\alpha\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
+                                       +\vu{e}_\beta\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
+                                       \right] \\
+    \vb{H}_\text{sph} &= \left(\vu{e}_\alpha\times\vu{e}_\beta\right)\times\vb{E}_\text{sph}\nonumber\\
+                      &= q(\alpha) \left[\vu{e}_\beta\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
+                                        -\vu{e}_\alpha\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
+                                        \right]
+  \end{align}
+where $\vu{e}_\alpha$ and $\vu{e}_\beta$ are the basis vectors of a spherical
+coordinate system centered at the focal point (not to be confused with the
+$\alpha=2f/r_\text{max}$). We evaluate these from the parabola described above.
+We thus have $\alpha_\text{max}=\pi/2$ and $q(\alpha)=\sec^2(\alpha/2)$.
+
+We have implemented a simple C++ program that evaluates these integrals for a
+single frequency component of the electromagnetic field for arbitrary
+apodization functions $q(\alpha)$ and arbitrary $\alpha$ limits.
+
+\todo[inline]{Fix the multiply defined $\alpha$ issue.}
+
+\subsection{Derivation of the Stratton-Chu Diffraction Integrals}
 
 The strategy to derive diffraction integrals from the Maxwell equations is to
-first decouple the curl equations to form second order partial differential equations
-for the electric and magnetic fields. Then, it is possible to find the Green's
-function of this differential operator. Using the dyadic-vector surface integral
-theorems leads to an integral representation for the fields. From this representation,
-it is possible to derive an integral equation for the current generated by the
-incident fields. By being careful about limits and singular integrals, we can
-utilize an iterative solution of the integral equation to reduce it to a quadrature
-over the surface.
-The derivation of the Stratton-Chu equations is fairly standard, and has been
-written about many times \cite{}. Here, however, we follow Sancer's derivation \cite{Sancer1968},
-whose exhaustive approach allows for a more thorough discussion. In this
-dissertation,¸we will take care of explaining the source of the
-hypersingularities and their consequence on the modelling of reflection off
-conducting surfaces.
+first decouple the curl equations to form second order partial differential
+equations for the electric and magnetic fields. Then, it is possible to find the
+Green's function of this differential operator. Using the dyadic-vector surface
+integral theorems leads to an integral representation for the fields. From this
+representation, it is possible to derive an integral equation for the current
+generated by the incident fields. By being careful about limits and singular
+integrals, we can utilize an iterative solution of the integral equation to
+reduce it to a quadrature over the surface. The derivation of the Stratton-Chu
+equations is fairly standard, and has been written about many times \cite{}.
+Here, however, we follow Sancer's derivation \cite{Sancer1968}, whose exhaustive
+approach allows for a more thorough discussion. In this dissertation,¸we will
+take care of explaining the source of the hypersingularities and their
+consequence on the modelling of reflection off conducting surfaces.
 
-The theoretical setup is as follows. Electric and magnetic currents\footnote{Magnetic
-currents are used as a stand-in for an incident electric field \cite{Schelkunoff1936}.}
-whose support are $V_e$ and $V_m$, respectively, are assumed to exist in free
-space, denoted by $V_\infty$ (Fig.~\ref{fig:sc.scatteringSystem}).
-Later in the derivation, integrals over these currents will be taken to represent the incident
-field.
-The scatterer
-of interest is defined by the volume $V_s$, and its surface by $S=\partial V_s$.
+The theoretical setup is as follows. Electric and magnetic
+currents\footnote{Magnetic currents are used as a stand-in for an incident
+electric field \cite{Schelkunoff1936}.} whose support are $V_e$ and $V_m$,
+respectively, are assumed to exist in free space, denoted by $V_\infty$
+(Fig.~\ref{fig:sc.scatteringSystem}). Later in the derivation, integrals over
+these currents will be taken to represent the incident field. The scatterer of
+interest is defined by the volume $V_s$, and its surface by $S=\partial V_s$.
 
   \begin{figure}
     \centering
@@ -854,6 +920,201 @@ coordinate system. In our implementation, we use a cylindrical coordinate
 system, as most of the incident fields we will use are axisymmetric. The
 explicit expressions of the Stratton-Chu equations can be found in Appendix
 \ref{app.explicit-sc}.
+
+\section{Comparison Between Field Models}
+
+\section{Comparisons with Other Field Models}
+
+In the previous section, we have shown some properties of electromagnetic fields
+in the tight focusing regime. Now, we show that the use of the rather
+complicated Stratton-Chu formalism was warranted. We proceed by implementing
+other field models and showing that all other well-known models do not reproduce
+the most salient features of tightly focused fields. We discuss both analytical
+solutions of Maxwell's equations and the Richards-Wolf diffraction formalism.
+
+This section can also serve as a guide to a cost-analysis benefit of using the
+StrattoCalculator in a given situation. Computing the fields in a volume around
+the focal spot can take quite a long time using the StrattoCalculator. In the
+worst cases considered in this thesis, a single simulation can take as long as
+five days on MP2. It is thus necessary to make sure that the use of our
+formalism is indeed warranted. If, for a given application, it is expected, or
+it can be shown that the properties listed above can affect the design of an
+experiment, or the properties of some quantity of interest, then it makes sense
+to invest the numerical power needed to run the StrattoCalculator. On the other
+hand, if the properties described above are expected to have little effect, or
+if the numerical code used is already heavy, then it might not make sense to use
+the StrattoCalculator.
+
+For the sake of comparison, we will use an incident beam that has a Gaussian
+spatial dependence, a super-Gaussian spectrum, and a parabola with a numerical
+aperture of exactly 1, or $\alpha=1$. This produces a focused that is firmly in
+the tight focusing regime, and allows for a comparison with a broad range of
+field categories. See Table \ref{tab:comparison.parameters} for the exact
+parameters.
+
+\subsection{Gaussian Optics Limit}
+
+\subsection{Analytical Field Models}
+
+Another class of useful field models are vacuum solutions of the Maxwell
+equations. In typical optical regimes, this is usually done via the paraxial
+approximation. However, as we know, this approximation in invalid in the tight
+focusing regime. It is possible, if more difficult, to write down solutions of
+Maxwell's equations without this approximation. In this section, we will compare
+our StrattoCalculator fields with those of the Salamin field model
+\cite{Salamin2015b} for a short, tightly focused linearly polarized field in
+vacuum. This model purports to approximate tightly focused fields with only
+three free parameters: the central wavelength of the radiation $\lambda_c$, its
+waist size $w_0$ and its axial length $L$, a parameter related to its temporal
+duration.
+
+The analytical expressions are relatively easy to evaluate numerically, although
+there are two prominent issues. First, there doesn't seem to be a simple way to
+evaluate the energy integral, defined as
+  \begin{equation}
+    E = \frac{1}{2}\int_V \left(\vb{E}^2+\vb{B}^2\right) dV,
+  \end{equation}
+of these fields. To fix the energy content of the beam in this model, it is
+necessary to numerically integrate the field over its whole spatial support with
+sufficient precision. In fact, for $w_0\ll L$, fixing the energy content takes
+longer than subsequently evaluating the field in a $\lambda^3$ volume. Second,
+some of the intermediate terms of the field expressions show a singular
+behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus be taken when
+evaluating the Salamin model in these regions.
+
+Computing the fields in the focal plane, it is immediately apparent that this
+model does not reproduce the high ellipticity that we observe in the fields
+computed via the StrattoCalculator. Moreover, the relative strength of the
+longitudinal components is much weaker than in the StrattoCalculator fields. The
+origin of these discrepancies lies in the fact that the analytical solution
+cannot take into account the parabolic structure of the mirror. The spatial
+phase structure that the parabola imparts on the field has important
+consequences for its focused properties.
+
+Moreover, the Salamin model inherently cannot reproduce the fields produced at
+$\alpha\ll1$. In this case, the parabolic shape is quite dramatic. Reducing the
+waist of the beam in the model does not help: the longitudinal components become
+somewhat stronger, but the primary field components never exhibit any
+ellipticity.
+
+\todo[inline]{Add figures of both fields in time at $t=0$ and $t=\lambda/4$.}
+
+\subsection{The Richards-Wolf Formalism}
+
+We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is
+virtually indistinguishable from the Stratton-Chu results
+(Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}). We observe the same ellipticity on
+the primary components $E_x$ and $B_y$, and similar magnitudes of the weaker
+transverse components and of the longitudinal components. On that basis, we
+could tempted to conclude that both formalism yield qualitatively the same
+results.
+
+\begin{figure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/RichardsWolf_fpNA1.pdf}
+    \caption[Richards-Wolf field components for the HNA.LIN.G.NA1 case.]
+            {Field components in the focal plane computed via the Richards-Wolf
+            formalism for the parameters given in Table \ref{tab:sc.comparison.parameters.linear}.}
+    \label{fig:sc.rw.hna-lin-g-na1}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/StrattonChu_fpNA1.pdf}
+    \caption[Stratton-Chu field components for the HNA.LIN.G.NA1 case.]
+            {Field components in the focal plane computed via the Stratton-Chu
+            formalism for the parameters given in Table \ref{tab:sc.comparison.parameters.linear}.}
+   \label{fig:sc.sc.hna-lin-g-na1}
+  \end{subfigure}
+
+\caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, HNA.LIN.G.NA1.]
+        {Comparison between the fields in the focal plane computed via
+        the Richards-Wolf and the Stratton-Chu formalisms. Each plot represents
+        the squared magnitude of a single Fourier component of the focused
+        electromagnetic field.}
+\label{fig:sc.sc-vs-rw-hna-lin-g-na1}
+\end{figure}
+
+However, when bringing the focal point inside the parabola, i.e. switching to
+the VSF.LIN.G type, the two formalisms start to diverge
+(Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}). The difference between the
+results of both formalisms increase with decreasing focal length (Fig.~\ref{}).
+Insofar as we assume that the Stratton-Chu is the correct one, an assumption
+that should be checked through experimentation, it seems that the RW formalism
+underestimates the amount of energy that persists in the focal spot, even at
+very small focal lengths.
+
+\begin{figure}
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs//RichardsWolf_fpVSF.pdf}
+    \caption[Richards-Wolf field components for the VSF.LIN.G.f0.00875 case.]
+            {Field components in the focal plane computed via the Richards-Wolf
+            formalism.}
+    \label{fig:sc.rw.vsf-lin-g-na1}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/StrattonChu_fpVSF.pdf}
+    \caption[Stratton-Chu field components for the VSF.LIN.G.f0.00875 case.]
+            {Field components in the focal plane computed via the Stratton-Chu
+            formalism.}
+   \label{fig:sc.sc.vsf-lin-g-f0.0875}
+  \end{subfigure}
+
+  \caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, VSF.LIN.G.f0.00875.]
+          {Comparison between the fields in the focal plane computed via \textbf{(a)}
+          the Richards-Wolf and the \textbf{(b)} Stratton-Chu formalisms for the
+          parameters shown in Table \ref{tab:sc.comparison.parameters.linear}, but
+          with $f=8.75\,\si{\mm}$, or $\alpha=0.1$. Each plot shows
+          the squared magnitude of a single Fourier component of the focused
+          electromagnetic field.}
+  \label{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}
+\end{figure}
+
+\todo[inline]{Do we know of any reason for this? I would venture that
+not taking into account the exact shape of the mirror would explain
+this, as a spherical shape could maybe explain that effect.
+(Check longitudinal fields https://en.wikipedia.org/wiki/Spherical\_aberration ).}
+
+
+\chapter{Parallel Implementation of the Stratton-Chu Diffraction Integrals}
+\label{chapter:stratton-chu}
+
+% \begin{chaptersummary}
+%   This chapter discusses the problem of properly modelling electromagnetic fields
+%   in the tight focusing regime. We first lay the foundation of electromagnetic
+%   scattering and justify the choice of the Stratton-Chu formalism. Our numerical
+%   implementation of this formalism is then discussed at length, and our results
+%   are benchmarked against analytical results and results from the literature.
+%   We briefly discuss the Richards-Wolf formalism, which is similar but not equivalent
+%   to the Stratton-Chu formulation.
+% \end{chaptersummary}
+
+In this chapter, we introduce a fully numerical implementation of the
+Stratton-Chu equations used to model the spatio-temporal focusing properties of
+large bandwidth laser pulses focused by high numerical aperture optics. Using
+our derivation from the previous chapter as the starting point, we analyze the
+Stratton-Chu formalism from a numerical point of view. Given the multi-scale
+nature of the method, we provide a preliminary comparison between
+state-of-the-art methods such as finite element and finite-difference
+time-domain (FTTD) methods and the Stratton-Chu formalism. Secondly, we discuss
+the handling of short temporal pulses from a Fourier-domain expression and the
+numerical challenges this poses. We also discuss the domain decomposition
+strategy used to parallelize our software implementation.
+
+We then study the properties of a linearly polarized Gaussian beam focused by a
+parabolic mirror of varying focal length $f$. We highlight some changes in the
+focused properties of the beam as a function. Specifically, we show that there
+is qualitative change in the field at the focus when $\alpha=2f/r_\text{max}\leq
+1$. We trace to change back to a sign change in the phase function of the
+integrand in the Stratton-Chu formalism.
+
+Finally, a short appendix provides numerical verifications of our software
+implementation. As no closed-form solution exist for the Stratton-Chu equations,
+we verify that the results converge and obey energy conservation.
 
 \section{Parallel Implementation}
 
@@ -1502,211 +1763,6 @@ Perhaps mention B-integral issues with thick broadband waveplates?
 Find bandwidth at which the field is properly collimated? (This probably
 can be done with the unfocused beams, so probably not interesting.)}
 
-
-\section{Comparisons with Other Field Models}
-
-In the previous section, we have shown some properties of electromagnetic fields
-in the tight focusing regime. Now, we show that the use of the rather
-complicated Stratton-Chu formalism was warranted. We proceed by implementing
-other field models and showing that all other well-known models do not reproduce
-the most salient features of tightly focused fields. We discuss both analytical
-solutions of Maxwell's equations and the Richards-Wolf diffraction formalism.
-
-This section can also serve as a guide to a cost-analysis benefit of using the
-StrattoCalculator in a given situation. Computing the fields in a volume around
-the focal spot can take quite a long time using the StrattoCalculator. In the
-worst cases considered in this thesis, a single simulation can take as long as
-five days on MP2. It is thus necessary to make sure that the use of our
-formalism is indeed warranted. If, for a given application, it is expected, or
-it can be shown that the properties listed above can affect the design of an
-experiment, or the properties of some quantity of interest, then it makes sense
-to invest the numerical power needed to run the StrattoCalculator. On the other
-hand, if the properties described above are expected to have little effect, or
-if the numerical code used is already heavy, then it might not make sense to use
-the StrattoCalculator.
-
-For the sake of comparison, we will use an incident beam that has a Gaussian
-spatial dependence, a super-Gaussian spectrum, and a parabola with a numerical
-aperture of exactly 1, or $\alpha=1$. This produces a focused that is firmly in
-the tight focusing regime, and allows for a comparison with a broad range of
-field categories. See Table \ref{tab:comparison.parameters} for the exact
-parameters.
-
-\subsection{Gaussian Optics Limit}
-
-\subsection{Analytical Field Models}
-
-Another class of useful field models are vacuum solutions of the Maxwell
-equations. In typical optical regimes, this is usually done via the paraxial
-approximation. However, as we know, this approximation in invalid in the tight
-focusing regime. It is possible, if more difficult, to write down solutions of
-Maxwell's equations without this approximation. In this section, we will compare
-our StrattoCalculator fields with those of the Salamin field model
-\cite{Salamin2015b} for a short, tightly focused linearly polarized field in
-vacuum. This model purports to approximate tightly focused fields with only
-three free parameters: the central wavelength of the radiation $\lambda_c$, its
-waist size $w_0$ and its axial length $L$, a parameter related to its temporal
-duration.
-
-The analytical expressions are relatively easy to evaluate numerically, although
-there are two prominent issues. First, there doesn't seem to be a simple way to
-evaluate the energy integral, defined as
-  \begin{equation}
-    E = \frac{1}{2}\int_V \left(\vb{E}^2+\vb{B}^2\right) dV,
-  \end{equation}
-of these fields. To fix the energy content of the beam in this model, it is
-necessary to numerically integrate the field over its whole spatial support with
-sufficient precision. In fact, for $w_0\ll L$, fixing the energy content takes
-longer than subsequently evaluating the field in a $\lambda^3$ volume. Second,
-some of the intermediate terms of the field expressions show a singular
-behaviour around both $|\vb{r}|\sim0$ and $z=t$. Care must thus be taken when
-evaluating the Salamin model in these regions.
-
-Computing the fields in the focal plane, it is immediately apparent that this
-model does not reproduce the high ellipticity that we observe in the fields
-computed via the StrattoCalculator. Moreover, the relative strength of the
-longitudinal components is much weaker than in the StrattoCalculator fields. The
-origin of these discrepancies lies in the fact that the analytical solution
-cannot take into account the parabolic structure of the mirror. The spatial
-phase structure that the parabola imparts on the field has important
-consequences for its focused properties.
-
-Moreover, the Salamin model inherently cannot reproduce the fields produced at
-$\alpha\ll1$. In this case, the parabolic shape is quite dramatic. Reducing the
-waist of the beam in the model does not help: the longitudinal components become
-somewhat stronger, but the primary field components never exhibit any
-ellipticity.
-
-\todo[inline]{Add figures of both fields in time at $t=0$ and $t=\lambda/4$.}
-
-\subsection{The Richards-Wolf Formalism}
-
-The Richards-Wolf (RW) formalism is very similar to the Stratton-Chu formalism.
-Both are based on vector diffraction integrals. They differ in that the RW
-formalism uses two additional approximations. First, the focal point is assumed
-far away from the reflecting surface, i.e. the far-field approximation is used.
-In practice, this is almost universally valid, and does not cause problems here.
-The second approximation is less explicit and thus more difficult to trace: it
-assumes that the light rays follow an energy conversation law on a reference
-sphere. Following this approximation, an integral of the incident fields over
-the reference sphere is set up, and the geometrical characteristics of the
-mirror are taken into account via a scalar factor called the apodization factor,
-to be computed via geometrical optics method. While the Richards-Wolf equation
-have been derived from the Stratto-Chu integrals in the past \cite{Sheppard1977}
-within this approximation, for the case of a reference spherical surface, we
-have not found such a derivation for arbitrary surfaces $S$. It is this lack of
-a limit to the Richards-Wolf integrals that make us think that the Stratton-Chu
-formalism has a wider range of validity than the RW formalism.
-
-In the RW formalism, the fields in the focal region can be expressed as, where
-in this section, we take $\alpha$ to the polar angle of a spherical coordinate
-system\cite{April2012}:
-  \begin{align}
-    \vb{E}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
-        \vb{E}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
-        \sin\alpha d\alpha d\beta, \\
-    \vb{B}(r,\theta,z) &= \frac{1}{4\pi}\int_0^{2\pi}\int_0^{\alpha_\text{max}}
-        \vb{B}_\text{sph}(\alpha,\beta)e^{-ikz\cos\alpha+ikr\sin\alpha\cos(\theta-\beta)}
-        \sin\alpha d\alpha d\beta
-  \end{align}
-where
-  \begin{align}
-    \vb{E}_\text{sph} &= q(\alpha)\left[\vu{e}_\alpha\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
-                                       +\vu{e}_\beta\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
-                                       \right] \\
-    \vb{H}_\text{sph} &= \left(\vu{e}_\alpha\times\vu{e}_\beta\right)\times\vb{E}_\text{sph}\nonumber\\
-                      &= q(\alpha) \left[\vu{e}_\beta\left(\vu{e}_\rho\cdot\vb{E}_\text{inc}\right)
-                                        -\vu{e}_\alpha\left(\vu{e}_\beta\cdot\vb{E}_\text{inc}\right)
-                                        \right]
-  \end{align}
-where $\vu{e}_\alpha$ and $\vu{e}_\beta$ are the basis vectors of a spherical
-coordinate system centered at the focal point (not to be confused with the
-$\alpha=2f/r_\text{max}$). We evaluate these from the parabola described above.
-We thus have $\alpha_\text{max}=\pi/2$ and $q(\alpha)=\sec^2(\alpha/2)$.
-
-We have implemented a simple C++ program that evaluates these integrals for a
-single frequency component of the electromagnetic field for arbitrary
-apodization functions $q(\alpha)$ and arbitrary $\alpha$ limits.
-
-\todo[inline]{Fix the multiply defined $\alpha$ issue.}
-
-We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is
-virtually indistinguishable from the Stratton-Chu results
-(Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}). We observe the same ellipticity on
-the primary components $E_x$ and $B_y$, and similar magnitudes of the weaker
-transverse components and of the longitudinal components. On that basis, we
-could tempted to conclude that both formalism yield qualitatively the same
-results.
-
-\begin{figure}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/RichardsWolf_fpNA1.pdf}
-    \caption[Richards-Wolf field components for the HNA.LIN.G.NA1 case.]
-            {Field components in the focal plane computed via the Richards-Wolf
-            formalism for the parameters given in Table \ref{tab:sc.comparison.parameters.linear}.}
-    \label{fig:sc.rw.hna-lin-g-na1}
-  \end{subfigure}
-
-  \begin{subfigure}{\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/StrattonChu_fpNA1.pdf}
-    \caption[Stratton-Chu field components for the HNA.LIN.G.NA1 case.]
-            {Field components in the focal plane computed via the Stratton-Chu
-            formalism for the parameters given in Table \ref{tab:sc.comparison.parameters.linear}.}
-   \label{fig:sc.sc.hna-lin-g-na1}
-  \end{subfigure}
-
-\caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, HNA.LIN.G.NA1.]
-        {Comparison between the fields in the focal plane computed via
-        the Richards-Wolf and the Stratton-Chu formalisms. Each plot represents
-        the squared magnitude of a single Fourier component of the focused
-        electromagnetic field.}
-\label{fig:sc.sc-vs-rw-hna-lin-g-na1}
-\end{figure}
-
-However, when bringing the focal point inside the parabola, i.e. switching to
-the VSF.LIN.G type, the two formalisms start to diverge
-(Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}). The difference between the
-results of both formalisms increase with decreasing focal length (Fig.~\ref{}).
-Insofar as we assume that the Stratton-Chu is the correct one, an assumption
-that should be checked through experimentation, it seems that the RW formalism
-underestimates the amount of energy that persists in the focal spot, even at
-very small focal lengths.
-
-\begin{figure}
-  \begin{subfigure}{\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs//RichardsWolf_fpVSF.pdf}
-    \caption[Richards-Wolf field components for the VSF.LIN.G.f0.00875 case.]
-            {Field components in the focal plane computed via the Richards-Wolf
-            formalism.}
-    \label{fig:sc.rw.vsf-lin-g-na1}
-  \end{subfigure}
-
-  \begin{subfigure}{\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/StrattonChu_fpVSF.pdf}
-    \caption[Stratton-Chu field components for the VSF.LIN.G.f0.00875 case.]
-            {Field components in the focal plane computed via the Stratton-Chu
-            formalism.}
-   \label{fig:sc.sc.vsf-lin-g-f0.0875}
-  \end{subfigure}
-
-\caption[Richards-Wolf vs Stratton-Chu: fields in the focal plane, VSF.LIN.G.f0.00875.]
-        {Comparison between the fields in the focal plane computed via \textbf{(a)}
-        the Richards-Wolf and the \textbf{(b)} Stratton-Chu formalisms for the
-        parameters shown in Table \ref{tab:sc.comparison.parameters.linear}, but
-        with $f=8.75\,\si{\mm}$, or $\alpha=0.1$. Each plot shows
-        the squared magnitude of a single Fourier component of the focused
-        electromagnetic field.}
-\label{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}
-\end{figure}
-
-\todo[inline]{Do we know of any reason for this? I would venture that
-not taking into account the exact shape of the mirror would explain
-this, as a spherical shape could maybe explain that effect.
-(Check longitudinal fields https://en.wikipedia.org/wiki/Spherical\_aberration ).}
 
 \section{Numerical Verifications}
 
