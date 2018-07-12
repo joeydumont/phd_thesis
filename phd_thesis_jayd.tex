@@ -1875,8 +1875,38 @@ Skeleton:
 \chapter{Four-Wave Mixing \textit{in vacuo} and Pair Production}
 \label{chapter:fwm}
 
-Application of tightly focused field model on observing SF-QED observables.
-Can model realistic experimental configurations.
+In this chapter we introduce the concept of four-wave mixing, first in perhaps
+more famililar context of nonlinear optics, and then discuss the same effect in
+the context of strong-field QED. The physical process is basically the same,
+although vacuum polarization has some peculiarities that we will discuss.
+
+Vacuum polarization has been known about for a long time: it was first predicted
+in the 1930s by Euler (not Leohard) in one of first QED calculations ever
+published \cite{}. With the technology available today, it is possible to
+envision an experimental detection of the process in the coming years \cite{}.
+
+Of course, the process has already been observed in an astrophysical setting
+\cite{} at the LHC. Our interest in detecting vacuum polarization using a HPL is
+first in providing tighter control over the experimental and reproducibility.
+One might also quality CERN's observation as indirect, since the observed
+photons were produced by virtual photons, not on-shell photons. An optical
+experiment would only deal with on-shell photons.
+
+In this chapter, we review the Euler-Heisenberg Lagrangian and the derivation of
+corrections to Maxwell's equations that model vacuum polarization. We show that
+it is possible to compute the yield and emission properties of vacuum FWM
+photons in the presence of arbitrarily complicated electromagnetic fields by
+solving the non-linear Maxwell equations with a Green's function technique. The
+technique is then implemented in a parallel C++ code, and coupled to our field
+modeling code described in the previous chapter.
+
+We then study vacuum FWM in a single-laser beam experiment in different mirror
+geometries. We show that there exists a parabolic mirror with an optimum focal
+length that maximizes the total number of photons generated. We also show that
+the observable number of photons is also maximized in this geometry.
+
+Application of tightly focused field model on observing SF-QED observables. Can
+model realistic experimental configurations.
 
 \todo[inline]{On the importance of modeling spatial inhomogeneities:
 https://journals.aps.org/pra/abstract/10.1103/PhysRevA.97.022515}
@@ -1885,8 +1915,12 @@ Usual apparatus of SF-QED can be unwieldy to write down predictions in
 complicated fields. Use of effective field theory to use ``first quantized''
 theory that can easily accommodate complex fields. [Battesti, Dunne].
 
-Most predictions rely on simple field models to be able to evaluate integrals [Karbstein].
-Counterpoint, VEV theory by Karbstien that we should compare against.
+Most predictions rely on simple field models to be able to evaluate integrals
+[Karbstein]. Counterpoint, VEV theory by Karbstien that we should compare
+against.
+
+In the second part of this chapter, we introduce the concept of Schwinger pair
+production, and show that there exists a similar parametric optimum.
 
 % Skeleton:
 % \begin{itemize}
