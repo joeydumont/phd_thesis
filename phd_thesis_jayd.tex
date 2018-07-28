@@ -21,8 +21,6 @@
 % --                          Packages                           -- %
 % ----------------------------------------------------------------- %
 
-
-
 % -- Math symbols and fonts.
 \let\mathfrak\undefined
 \usepackage[charter]{mathdesign}      % Bitstream Charter for best font.
@@ -75,7 +73,6 @@
 \usepackage{subcaption}
 \let\newfloat\undefined
 \usepackage{floatrow}
-
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -212,14 +209,46 @@ action sequences, but for every artistic, cultural or scientific endeavour.
 
 In this chapter, we place the contributions of this dissertation in the context
 of the high-power laser literature and introduces some of the theoretical
-considerations on which this dissertation will focus. We first discuss some recent
-advances in the development of high-power laser sources and their effect
+considerations on which this dissertation will focus. We first discuss some
+recent advances in the development of high-power laser sources and their effect
 on the design of experimented aimed at measuring quantum electrodynamical
 effects in the strong field regime. The specific goals of this dissertation are
 enumerated in \S\ref{sec:intro.objectives}.
 
-
 \section{High-Power Laser Systems}
+
+
+The advent of the chirped pulse amplification technique (CPA) has catapulted the
+available focused laser intensities in the last three decades \cite{Mourou2006}.
+Indeed, this technique has allowed an increase of about 6 orders of magnitude in
+the highest recorded intensity in a very short time
+(Fig.~\ref{fig:intro.intensity-history}). Currently, the highest measured
+intensity is approximately $10^{22}\,\si{\watt\per\cm\squared}$ \cite{Bahk005},
+but several high-power facilities that are currently under construction aim to
+obtain focused intensities on the order of $10^{25}\,\si{\watt\per\cm\squared}$,
+with some projects even claiming to reach $10^{27}\,\si{\watt\per\cm\squared}$.
+In any case, this rapid increase in intensity to improvements in many
+experimental techniques, such as laser-driven plasma particle acceleration
+schemes \cite{Esarey2009}, direct electron acceleration
+\cite{Salamin2008,Marceau2013a}, medical imaging and radiation biology \cite[and
+references therein]{Danson2015,Malka2008}. At the time of its development, CPA
+gave physicists access to the relativistic regime of laser-electron interactions.
+Now, we expect to be able to probe the quantum dynamics of electrons in strong
+laser fields. It has become feasible to test a new sector of quantum electrodynamics:
+the strong-field regime.
+
+Indeed, the interactions of electrons with lasers can be divided in three main
+categories: the classical regime, the relativistic regime and the quantum regime.
+\todo[inline]{Define SF-QED.}
+
+The observation of strong-field quantum electrodynamics (SF-QED) processes with
+light is contingent, for the most part, on the development of high-intensity
+laser sources \cite{DiPiazza2012}. Reaching higher intensities can be achieved
+by (1) increasing the pump energy, (2) shortening the pulse duration or (3)
+concentrating the beam in a small volume of space. While recent laser systems
+have made significant advances on the first two items, there seems to be
+technological difficulties in engineering gratings resistant enough to withstand
+the extreme energy of the laser pulse.
 
 \begin{figure}
   \centering
@@ -232,40 +261,23 @@ enumerated in \S\ref{sec:intro.objectives}.
   \label{fig:intro.intensity-history}
 \end{figure}
 
-The advent of the chirped pulse amplification technique (CPA) has catapulted
-the available focused laser intensities in the last three decades
-\cite{Mourou2006}. Indeed, this technique has allowed an increase of about
-6 orders of magnitude in the highest recorded intensity in a very short time
-(Fig.~\ref{fig:intro.intensity-history}). \todo{Add applications of HPL other than
-QED stuff. Wakefield acceleration as catalyst of other applications (also QED).
-Probably cite JCK's work on phase contrast imaging.}
-This has opened up the possibility
-of testing QED in a completely new sector of parameters.
-
-The observation of strong-field quantum electrodynamics (SF-QED) processes with light
-is contingent, for the most part, on the development of high-intensity laser sources \cite{DiPiazza2012}.
-Reaching higher intensities can be achieved by (1) increasing the pump energy,
-(2) shortening the pulse duration or (3) concentrating the beam in a small volume of space.
-While recent laser systems have made significant advances on the first two items, there seems
-to be technological difficulties in engineering gratings resistant enough to withstand the extreme
-energy of the laser pulse.
-
 \todo[inline]{Add more background on OPA laser systems. Paraxial propagation for most
   of laser chain, then non-paraxial effects in the last part of chain, just before
   the interaction region. Add figure. Check Mourou's review for technological issues
   related to HPLs.}
 
-A promising avenue is the focusing of light down to extremely small volumes, on the order
-of the wavelength of the radiation. In this regime, however, the oft used paraxial approximation
-does not hold. This approximation is related to a Taylor expansion in terms
-of the Lax parameter $\epsilon=\lambda/\pi w_0$ \cite{Lax1975}. In tightly focused
-fields, the spatial extension of the field is on the same order as its wavelength,
-i.e. $w_0\sim\lambda$, where the waist $w_0$ is usually a good measure of the beam's
-spatial extension, and the series does not converge \cite{Borghi2003}. In addition,
-the vector nature of the fields should be retained throughout the analysis.
-In our case, we are also interested in determining the effect of the shape of
-the reflecting surface on the fields at the focal spot, an effect that is hard to
-be model within the paraxial framework \cite{Tkaczyk2012}.
+A promising avenue is the focusing of light down to extremely small volumes, on
+the order of the wavelength of the radiation. In this regime, however, the oft
+used paraxial approximation does not hold. This approximation is related to a
+Taylor expansion in terms of the Lax parameter $\epsilon=\lambda/\pi w_0$
+\cite{Lax1975}. In tightly focused fields, the spatial extension of the field is
+on the same order as its wavelength, i.e. $w_0\sim\lambda$, where the waist
+$w_0$ is usually a good measure of the beam's spatial extension, and the series
+does not converge \cite{Borghi2003}. In addition, the vector nature of the
+fields should be retained throughout the analysis. In our case, we are also
+interested in determining the effect of the shape of the reflecting surface on
+the fields at the focal spot, an effect that is hard to be model within the
+paraxial framework \cite{Tkaczyk2012}.
 
 To see this, simply compare the fields of a ``focused'' paraxial beam with that
 of a fully numerical solution of Maxwell's equations (more on that later).
@@ -276,29 +288,29 @@ Even with added terms, \ldots\todo{Same thing again.}
 \todo[inline]{Applications in QED and other stuff to tightly focused fields.}
 
 Multiple methods that consider the vector character of the beam has been
-developed and used before. One of the first examples we could find
-dates back to beginning of the 20th century, when Ignatowski solved Maxwell's
-equations in parabolic cylindrical coordinates \cite{Ignatowsky1907,Ignatowsky1908}.
-A little more than a decade later, Kottler formulated the problem as an
-integral equation using Green's functions techniques for, as far as we know,
-the first time \cite{Kottler1923a,Kottler1923b}.
-The derivation, based on potential theory, was a little obtuse.
-The often-cited Stratton and Chu paper from 1939 generalized Kottler's result
-and streamlined his derivation \cite{Stratton1939}.
+developed and used before. One of the first examples we could find dates back to
+beginning of the 20th century, when Ignatowski solved Maxwell's equations in
+parabolic cylindrical coordinates \cite{Ignatowsky1907,Ignatowsky1908}. A little
+more than a decade later, Kottler formulated the problem as an integral equation
+using Green's functions techniques for, as far as we know, the first time
+\cite{Kottler1923a,Kottler1923b}. The derivation, based on potential theory, was
+a little obtuse. The often-cited Stratton and Chu paper from 1939 generalized
+Kottler's result and streamlined his derivation \cite{Stratton1939}.
 
 There also exists analytical solutions of Maxwell's equations that do not rely
 on the paraxial approximation, such as e-dipole pulses and other models
-\cite{Gonoskov2012,Salamin2015a,Salamin2015b}. They can be incredibly useful when used as part of
-numerically-heavy codes, such as particle-in-cell codes because of their low
-cost of evaluation. However, as any solution of Maxwell's equations in vacuum,
-they do not take into account the minutiae of a given experimental setup
-and thus fail to reproduce some details of tightly focused fields.
+\cite{Gonoskov2012,Salamin2015a,Salamin2015b}. They can be incredibly useful
+when used as part of numerically-heavy codes, such as particle-in-cell codes
+because of their low cost of evaluation. However, as any solution of Maxwell's
+equations in vacuum, they do not take into account the minutiae of a given
+experimental setup and thus fail to reproduce some details of tightly focused
+fields.
 \todo[inline]{Argue why this is important.}
 
-In this dissertation, we are primarily interested in developing numerical tools for the
-study of electromagnetic fields in the tight focusing regime in typical experimental
-conditions in high-power laser sources. The theoretical framework needs to be
-flexible enough to take into account
+In this dissertation, we are primarily interested in developing numerical tools
+for the study of electromagnetic fields in the tight focusing regime in typical
+experimental conditions in high-power laser sources. The theoretical framework
+needs to be flexible enough to take into account
   \begin{itemize}
     \item the complicated power spectra and phase relations
           typical of these types of sources \cite{Jeong2015};
@@ -307,22 +319,20 @@ flexible enough to take into account
     \item various types of incident fields, such as linearly or radially polarized beams;
     \item the possibility that the incident fields contain aberrations.
   \end{itemize}
-In addition to these ``physical'' requirements on the theoretical framework,
-we also require that the resulting software implementation satisfies some
-properties. As this software project forms the basis for our future work
-on the computation of strong-field QED observables, we must make sure that
-the code is modular enough to accommodate the demands of each target observable.
-We also require that the resulting framework that a software implementation
-can run in a reasonable amount of time on a computing cluster.
+In addition to these ``physical'' requirements on the theoretical framework, we
+also require that the resulting software implementation satisfies some
+properties. As this software project forms the basis for our future work on the
+computation of strong-field QED observables, we must make sure that the code is
+modular enough to accommodate the demands of each target observable. We also
+require that the resulting framework that a software implementation can run in a
+reasonable amount of time on a computing cluster.
 \todo{Fix large space in itemize.}
 
 Both RW and SC take an incident field as an input, and output the reflected
 field at the focal spot (or wherever). In this respect, these two techniques
-tick off all the ``physical'' requirements we need. They also satisfy
-the computing requirements. We go through each of these requirements in detail
-in section \ref{}.
-
-
+tick off all the ``physical'' requirements we need. They also satisfy the
+computing requirements. We go through each of these requirements in detail in
+section \ref{}.
 
 \section{Strong-Field QED and Tightly Focused Fields}
 
@@ -353,7 +363,8 @@ to an intensity of
   \end{equation}
 and most planned facilities, such the European Extreme Light Infrastructure (ELI),
 the French APOLLON, the Russian XCELS, the South Korean CoReLS, and (others)
-do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$ (Fig.~\ref{fig:intro.intensity-history}).
+do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$
+(see Fig.~\ref{fig:intro.intensity-history} and Ref.~\citep{Danson2015}).
 
 HPL as another sector of QED to test. Complementary sector. New theoretical tools
 needed (SF-QED). Insight into traditional QED as well?
@@ -380,7 +391,7 @@ dictates whether multiphotonic are important. It is defined by
     \xi = \frac{|e|E_0}{m_e\omega c}.
   \end{equation}
 At low $\xi$, the probability that an electron interacts with $n$ photons
-during its propagation scales as $P_n\sim\xi^{2n}$. In this regime,
+during its propagation scales as $P_n\sim\xi^{2n}$. In this regime,{}
 only a few photons are exchanged between the laser and the electrons, and a
 perturbative treatment makes. However, when $\xi\sim1$, multiphotonic effects
 dominate and we must take into account the effect of the laser exactly.
