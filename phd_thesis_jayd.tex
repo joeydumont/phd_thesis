@@ -211,7 +211,7 @@ In this chapter, we place the contributions of this dissertation in the context
 of the high-power laser literature and introduces some of the theoretical
 considerations on which this dissertation will focus. We first discuss some
 recent advances in the development of high-power laser sources and their effect
-on the design of experimented aimed at measuring quantum electrodynamical
+on the design of experiments aimed at measuring quantum electrodynamical
 effects in the strong field regime. The specific goals of this dissertation are
 enumerated in \S\ref{sec:intro.objectives}.
 
@@ -227,19 +227,107 @@ intensity is approximately $10^{22}\,\si{\watt\per\cm\squared}$ \cite{Bahk005},
 but several high-power facilities that are currently under construction aim to
 obtain focused intensities on the order of $10^{25}\,\si{\watt\per\cm\squared}$,
 with some projects even claiming to reach $10^{27}\,\si{\watt\per\cm\squared}$.
-In any case, this rapid increase in intensity to improvements in many
+This rapid increase in intensity to improvements in many
 experimental techniques, such as laser-driven plasma particle acceleration
 schemes \cite{Esarey2009}, direct electron acceleration
 \cite{Salamin2008,Marceau2013a}, medical imaging and radiation biology \cite[and
-references therein]{Danson2015,Malka2008}. At the time of its development, CPA
-gave physicists access to the relativistic regime of laser-electron interactions.
-Now, we expect to be able to probe the quantum dynamics of electrons in strong
-laser fields. It has become feasible to test a new sector of quantum electrodynamics:
-the strong-field regime.
+references therein]{Danson2015,Malka2008}. At the time of its development, the CPA technique
+gave physicists access to the relativistic regime of laser-electron interactions,
+and in turn to a wealth of new physical processes such as relativistic self-focusing
+\cite{}. Today, we hope to gain access to the quantum dynamics of electrons in strong
+fields, and of the interaction of photons between themselves or, in other words,
+to probe the quantum vacuum.
 
-Indeed, the interactions of electrons with lasers can be divided in three main
-categories: the classical regime, the relativistic regime and the quantum regime.
-\todo[inline]{Define SF-QED.}
+The theoretical framework that describes such interactions is the celebrated
+quantum electrodynamics field theory. While the theory has been tested in multiple
+high-precision experiments, such as the anomalous magnetic moment of the electron,
+and high-energy collisions at particle accelerators such as the LHC. HPLs would
+allow to probe a new sector of QED: the strong-field regime. In the literature,
+this sector is referred to as SF-QED.
+
+
+Although the availability of high-power lasers
+($I\leq10^{22}\si{\watt\per\cm\squared}$) is relatively recent, the study of
+quantum electrodynamics processes in the presence of strong fields dates back to
+the tail end of the 1920s. Klein's 1929's publication \cite{Klein1929} on a
+paradox that now bears his name paved the way to the modelization of
+relatistivic quantum effects. Sauter, in his 1931 paper \cite{Sauter1931},
+showed that the scale at which these non-linear effects become important is
+given by what is now called the Schwinger field,
+  \begin{equation}
+    E_S = \frac{m_e^2c^3}{e\hbar} \approx 1.3\times10^{18}\si{\volt\per\meter},
+  \end{equation}
+or rather the parameter
+  \begin{equation}
+    \eta = \frac{E_0}{E_S}
+  \end{equation}
+where $E_0$ is the amplitude of the background laser field. When $\eta\sim1$
+in a static field,
+it is expected that the dynamics are dominated by the breakdown of vacuum
+into electron-positron pairs, until the depletion of the laser energy.
+However, even future planned laser facilities will fall short of attaining
+this extremely high electric field. Indeed, the Schwinger field corresponds
+to an intensity of
+  \begin{equation}
+    I_S = \frac{1}{2}c\epsilon_0E_S^2\sim 2.24\times10^{29}\si{\watt\per\cm\squared},
+  \end{equation}
+and most planned facilities, such the European Extreme Light Infrastructure (ELI),
+the French APOLLON, the Russian XCELS, the South Korean CoReLS, and (others)
+do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$
+(see Fig.~\ref{fig:intro.intensity-history} and Ref.~\citep{Danson2015}).
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/ResummedPropagator.pdf}
+  \caption[Resummation of multiphotonic effects on the fermion propagator.]
+          {When the multilphotonic parameter $\xi\geq1$, all these Feynman
+          diagrams contribute to the same order. It is thus necessary to
+          resum their contributions exactly, i.e. take into account
+          the non-perturbative character of the interaction between the
+          fermion and the laser field.}
+  \label{fig:intro.resummed-propagator}
+\end{figure}
+
+When real electrons are involved in the process, the additional degrees of freedom
+allow for the definition of new dimensionless parameters which govern the dynamics.
+The first is similar to the Keldysh defined in the theory of ionization, as it
+dictates whether multiphotonic are important. It is defined by
+  \begin{equation}
+    \xi = \frac{|e|E_0}{m_e\omega c}.
+  \end{equation}
+At low $\xi$, the probability that an electron interacts with $n$ photons
+during its propagation scales as $P_n\sim\xi^{2n}$. In this regime,{}
+only a few photons are exchanged between the laser and the electrons, and a
+perturbative treatment makes. However, when $\xi\sim1$, multiphotonic effects
+dominate and we must take into account the effect of the laser exactly.
+In other words, it is necessary to exactly resum the $n$ photon interactions,
+a procedure shown schematically in terms of Feynman diagrams in Fig.~\ref{fig:intro.resummed-propagator}.
+
+The other important parameter is the laser field that the electron experiences
+in its rest frame. It is simply given by
+  \begin{equation}
+    \chi = \frac{|e|\hbar\sqrt{\left(F^{\mu\nu}p_\nu\right)^2}}{c^3m_e^3} = \frac{(pk)}{(m_e c\omega)}\frac{E_0}{E_S}
+  \end{equation}
+where the second quality is valid in a plane wave.
+
+Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
+chi << 1, classical trajectories (no recoil).
+
+SLAC E144, (multiple proposals since then, Karbstein et al), possible
+detection of radiation reaction, proposals at ELI and other HPL facilities.
+
+
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/ClassicalLimit.pdf}
+  \caption[Map of non-linearity parameters in intensity-frequency space.]
+          {Value of the $\xi$ parameter as a function of intensity in \si{\watt\per\cm\squared}
+          as a function of the frequency of the laser in \si{\eV}.}
+  \label{fig:intro.xi-map}
+\end{figure}
+
+\section{Strong-Field QED and Tightly Focused Fields}
 
 The observation of strong-field quantum electrodynamics (SF-QED) processes with
 light is contingent, for the most part, on the development of high-intensity
@@ -319,108 +407,81 @@ needs to be flexible enough to take into account
     \item various types of incident fields, such as linearly or radially polarized beams;
     \item the possibility that the incident fields contain aberrations.
   \end{itemize}
-In addition to these ``physical'' requirements on the theoretical framework, we
-also require that the resulting software implementation satisfies some
-properties. As this software project forms the basis for our future work on the
-computation of strong-field QED observables, we must make sure that the code is
-modular enough to accommodate the demands of each target observable. We also
-require that the resulting framework that a software implementation can run in a
-reasonable amount of time on a computing cluster.
-\todo{Fix large space in itemize.}
+At the outset, the first two requirements rule out most of the analytical
+solutions of Maxwell's equations, as they are constrained to simple spectral
+profiles to ensure that the solutions can be expressed in closed-form.
 
-Both RW and SC take an incident field as an input, and output the reflected
-field at the focal spot (or wherever). In this respect, these two techniques
-tick off all the ``physical'' requirements we need. They also satisfy the
-computing requirements. We go through each of these requirements in detail in
-section \ref{}.
+The two integral frameworks, the Stratton-Chu (SC) and Richards-Wolf (RW) equations,
+are both sufficiently flexible to accommodate these needs. They both can be seen
+as black boxes that take the incident field of the user's choice and outputs
+the field in the focal volume, after reflection off a specific mirror geometry.
+In typical optical setups, the numerical problem that needs to be solved is
+multi-scale in nature: the incident field has a beam size in the range of the
+centimeter, while the focal volume is expected to be close to the size
+of the wavelength of the radiation, in the micrometer range. This implies long
+computing times and high memory requirements. Monochromatic codes have been developed
+in the last decade, but codes that can model ultrashort pulses, i.e. pulses
+that have a broad spectrum, are only very recent. Here, we document the implementation
+of, to the best of our knowledge, the first such code.
 
-\section{Strong-Field QED and Tightly Focused Fields}
+% In addition to these ``physical'' requirements on the theoretical framework, we
+% also require that the resulting software implementation satisfies some
+% properties. As this software project forms the basis for our future work on the
+% computation of strong-field QED observables, we must make sure that the code is
+% modular enough to accommodate the demands of each target observable. We also
+% require that the resulting framework that a software implementation can run in a
+% reasonable amount of time on a computing cluster.
+% \todo{Fix large space in itemize.}
 
-Although the availability of high-power lasers ($I\leq10^{22}\si{\watt\per\cm\squared}$)
-is relatively recent, the study of quantum electrodynamics processes in the presence
-of strong fields, a technical term to be defined a little later in this introcution,
-dates back to the tail end of the 1920s. Klein's 1929's publication \cite{Klein1929} on a paradox
-that now bears his name paved the way to the modelization of relatistivic
-quantum effects. Sauter, in his 1931 paper \cite{Sauter1931}, showed that the scale at which
-these non-linear effects become important is given by what is now called
-the Schwinger field,
-  \begin{equation}
-    E_S = \frac{m_e^2c^3}{e\hbar} \approx 1.3\times10^{18}\si{\volt\per\meter},
-  \end{equation}
-or rather the parameter
-  \begin{equation}
-    \eta = \frac{E_0}{E_S}
-  \end{equation}
-where $E_0$ is the amplitude of the background laser field. When $\eta\sim1$
-in a static field,
-it is expected that the dynamics are dominated by the breakdown of vacuum
-into electron-positron pairs, until the depletion of the laser energy.
-However, even future planned laser facilities will fall short of attaining
-this extremely high electric field. Indeed, the Schwinger field corresponds
-to an intensity of
-  \begin{equation}
-    I_S = \frac{1}{2}c\epsilon_0E_S^2\sim 2.24\times10^{29}\si{\watt\per\cm\squared},
-  \end{equation}
-and most planned facilities, such the European Extreme Light Infrastructure (ELI),
-the French APOLLON, the Russian XCELS, the South Korean CoReLS, and (others)
-do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$
-(see Fig.~\ref{fig:intro.intensity-history} and Ref.~\citep{Danson2015}).
+For our field model to be useful, we must be able to extract meaningful information
+about SF-QED processes with them. Most analytical tools in the SF-QED framework
+are ill-equipped to deal with complicated fields. Most approaches consider
+simplified field models, such as plane waves or Gaussian beams, although there
+have been recent breakthroughs in the domain \cite{DIPIAZZA}. However, it has
+come to the attention of the community that the local details of tightly focused
+fields have an impact on some properties of SF-QED processes, such as the total
+yield (measured in number of emitted photons, for example) and their direction
+of emission (i.e. their angular spectrum). It is crucial to know these quantities
+with accuracy when designing experiments aimed at observing SF-QED processes,
+as the signal-to-noise ratio is typically very low.
 
-HPL as another sector of QED to test. Complementary sector. New theoretical tools
-needed (SF-QED). Insight into traditional QED as well?
+In this dissertation, we will focus on the modelization of two SF-QED processes:
+four-wave mixing \textit{in vacuo} and Schwinger pair production. The former is
+analogous to harmonic generation in a crystal, where the interaction of light
+with the lattice structure mediates the generation of higher frequency photons.
+In the vacuum case, the medium is the vacuum itself. At high enough intensities,
+the interaction of the laser with the quantum fluctuations of othe vacuum,
+comprised of virtual electron/positron pairs, becomes observable. This can be
+pictured by a Feynman diagram.
 
+\todo[inline]{Add Feynman diagram of FWM.}
 
+At low photon energies, it is possible to construct an effective field theory
+from which the Euler-Heisenberg Lagrangian can be derived. This theory
+integrates away the fermions from the full QED Lagrangian. This process can also
+be represented as a Feynman diagram, where the fermion loop is replaced by a
+four-point photon interaction. Schwinger pair production can also be described in
+this framework. Pictorially, the process of pair creation can be seen as a
+fracture of the FWM diagram. The fermion lines are torn apart by the intense
+laser field and the fermions become on-shell, i.e. observable. In the EH framework,
+the pair creation probability can be related to the poles of the EH Lagrangian.
 
-\begin{figure}
-  \centering
-  \includegraphics{figs/ResummedPropagator.pdf}
-  \caption[Resummation of multiphotonic effects on the fermion propagator.]
-          {When the multilphotonic parameter $\xi\geq1$, all these Feynman
-          diagrams contribute to the same order. It is thus necessary to
-          resum their contributions exactly, i.e. take into account
-          the non-perturbative character of the interaction between the
-          fermion and the laser field.}
-  \label{fig:intro.resummed-propagator}
-\end{figure}
+In the EH framework, it is possible to directly relate SF-QED observables to the
+electromagnetic fields that cause, either via a partial differential equation
+for FWM or a simple quadrature for SPP. For the former, the starting point is
+the derivation of an equation of motion for photons with the 4-point
+interaction. In full QED, this gives rise to a very complicated, coupled system
+of partial differential equations. Namely, Maxwell's equations coupled to the
+Dirac equation. It is very difficult to solve this system self-consistently \cite{}.
+In the EH framework, there are no fermions, and we are left with Maxwell's equations
+and a source term related to the 4-point interaction. This forms the basis of the
+method developed in Chapter \ref{chapter:fwm} aimed at computing FWM yields
+in tightly focused fields.
 
-When real electrons are involved in the process, the additional degrees of freedom
-allow for the definition of new dimensionless parameters which govern the dynamics.
-The first is similar to the Keldysh defined in the theory of ionization, as it
-dictates whether multiphotonic are important. It is defined by
-  \begin{equation}
-    \xi = \frac{|e|E_0}{m_e\omega c}.
-  \end{equation}
-At low $\xi$, the probability that an electron interacts with $n$ photons
-during its propagation scales as $P_n\sim\xi^{2n}$. In this regime,{}
-only a few photons are exchanged between the laser and the electrons, and a
-perturbative treatment makes. However, when $\xi\sim1$, multiphotonic effects
-dominate and we must take into account the effect of the laser exactly.
-In other words, it is necessary to exactly resum the $n$ photon interactions,
-a procedure shown schematically in terms of Feynman diagrams in Fig.~\ref{fig:intro.resummed-propagator}.
-
-The other important parameter is the laser field that the electron experiences
-in its rest frame. It is simply given by
-  \begin{equation}
-    \chi = \frac{|e|\hbar\sqrt{\left(F^{\mu\nu}p_\nu\right)^2}}{c^3m_e^3} = \frac{(pk)}{(m_e c\omega)}\frac{E_0}{E_S}
-  \end{equation}
-where the second quality is valid in a plane wave.
-
-Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
-chi << 1, classical trajectories (no recoil).
-
-SLAC E144, (multiple proposals since then, Karbstein et al), possible
-detection of radiation reaction, proposals at ELI and other HPL facilities.
-
-
-
-\begin{figure}
-  \centering
-  \includegraphics{figs/ClassicalLimit.pdf}
-  \caption[Map of non-linearity parameters in intensity-frequency space.]
-          {Value of the $\xi$ parameter as a function of intensity in \si{\watt\per\cm\squared}
-          as a function of the frequency of the laser in \si{\eV}.}
-  \label{fig:intro.xi-map}
-\end{figure}
+Similarly, the SPP yield can be computed via a quadrature of the
+electromagnetic fields, granted that we assume that fields vary slowly compared
+to the typical region of pair creation. This is called the adiabatic approximation,
+and it holds well in optical experiments. We also discuss this in \ref{chapter:fwm}.
 
 \section{Objectives and organization of this dissertation}
 \label{sec:intro.objectives}
@@ -481,7 +542,7 @@ geared towards execution on super-computing clusters.
   electromagnetic fields.
 
   In Section {}, we study FWM \textit{in vacuo} in different geometries. We start
-  from typical parabolic mirror geomeetries, such as the off-axis mirror, to
+  from typical parabolic mirror geometries, such as the off-axis mirror, to
   less common geometries such as on-axis mirrors, and parabolic mirrors where the
   focal point is inside the aperture of the mirror. We show that there is parametric
   maximum in the number of FWM photons when varying the focal length of such mirrors.
