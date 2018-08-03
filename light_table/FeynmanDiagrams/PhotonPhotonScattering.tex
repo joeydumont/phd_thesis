@@ -1,0 +1,33 @@
+% --------------------------------------------------------------------------- %
+% Author:          Joey Dumont                <joey.dumont@gmail.com>         %
+% Date created:    Aug. 3rd, 2018                                             %
+% Date modified:   Aug. 3rd, 2018                                             %
+% Description:     Prepared for the thesis.                                   %
+%                  Photon-photon scattering in full QED.                      %
+% License:         CC0                                                        %
+%                  <https://creativecommons.org/publicdomain/zero/1.0>        %
+% --------------------------------------------------------------------------- %
+
+\documentclass{standalone}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{feynmp-auto}
+
+\begin{document}
+
+\begin{fmffile}{simple_box}
+\begin{fmfgraph}(90,70)
+  \fmfkeep{simple_box}
+  \fmfleft{i1,i2}
+  \fmfright{o1,o2}
+  \fmf{photon}{i1,v1}
+  \fmf{photon}{i2,v2}
+  \fmf{photon}{v3,o1}
+  \fmf{photon}{v4,o2}
+  \fmf{fermion}{v1,v3,v4,v2,v1}
+\end{fmfgraph}
+\end{fmffile}
+
+\end{document}
+
+\end{document}

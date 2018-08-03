@@ -37,6 +37,7 @@ PY_OUTDIR=figs
 PY_FLAGS=
 BIN_FOLDER=bin
 
+.PHONY: list latex_images_nooutputdir latex_images python_images
 # -- User targets.
 default: $(OUTDIR)/$(PROJECT).pdf
 
@@ -53,6 +54,9 @@ prune-bib: $(BIB_FILES)
 
 log: $(OUTDIR)/$(PROJECT).pdf
 	pplatex -i $(OUTDIR)/$(PROJECT).log
+
+list:
+	@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
 
 ### Compilation Flags
 PDFLATEX_FLAGS  = -xelatex -halt-on-error --outdir=$(OUTDIR)/
@@ -114,11 +118,15 @@ $(FIG_OUTDIR)/:
 
 # -------------------- Generation of LaTeX based figures -------------------- #
 LATEX_IMAGES_LOCAL     := $(LIGHT_TABLE)/FeynmanDiagrams/ResummedPropagator.tex
-LATEX_IMAGES_LOCAL_CMD  = $(cd $$(dirname $$(readlink -f $(file))) && $(FIG_LATEX) -shell-escape $$(basename $(file)) && cp $$(basename $${$(file)} .tex}) $(PROJECT_DIR)/$(FIG_OUTDIR)/ && cd $(PROJECT_DIR))
+LATEX_IMAGES_LOCAL     += $(LIGHT_TABLE)/FeynmanDiagrams/EulerHeisenberg.tex
+LATEX_IMAGES_LOCAL     += $(LIGHT_TABLE)/FeynmanDiagrams/SchwingerPairProduction.tex
+LATEX_IMAGES_LOCAL_CMD  = $(cd $$(dirname $$(readlink -f $(s))); $(FIG_LATEX) -shell-escape $$(basename $(s)); cp $$(basename $${$(s)}.tex}) $(PROJECT_DIR)/$(FIG_OUTDIR)/ ; cd $(PROJECT_DIR))
 
 latex_images_nooutputdir: $(LATEX_IMAGES_LOCAL) | $(FIG_OUTDIR)
-	#$(foreach $file, $^, $(LATEX_IMAGES_LOCAL_CMD))
-	$(foreach  $file, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) -shell-escape $(file)))
+	$(foreach $s, $(LATEX_IMAGES_LOCAL), $(LATEX_IMAGES_LOCAL_CMD))
+	#$(foreach  $s, $^, $(shell $(FIG_LATEX) $(FIG_LATEXFLAGS) -shell-escape $(s)))
+	pdfcrop $(FIG_OUTDIR)/SchwingerPairProduction.pdf $(FIG_OUTDIR)/SchwingerPairProduction-cropped.pdf
+	mv $(FIG_OUTDIR)/SchwingerPairProduction-cropped.pdf $(FIG_OUTDIR)/SchwingerPairProduction.pdf
 
 LATEX_IMAGES_DEPS := $(LIGHT_TABLE)/DomainDecomposition/hpc-domaindecomposition.tex
 LATEX_IMAGES_DEPS += $(LIGHT_TABLE)/ParabolicMirrors/parabola_hna.tex
