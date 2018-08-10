@@ -237,6 +237,8 @@ and in turn to a wealth of new physical processes such as relativistic self-focu
 fields, and of the interaction of photons between themselves or, in other words,
 to probe the quantum vacuum.
 
+\todo[inline]{https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.053001}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{figs/IntensityHistory.pdf}
@@ -322,6 +324,9 @@ where the second quality is valid in a plane wave.
 
 Electron dynamics: introduction of xi and chi. xi >> 1 multiphotonic effects,
 chi << 1, classical trajectories (no recoil).
+
+\todo[inline]{https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.121.043202
+https://arxiv.org/abs/1807.09271}
 
 SLAC E144, (multiple proposals since then, Karbstein et al), possible
 detection of radiation reaction, proposals at ELI and other HPL facilities.
@@ -441,7 +446,8 @@ For our field model to be useful, we must be able to extract meaningful informat
 about SF-QED processes with them. Most analytical tools in the SF-QED framework
 are ill-equipped to deal with complicated fields. Most approaches consider
 simplified field models, such as plane waves or Gaussian beams, although there
-have been recent breakthroughs in the domain \cite{DIPIAZZA}. However, it has
+have been recent breakthroughs in the domain \cite{DIPIAZZA.}. However, it has
+\todo[inline]{https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.012134}
 come to the attention of the community that the local details of tightly focused
 fields have an impact on some properties of SF-QED processes, such as the total
 yield (measured in number of emitted photons, for example) and their direction
@@ -613,29 +619,75 @@ geared towards execution on super-computing clusters.
 \chapter{Methods: Tightly Focused Electromagnetic Field Models}
 \label{chapter:methods}
 
-In the tight focusing regime, electromagnetic fields are characterized
-by a waist size similar to its Rayleigh length or, in other words, a strong
+In the tight focusing regime, electromagnetic fields are characterized by a
+waist size similar to its Rayleigh length or, in other words, a strong
 divergence angle. In this chapter, we review the paraxial field model and its
 important use in the description of beam transport inside a laser chain and show
 how it fails to describe tightly focused fields. We then review other approaches
-of modeling tightly focused fields: (1) analytical solutions of Maxwell's equations
-in vacuum, specifically the Salamin solutions \cite{Salamin2015a,Salamin2015b},
-the e-dipole models \cite{Gonoskov2012} and the complex source method \cite{April2012}.
-We show that to properly account for the local details of tightly focused fields,
-it is necessary to model the reflection off the focusing optics. This leads us to
-(2) diffraction integral frameworks. We review the Richards-Wolf and Stratton-Chu
-formalisms. By comparing fields from different models, we show that the Stratton-Chu
-formalisms shows features unique to the tight focusing regime that the analytical
-models fail to show. We also discuss a discrepancy between the Richards-Wolf and
-Stratton-Chu formalisms. The question of which formalism is correct should be
-resolved by comparison with experimental data. In the end, we settle on the
-Stratton-Chu formalism to model fields in the tight focusing regime for its
-generality.
-We thus review the derivation of the Stratton-Chu formalism in depth, and provide
-ideas for a more rigorous handling of the hypersingularities that arise in the
-modelization of open surfaces.
+of modeling tightly focused fields: (1) analytical solutions of Maxwell's
+equations in vacuum, specifically the Salamin solutions
+\cite{Salamin2015a,Salamin2015b}, the e-dipole models \cite{Gonoskov2012} and
+the complex source method \cite{April2012}. We show that to properly account for
+the local details of tightly focused fields, it is necessary to model the
+reflection off the focusing optics. This leads us to two (2) diffraction
+integral frameworks, the Richards-Wolf and Stratton-Chu formalisms. By comparing
+fields from different models, we show that the Stratton-Chu formalisms shows
+features unique to the tight focusing regime that the analytical models fail to
+show. We also discuss a discrepancy between the Richards-Wolf and Stratton-Chu
+formalisms. The question of which formalism is correct should be resolved by
+comparison with experimental data. In the end, we settle on the Stratton-Chu
+formalism to model fields in the tight focusing regime because of its
+generality. We thus review the derivation of the Stratton-Chu formalism in
+depth, and provide ideas for a more rigorous handling of the hypersingularities
+that arise in the modelization of open surfaces.
 
 \section{Paraxial Optics}
+
+The starting point is, as usual, the Maxwell equations. Their macroscopic version,
+in Lorentz-Heaviside units with $c=1$, reads
+  \begin{subequations}
+  \begin{align}
+    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
+    \nabla\times\vb{H} - \frac{\partial\vb{D}}{\partial t}  &= \vb{J}_e
+  \end{align}
+  \end{subequations}
+where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field, $\vb{D}$
+the electric displacement, and $\vb{H}$ the magnetic field strength. $\vb{J}_e$
+is an electric current distribution that generates the incident magnetic field
+and $\vb{J}_m$ is a fictitious magnetic current distribution that generates an
+incident electric field \cite{Schelkunoff1936,Elliott2003}. We will mostly be
+interested in the electromagnetic field distribution in the $V_\infty$ region,
+i.e. in vacuum. In this case, we have $\vb{D}=\vb{E}$ and $\vb{H}=\vb{B}$. In
+this section, we will also take vanishing sources $\vb{J}_e=\vb{J}_m\equiv0$.
+
+It can be shown that Maxwell's equations in vacuum obey the vector wave equation:
+  \begin{equation}
+     \left(\nabla^2-\partial_t^2\right)\vb{F}=0
+  \end{equation}
+where $\vb{F}$ stands for either the electric field, the magnetic field, or even
+the vector potential $\vb{A}$, which is defined by
+  \begin{subequations}
+  \begin{align}
+    \vb{B} &=\nabla\times\vb{A}, \\
+    \vb{E} &= -\frac{\partial\vb{A}}{\partial t} - \nabla\phi.
+  \end{align}
+  \end{subequations}
+This can be used to our advantage, as we only need to solve the one equation
+to find solutions for these three fields. From this, it will be possible to
+find expressions for different field characteristics, such as linearly versus
+radially polarized beams \cite{Salamin}.
+
+Since we are interested in obtaining propagating solutions, we look for solutions
+of the form
+  \begin{equation}
+    \varphi = \psi(\vb{r}_\perp,z)e^{-ikz}.
+  \end{equation}
+In Cartesian coordinates, each component of the vector equation will have the same
+form. We can thus substitute this scalar ansatz in any of these components.
+We then obtain
+  \begin{equation}
+    \nabla_\perp^2\psi=2ik(\partial_z\psi)-\partial_z^2\psi.
+  \end{equation}
 
 \todo[inline]{Introduction of approximation (Lax series), and cite other attempts.}
 \todo[inline]{Short discussion of propagation methods because of first-order in $z$.}
@@ -739,22 +791,6 @@ interest is defined by the volume $V_s$, and its surface by $S=\partial V_s$.
              $V_\infty=\mathbb{R}^3\backslash V_s$.}
     \label{fig:sc.scatteringSystem}
   \end{figure}
-
-The starting point is, as usual, the Maxwell equations. Their macroscopic version,
-in Lorentz-Heaviside units with $c=1$, reads
-  \begin{subequations}
-  \begin{align}
-    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
-    \nabla\times\vb{H} - \frac{\partial\vb{D}}{\partial t}  &= \vb{J}_e
-  \end{align}
-  \end{subequations}
-where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field,
-$\vb{D}$ the electric displacement, and $\vb{H}$ the magnetic field strength.
-$\vb{J}_e$ is an electric current distribution that generates the incident
-magnetic field and $\vb{J}_m$ is a fictitious magnetic current distribution
-that generates an incident electric field. We will mostly be interested
-in the electromagnetic field distribution in the $V_\infty$ region, i.e.
-in vacuum. In this case, we have $\vb{D}=\vb{E}$ and $\vb{H}=\vb{B}$.
 
 We first take the Fourier transform of the fields, defined as
   \begin{equation}
