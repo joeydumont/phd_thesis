@@ -303,7 +303,7 @@ do not plan on exceeding $10^{25}\si{\watt\per\cm\squared}$
 When real electrons are involved in the process, the additional degrees of freedom
 allow for the definition of new dimensionless parameters which govern the dynamics.
 The first is similar to the Keldysh defined in the theory of ionization, as it
-dictates whether multiphotonic are important. It is defined by
+dictates whether multiphotonic effects are important. It is defined by
   \begin{equation}
     \xi = \frac{|e|E_0}{m_e\omega c}.
   \end{equation}
@@ -345,13 +345,17 @@ detection of radiation reaction, proposals at ELI and other HPL facilities.
 \section{Strong-Field QED and Tightly Focused Fields}
 
 The observation of strong-field quantum electrodynamics (SF-QED) processes with
-light is contingent, for the most part, on the development of high-intensity
-laser sources \cite{DiPiazza2012}. Reaching higher intensities can be achieved
-by (1) increasing the pump energy, (2) shortening the pulse duration or (3)
-concentrating the beam in a small volume of space. While recent laser systems
-have made significant advances on the first two items, there seems to be
-technological difficulties in engineering gratings resistant enough to withstand
-the extreme energy of the laser pulse.
+light is contingent, for the most part, on the availability of strong $\vb{E}$
+and $\vb{B}$ fields \cite{DiPiazza2012}. \todo{Cite physical phenomena that
+display strong fields, such as astrophysical phenomena, and heavy ion
+collisions. Mention HPLs last, and praise their controllability, reproducibility
+and full diagnostics. Conclude to reaching high intensities.} Reaching higher
+intensities can be achieved by (1) increasing the pump energy, (2) shortening
+the pulse duration or (3) concentrating the beam in a small volume of space.
+While recent laser systems have made significant advances on the first two
+items, there seems to be technological difficulties in engineering gratings
+resistant enough to withstand the extreme energy of the laser pulse.
+\todo{Provide citation.}
 
 \todo[inline]{Add more background on OPA laser systems. Paraxial propagation for most
   of laser chain, then non-paraxial effects in the last part of chain, just before
@@ -370,7 +374,7 @@ $w_0$ is usually a good measure of the beam's spatial extension, and the series
 does not converge \cite{Borghi2003}. In addition, the vector nature of the
 fields should be retained throughout the analysis. In our case, we are also
 interested in determining the effect of the shape of the reflecting surface on
-the fields at the focal spot, an effect that is hard to be model within the
+the fields at the focal spot, an effect that is hard to model within the
 paraxial framework \cite{Tkaczyk2012}.
 
 % To see this, simply compare the fields of a ``focused'' paraxial beam with that
@@ -417,18 +421,18 @@ At the outset, the first two requirements rule out most of the analytical
 solutions of Maxwell's equations, as they are constrained to simple spectral
 profiles to ensure that the solutions can be expressed in closed-form.
 
-The two integral frameworks, the Stratton-Chu (SC) and Richards-Wolf (RW) equations,
-are both sufficiently flexible to accommodate these needs. They both can be seen
-as black boxes that take the incident field of the user's choice and outputs
-the field in the focal volume, after reflection off a specific mirror geometry.
-In typical optical setups, the numerical problem that needs to be solved is
-multi-scale in nature: the incident field has a beam size in the range of the
-centimeter, while the focal volume is expected to be close to the size
-of the wavelength of the radiation, in the micrometer range. This implies long
-computing times and high memory requirements. Monochromatic codes have been developed
-in the last decade, but codes that can model ultrashort pulses, i.e. pulses
-that have a broad spectrum, are only very recent. Here, we document the implementation
-of, to the best of our knowledge, the first such code.
+The two integral frameworks, the Stratton-Chu (SC) and Richards-Wolf (RW)
+equations, are both sufficiently flexible to accommodate these needs. They both
+can be seen as black boxes that take the incident field of the user's choice and
+outputs the field in the focal volume, after reflection off a specific mirror
+geometry. In typical optical setups, the numerical problem that needs to be
+solved is multi-scale in nature: the incident field has a beam size in the range
+of the centimeter, while the focal volume is expected to be close to the size of
+the wavelength of the radiation, in the micrometer range. This implies long
+computing times and high memory requirements. Monochromatic codes have been
+developed in the last decade, but codes that can model ultrashort pulses, i.e.
+pulses that have a broad spectrum, are only very recent. Here, we document the
+implementation of, to the best of our knowledge, the first such code.
 
 % In addition to these ``physical'' requirements on the theoretical framework, we
 % also require that the resulting software implementation satisfies some
@@ -442,11 +446,12 @@ of, to the best of our knowledge, the first such code.
 
 \subsection{Modeling SF-QED Processes with Arbitrary Fields}
 
-For our field model to be useful, we must be able to extract meaningful information
-about SF-QED processes with them. Most analytical tools in the SF-QED framework
-are ill-equipped to deal with complicated fields. Most approaches consider
-simplified field models, such as plane waves or Gaussian beams, although there
-have been recent breakthroughs in the domain \cite{DIPIAZZA.}. However, it has
+For our field model to be useful, we must be able to extract meaningful
+information about SF-QED processes with them. Most analytical tools in the
+SF-QED framework are ill-equipped to deal with complicated fields. Most
+approaches consider simplified field models, such as plane waves or Gaussian
+beams, although there have been recent breakthroughs in the domain
+\cite{DIPIAZZA}. However, it has
 \todo[inline]{https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.012134}
 come to the attention of the community that the local details of tightly focused
 fields have an impact on some properties of SF-QED processes, such as the total
@@ -460,7 +465,7 @@ four-wave mixing \textit{in vacuo} and Schwinger pair production. The former is
 analogous to harmonic generation in a crystal, where the interaction of light
 with the lattice structure mediates the generation of higher frequency photons.
 In the vacuum case, the medium is the vacuum itself. At high enough intensities,
-the interaction of the laser with the quantum fluctuations of othe vacuum,
+the interaction of the laser with the quantum fluctuations of of the vacuum,
 comprised of virtual electron/positron pairs, becomes observable. This can be
 pictured by a Feynman diagram.
 
@@ -688,6 +693,7 @@ We then obtain
   \begin{equation}
     \nabla_\perp^2\psi=2ik(\partial_z\psi)-\partial_z^2\psi.
   \end{equation}
+We can adimensionalize this equation by postulating that 
 
 \todo[inline]{Introduction of approximation (Lax series), and cite other attempts.}
 \todo[inline]{Short discussion of propagation methods because of first-order in $z$.}
@@ -800,7 +806,7 @@ We first take the Fourier transform of the fields, defined as
   \end{equation}
 for an arbitrary vector field $\vb{A}(\vb{r},t)$.
 Note that we use $\omega$ and $k$ interchangeably in this section, and in most of
-this dissertation, as vacuum is non-dispersive. We thus have
+this dissertation, as vacuum is non-dispersive, i.e. $\omega=k$. We thus have
   \begin{subequations}
   \begin{align}
     \nabla\times\vb{E} - i\omega\vb{B} &= \vb{J}_m, \\
@@ -831,7 +837,7 @@ unprimed quantities on $\vb{r}$. The crux of the derivation lies in the formatio
     \vb{E}\cdot L\left(\dyad{G}\cdot\vb{V}'\right) - \left(\dyad{G}\cdot\vb{V}'\right)\cdot L\vb{E}
      = \nabla\cdot\left\{\left[\nabla\times(\dyad{G}\cdot\vb{V}')\right]\times\vb{E}-\left[\nabla\times\vb{E}\right]\times\left(\dyad{G}\cdot\vb{V}'\right)\right\}
   \end{equation}
-where $L$ is the differential operator $\nabla\times\nabla\times-k^2$ and
+where $L$ is the differential operator $-k^2+\nabla\times\nabla\times$ and
 $\vb{V}'$ is an arbitrary vector function. Upon integration over the unprimed
 coordinates and over the volume $V_\infty$, the first term on the l.h.s. yields
 $\vb{V}'\cdot\vb{E}'$ due to the definition of the dyad Green's function. In the
@@ -1085,7 +1091,7 @@ the StrattoCalculator.
 
 For the sake of comparison, we will use an incident beam that has a Gaussian
 spatial dependence, a super-Gaussian spectrum, and a parabola with a numerical
-aperture of exactly 1, or $\alpha=1$. This produces a focused that is firmly in
+aperture of exactly 1, or $\alpha=1$. This produces a focus that is firmly in
 the tight focusing regime, and allows for a comparison with a broad range of
 field categories. See Table \ref{tab:comparison.parameters} for the exact
 parameters.
@@ -1096,7 +1102,7 @@ parameters.
 
 Another class of useful field models are vacuum solutions of the Maxwell
 equations. In typical optical regimes, this is usually done via the paraxial
-approximation. However, as we know, this approximation in invalid in the tight
+approximation. However, as we know, this approximation is invalid in the tight
 focusing regime. It is possible, if more difficult, to write down solutions of
 Maxwell's equations without this approximation. In this section, we will compare
 our StrattoCalculator fields with those of the Salamin field model
@@ -1139,7 +1145,7 @@ ellipticity.
 
 \subsection{The Richards-Wolf Formalism}
 
-We note that for the HNA.LIN.G.NA1 case, the Richards-Wolf formalism is
+We note that for the $\text{NA}=1$ case, the Richards-Wolf formalism is
 virtually indistinguishable from the Stratton-Chu results
 (Fig.\ref{fig:sc.sc-vs-rw-hna-lin-g-na1}). We observe the same ellipticity on
 the primary components $E_x$ and $B_y$, and similar magnitudes of the weaker
@@ -1174,14 +1180,13 @@ results.
 \label{fig:sc.sc-vs-rw-hna-lin-g-na1}
 \end{figure}
 
-However, when bringing the focal point inside the parabola, i.e. switching to
-the VSF.LIN.G type, the two formalisms start to diverge
-(Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}). The difference between the
-results of both formalisms increase with decreasing focal length (Fig.~\ref{}).
-Insofar as we assume that the Stratton-Chu is the correct one, an assumption
-that should be checked through experimentation, it seems that the RW formalism
-underestimates the amount of energy that persists in the focal spot, even at
-very small focal lengths.
+However, when bringing the focal point inside the parabola, the two formalisms
+start to diverge (Fig.~\ref{fig:sc.sc-vs-rw-vsf-lin-g-f0.0875}). The difference
+between the results of both formalisms increase with decreasing focal length
+(Fig.~\ref{}). Insofar as we assume that the Stratton-Chu is the correct one, an
+assumption that should be checked through experimentation, it seems that the RW
+formalism underestimates the amount of energy that persists in the focal spot,
+even at very small focal lengths.
 
 \begin{figure}
   \begin{subfigure}{\textwidth}
@@ -1343,7 +1348,7 @@ use the Poynting theorem to relate the energy density of the pulse to the
 spatiotemporal characteristics of the incident beam.
 
 We assume that a quantity known as the spectral energy density and spectral
-phase (to be defined later), the the total energy, and the spectral phase are
+phase (to be defined later), the total energy, and the spectral phase are
 known. The total energy of the beam can be computed via the Poynting theorem
   \begin{equation}
     E_\text{beam}
@@ -1361,7 +1366,7 @@ Substituting the Fourier transform of the fields, i.e.
         \vb{B}_\text{inc}(\vb{r},k)e^{i\varphi(k)}e^{-ik t} dk
   \end{align}
 where $\varphi(k)$ is some phase that only depends on the frequency. The total
-energy can then be written as
+energy of the pulse can then be written as
   \begin{equation}
     E_\text{beam} = 4\pi \oiint_A \int_0^\infty
         \real{\vb{E}_\text{inc}(\vb{r},k)\times\vb{B}_\text{inc}^*(\vb{r},k)}\cdot d\vb{A}dk
@@ -1374,13 +1379,13 @@ define the spectral energy density,  $\epsilon=dE_\text{beam}/dk$
       = 4\pi\oiint_A \real{\vb{E}_\text{inc}(\vb{r},k)\times\vb{B}_\text{inc}^*(\vb{r},k)}\cdot d\vb{A}
   \end{equation}
 Now, due to the linearity of Maxwell's equations, we can multiply the field by
-an arbitrary complex number and still be solutions of the differential
-equations. We thus write
+an arbitrary complex number $E_0$ and have it still be a solution of the
+differential equations. We thus write
   \begin{equation}
     \vb{E}(\vb{r},k) = E_0\vb{f}_E(\vb{r},k); \qquad
     \vb{B}(\vb{r},k) = E_0\vb{f}_B(\vb{r},k)
   \end{equation}
-where $\vb{f}_E$ and $\vb{f})B$ are some functions that contain the whole
+where $\vb{f}_E$ and $\vb{f}_B$ are some functions that contain the whole
 spatial dependence of the incident fields. In what follows, we will refer to
 these functions as the \textit{incident field model}. Using these convenience
 functions, we can rescale the fields, for each frequency component, with:
@@ -1392,6 +1397,12 @@ functions, we can rescale the fields, for each frequency component, with:
     \label{eq:sc.normalization}
   \end{equation}
 where $\epsilon_\text{exp}(k)$ is the experimentally known spectral density.
+
+Therefore, by knowing $\epsilon_\text{exp}(k)$ and by specifying an incident
+field model through the $\vb{f}_E$ and $\vb{f}_B$ functions, we can fix the
+total energy of the pulse to any chosen value with the $E_0$ scaling factor. We
+discuss some specific incident field models in
+Appendix~\ref{app:solution-paraxial-equation}.
 
 In the implementation, the renormalization is performed by specifying the total
 energy of the beam $E_\text{beam}$ and a functional form for $\epsilon(k)$.
@@ -1409,9 +1420,17 @@ coordinates $\vb{r}$ reside, and the points at which the field is evaluated,
 $\vb{r}'$. Numerically, these two regions are discretized independently. There
 are multiple advantages that stem form this: (1) the typical length scales of
 the unfocused and focused fields can differ by orders of magnitude, hence, their
-natural separation in the integral formulation makes their meshing much easier,
-(2)  the field can be evaluated at any point of our choosing: the method is not
-limited to a specific type of mesh.
+natural separation in the integral formulation makes their meshing much easier:
+indeed, in other methods, such as FTDT, a singular mesh is used for the whole
+region of space where the field needs to be computed. In the specific example of
+FTDT, this implies that the whole region must be meshed at the level of
+precision that the focused field requires, on the order of $\lambda/10$. This
+leads to stringent memory requirements. This can be mitigated in FEM methods,
+where the mesh can more easily have a spatially varying resolution, but the
+whole region still needs to be meshed, while the integral method only needs to
+mesh the mirror and focal spot, and they are meshed separately. (2) The field
+can be evaluated at any point of our choosing: the method is not limited to a
+specific type of mesh.
 
 \todo[inline]{Link this discussion with the other methods discussion elsewhere.}
 
@@ -1497,8 +1516,8 @@ higher performance. It also guarantees a good load balance of our simulation
 tasks, as each processor is given a homogeneous, pre-determined fraction of the
 work to do. On the other hand, the use of non-adaptive method entails that the
 mesh size should be chosen in a such a way the finest details of the integrands
-be resolved properly, leading to potentially heavier workloads for each
-processor.
+be resolved properly on the whole focal spot mesh, leading to potentially
+heavier workloads for each processor.
 
 \begin{figure}
   \begin{subfigure}[t]{0.32\textwidth}
@@ -1533,9 +1552,11 @@ processor.
 \end{figure}
 
 The cancellation occurs when we consider the oscillatory behaviour of the
-incoming field. In the paraxial approximation, the incoming field carries a
-propagation phase such that $f(\vb{r})\propto e^{-ikz}$. Hence, the phase
-function that determines the oscillatory behaviour is
+incident field. Our incident field models are based on the paraxial
+approximation, as typically a highly collimated (paraxial) laser pulse is used
+in focusing geometries. In the paraxial approximation, the incoming field
+carries a propagation phase such that $f(\vb{r})\propto e^{-ikz}$. Hence, the
+phase function that determines the oscillatory behaviour is
 $h(\vb{r},\vb{r}')=|\vb{r}-\vb{r}'|-z$. To determine whether the integrand
 oscillate strongly, we examine this function in the vicinity of the focal point,
 i.e. $\vb{r}'=0$ in our coordinates. Expanding the phase function in a Taylor
@@ -1593,9 +1614,9 @@ $n=1$ refers to a standard Gaussian beam.
 
 While the Stratton-Chu equations do not explicitly require any assumption on
 the incident field, it is useful to introduce some. In particular, we will be
-interested in field models where the normalization constant, $E_0$ in [\eqref{eq:sc.normalization}],
+interested in field models where the normalization constant, $E_0$,
 can be computed analytically, as this can drastically reduce the setup time
-of the computation. \todo{Why?}
+of the computation of Eq.~\eqref{eq:sc.normalization}.
 
 Unfortunately, this precludes the direct use of the super-Gaussian function,
 as it typically leads to non-integrable functions. Our strategy, then, will
@@ -1632,9 +1653,11 @@ portion $s$ and a parallel portion $p$ is given by
   \begin{equation}
     S = \frac{1}{1-p+\frac{p}{s}}
   \end{equation}
-This can be misleading, as it is possible that other factors, such as a reduced
-number of cache misses, occur when increasing the number of processors. The
-latter could even lead to a parallel efficiency that is larger than 1.
+where $p$ and $s$ represent the proportion of runtime that can be parallelized
+and the proportion that cannot, respectively. This parameter can be misleading,
+as it is possible that other factors, such as a reduced number of cache misses,
+occur when increasing the number of processors. The latter could even lead to a
+parallel efficiency that is larger than 1.
 
 The StrattoCalculator has two use cases: (1) we compute the field in the focal
 spot and save it to a file for later analysis and (2) we compute the field in
@@ -1665,20 +1688,21 @@ requirement that each processor contains a minimum number of points.
 
 \todo[inline]{Add sources for the data.}
 
-Running tests on two different clusters reveals that the parallel efficiency
-greatly depends on the underlying hardware. We ran tests on Mammouth parallèle II (MP2)
-and Graham (GP3), two Compute Canada clusters geared towards parallel workflows,
-especially programs based on MPI and OpenMP. A summary of their properties can be found
-in Table On MP2, the test simulation
-with data output does not scale well beyond 8 nodes, or 192 processors (Fig.~\ref{fig:sc.parallel-efficiency.mp2}).
-We could test beyond 384 processors, as it is the maximum number of processors
-that can be requested at a time on MP2, but we can already that, for the parameters
-chosen in our test simulation, the implementation takes \textit{longer} to run
-on 384 processors than on 192.
-On GP3, the implementation scales well, even at 1024 processors. We surmise that
-the faster InfiniBand interconnects and a properly Lustre-optimized Parallel HDF5
-module explains the much more efficient I/O, and therefore the overall better parallel efficiency
-on GP3.
+Running simulations with ``typical'' parameters on two different clusters
+reveals that the parallel efficiency greatly depends on the underlying hardware.
+We ran tests on Mammouth parallèle II (MP2) and Graham (GP3), two Compute Canada
+clusters geared towards parallel workflows, especially programs based on MPI and
+OpenMP. A summary of their properties can be found in
+Table~\ref{tab:sc.summary-of-cc-clusters}. On MP2, the test simulation with data
+output does not scale well beyond 8 nodes, or 192 processors
+(Fig.~\ref{fig:sc.parallel-efficiency.mp2}). We could not test beyond 384
+processors, as it is the maximum number of processors that can be requested at a
+time on MP2, but we can already see that, for the parameters chosen in our test
+simulation, the implementation takes \textit{longer} to run on 384 processors
+than on 192. On GP3, the implementation scales well, even at 1024 processors. We
+surmise that the faster InfiniBand interconnects and a properly Lustre-optimized
+Parallel HDF5 module explains the much more efficient I/O, and therefore the
+overall better parallel efficiency on GP3.
 
 \begin{figure}
   \centering
@@ -1714,8 +1738,7 @@ size decreases with decreasing $\alpha=2f/r_\text{max}$, as expected, this
 behaviour reverses when $\alpha$ goes below 1. We show that this can be
 explained by the progressive increase in strength of the longitudinal components
 of the field, which exhibit two lobes in the focal plane, instead of the usual
-Gaussian dependence. While this result is expected, what is more interesting is
-the effect this has on SF-QED observables, to be discussed in the next chapter.
+Gaussian dependence.
 
 \todo[inline]{Connection to: https://www.osapublishing.org/josaa/abstract.cfm?uri=josaa-35-6-985}
 
@@ -1727,7 +1750,7 @@ or NA­ It is defined as $\text{NA}=\sin\theta$, where $\theta$ is the angle
 between the optical axis and the line that goes from the focal point to the
 aperture of the parabola. It can also be related to the waist of the incident
 field. However, for very short focal lengths, the NA is not an appropriate
-parameter, as $\theta$ goes beyond $\pi$, and the NA strats to decrease again.
+parameter, as $\theta$ goes beyond $\pi$, and the NA starts to decrease again.
 In other words, the function $\text{NA}(\theta)$ is non-bijective. Instead, we
 introduce the parameter $\alpha=2f/r_ \text{max}$,where $f$ is the focal length
 and $r_\text{max}$ is the radius of the aperture of the parabola. This parameter
@@ -2018,7 +2041,7 @@ Skeleton:
 \label{chapter:fwm}
 
 In this chapter we introduce the concept of four-wave mixing, first in perhaps
-more famililar context of nonlinear optics, and then discuss the same effect in
+more familiar context of nonlinear optics, and then discuss the same effect in
 the context of strong-field QED. The physical process is basically the same,
 although vacuum polarization has some peculiarities that we will discuss.
 
@@ -2115,13 +2138,13 @@ in an all-optical experiment by tweaking the properties of the mirror and the
 spectral and spatial properties of the single incident laser beam. The total
 energy of the beam is fixed by the laser chain, although it is possible to
 change the polarization and the wavefront of the beam, and, to some degree, its
-spatial shape.
+spatial shape and power spectrum.
 
 To this end, we will try to differentiate the total number of \textit{in vacuo}
 FWM photons emitted and the observable number of photons. The exact definition
 of observable will unfortunately depend on the experimental configuration
 under study, but should provide an adequate measure of quality for our
-purposes.
+purposes. \todo{Clarify.}
 
 Four-wave mixing generates two types of frequencies. The dominant effect
 is the broadening of the frequency spectrum of the incident beam, generated
@@ -2300,8 +2323,9 @@ for each of these geometries.
 The VSF configuration type defines a natural ``shadow'' in the far-field
 pattern, as can be seen from simple ray optics (Fig.~{}). Experimentally, it is
 possible to place a detector in this shadow to facilitate the detection of FWM
-photons. The observable number of photons, then, is simply the integral of the
-angular spectrum in this shadow.
+photons. In short, then, the shadow serves as a way to disentangle the signal
+from the noise.The observable number of photons, then, is simply the integral of
+the angular spectrum in this shadow.
 
 To compare the VSF and HNA configurations, we induce an artificial shadow in
 the HNA parabola by masking the center of the beam with a circular absorber
@@ -2355,14 +2379,16 @@ with the optimal shadow of the HNA.
   \label{tab:fwm.hna-lin-g}
 \end{table}
 
-\subsection{Maximing the Observable Number of Photons}
+\subsection{Maximizing the Observable Number of Photons}
 
 To optimize the probability of detecting four-wave mixing in vacuum, it is
-necessary to increase the relatively low number of detectable photons. Up to
-this point, we have changed the geometry of the reflecting surface and the polarization
-properties of the beam to increase the total number of photons generated.
-In this section, we will instead try to increase the number of observable photons
-in each configuration.
+necessary to increase the relatively low number of detectable photons, as the
+signal-to-noise ratio is incredibly small. Indeed, the incident laser beams
+contains approximately $10^{20}$ photons and only about $\mathcal{O}(1)$ FWM
+photons are generated via the vacuum process.  Up to this point, we have changed
+the geometry of the reflecting surface and the polarization properties of the
+beam to increase the total number of photons generated. In this section, we will
+instead try to increase the number of observable photons in each configuration.
 
 In the previous section, we saw that the natural shadow of the VSF and the
 artificial shadow of the HNA unfortunately do not intersect with the bulk
@@ -2541,7 +2567,7 @@ Our starting point is \eqref{eq:sc.stratton-chu-poa-og}, which we print here for
     \vb{B}'_\text{ref}(\vb{r}',k)  &= 2\iint_S (\vu{n}\times\vb{B}_\text{inc})\times\nabla g dS.
   \end{align}
   \end{subequations}
-where recall that
+where
   \begin{align}
     g(\vb{r},\vb{r}') &= \frac{e^{ik\left|\vb{r}-\vb{r}'\right|}}{\left|\vb{r}-\vb{r}'\right|}, \\
     \left|\vb{r}-\vb{r}'\right| &= \sqrt{r^2+r'^2-2rr'\cos(\theta-\theta')-(z-z')^2}.
@@ -3196,8 +3222,8 @@ yields
 
 \todo[inline]{Rewrite by first stating all of the components in terms of $\rho$ and perform
 the $\theta$ integrals. State the components as an integral over the relevant
-Bessel functions. Maybe compare to RW at that point. Then introduce the power-series
-representation, and the incomplete gamma function expressions}
+Bessel functions. Maybe compare to RW at that point. Then introduce the
+power-series representation, and the incomplete gamma function expressions}
 
 \subsection{Radially Symmetric, Radially Polarized Beam}
 
@@ -3206,8 +3232,8 @@ representation, and the incomplete gamma function expressions}
 
 In this Appendix, we show the general solutions of the paraxial wave equations
 that we use as a basis to describe incident fields of arbitrary spatial shapes.
-We also evaluate the spectral density integral analytically, the denominator
-of Eq.\eqref{eq:sc.normalization}, for use with the Stratton-Chu implementation.
+We also evaluate the spectral density integral analytically, the denominator of
+Eq.\eqref{eq:sc.normalization}, for use with the Stratton-Chu implementation.
 
 In vacuum, the electric field $\vb{E}$, magnetic field $\vb{B}$ and vector
 potential $\vb{A}$ all obey the same differential equation, namely
@@ -3235,9 +3261,10 @@ The general solution reads \cite{Allen1992}
   \end{multline}
 
 This equation can be used to describe both linearly and radially polarized
-beams. Indeed, choosing $\vb{E}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t -ikz}\vu{x}$,
-we can describe a linearly polarized beam. Choosing $\vb{A}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t - ikz}\vu{z}$
-yields
+beams. Indeed, choosing
+$\vb{E}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t -ikz}\vu{x}$, we can describe a
+linearly polarized beam. Choosing
+$\vb{A}(\vb{r},t)=\psi(r,\theta,z)e^{-i\omega t - ikz}\vu{z}$ yields
   \begin{align}
     \vb{E}(\vb{r},k) &= ik\vb{A}+\frac{i}{k}\nabla\left(\nabla\cdot\vb{A}\right) \\
     \vb{B}(\vb{r},k) &= \nabla\times\vb{A}.
@@ -3296,7 +3323,7 @@ wave equations for both the electric and magnetic fields
   \end{align}
   \end{subequations}
 As they stand, these equations are nonlinear partial differential equations and
-can be incredibly difficult to solve. To simplify the process, we linearize these
+can be incredibly difficult to solve. \todo{Cite B. King (shock QED).} To simplify the process, we linearize these
 equations by writing the total field as
   \begin{align}
     \vb{E}  &= \vb{E}_0 + \vb{E}_\text{gen} \\
@@ -3305,7 +3332,7 @@ equations by writing the total field as
 where $\vb{E}_0$ and $\vb{B}_0$ are solutions of the homogeneous wave equations
 and $\vb{E}_\text{gen}$ and $\vb{B}_\text{gen}$ are the fields generated by the
 non-linearity. We assume that $|\vb{E}_\text{gen}|\ll|\vb{E}_0|$ such that we
-can write
+can write, to first order,
   \begin{subequations}
   \begin{align}
     \left[\partial_t^2-\nabla^2\right]\vb{E}_\text{gen}
@@ -3354,7 +3381,7 @@ For the far-field approximation to make sense, we will make the assumption
 that the support $D$ of both $\vb{P}_0$ and $\vb{M}_0$ is smaller than a sphere of
 radius $\ell$. This is not quite true, as the applied field falls off as
 $1/R$, consequently the polarization and magnetization fall off as $1/R^3$.
-In practice, we will vary the region of integration $D$ until some some predefined
+In practice, we will vary the region of integration $D$ until some predefined
 convergence measure is achieved. In tightly focused fields configuration, $D$ will be
 on the order of $\lambda^3$. The far-field approximation can thus be formulated
 as the observation point $\vb{r}'$ being very far away from the applied field,
