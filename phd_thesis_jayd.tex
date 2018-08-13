@@ -693,7 +693,27 @@ We then obtain
   \begin{equation}
     \nabla_\perp^2\psi=2ik(\partial_z\psi)-\partial_z^2\psi.
   \end{equation}
-We can adimensionalize this equation by postulating that 
+We can adimensionalize this equation by postulating that there exists typical
+lengths in each spatial dimension. Given our aim of describing propagating
+fields, we suppose that the transverse coordinates share the same typical
+length, the waist of the beam $w_0$ and the longitudinal coordinate has some
+typical length $\ell$. In other words, we define
+  \begin{equation}
+    x = w_0 x'; \qquad y = w_0 y'; \qquad z = \ell z'.
+  \end{equation}
+In terms of these new variables, the differential equation reads
+  \begin{equation}
+    \left({\nabla_\perp'}^2-\frac{2ikw_0^2}{\ell}\partial_{z'}\right)\psi = -\left(\frac{w_0}{\ell}\right)^2 \partial_{z'}^2 \psi
+  \end{equation}
+Taking $\ell=kw_0^2/2$, which we recognize as the Rayleigh length typical of Gaussian
+beams, and dropping the primes, we get
+  \begin{equation}
+    \left(\nabla_\perp^2-4i\partial_z\right)\psi = -\epsilon^2\partial_z^2\psi
+  \end{equation}
+where $\epsilon=w_0/\ell$ is the ratio between the waist and the Rayleigh
+length, which is a measure of the divergence of the beam. For $\epsilon\ll1$,
+the beam is strongly collimated, and we can expand the solution of this
+equation in a Taylor series in $\epsilon$.
 
 \todo[inline]{Introduction of approximation (Lax series), and cite other attempts.}
 \todo[inline]{Short discussion of propagation methods because of first-order in $z$.}
@@ -1066,8 +1086,6 @@ explicit expressions of the Stratton-Chu equations can be found in Appendix
 \ref{app.explicit-sc}.
 
 \section{Comparison Between Field Models}
-
-\section{Comparisons with Other Field Models}
 
 In the previous section, we have shown some properties of electromagnetic fields
 in the tight focusing regime. Now, we show that the use of the rather
