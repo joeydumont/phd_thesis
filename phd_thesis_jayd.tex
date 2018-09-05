@@ -73,6 +73,7 @@
 \usepackage{subcaption}
 \let\newfloat\undefined
 \usepackage{floatrow}
+\usepackage{units}
 
 \usepackage[unicode=true,
       pdfauthor={Joey Dumont},
@@ -469,8 +470,6 @@ the interaction of the laser with the quantum fluctuations of of the vacuum,
 comprised of virtual electron/positron pairs, becomes observable. This can be
 pictured by a Feynman diagram.
 
-\todo[inline]{Add Feynman diagram of FWM.}
-
 At low photon energies, it is possible to construct an effective field theory
 from which the Euler-Heisenberg Lagrangian can be derived. This theory
 integrates away the fermions from the full QED Lagrangian. This process can also
@@ -648,8 +647,8 @@ that arise in the modelization of open surfaces.
 
 \section{Paraxial Optics}
 
-The starting point is, as usual, the Maxwell equations. Their macroscopic version,
-in Lorentz-Heaviside units with $c=1$, reads
+The starting point is, as usual, the Maxwell equations. Their macroscopic
+version, in Lorentz-Heaviside units with $c=1$, reads
   \begin{subequations}
   \begin{align}
     \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
@@ -682,6 +681,9 @@ to find solutions for these three fields. From this, it will be possible to
 find expressions for different field characteristics, such as linearly versus
 radially polarized beams \cite{Salamin}.
 
+\todo[inline]{Add paragraph on Lax substitution to solve for both transverse
+and longitudinal components separately.}
+
 Since we are interested in obtaining propagating solutions, we look for solutions
 of the form
   \begin{equation}
@@ -713,14 +715,34 @@ beams, and dropping the primes, we get
 where $\epsilon=w_0/\ell$ is the ratio between the waist and the Rayleigh
 length, which is a measure of the divergence of the beam. For $\epsilon\ll1$,
 the beam is strongly collimated, and we can expand the solution of this
-equation in a Taylor series in $\epsilon$.
+equation in a Taylor series in $\epsilon$. This expansion takes the form
+  \begin{equation}
+    \psi = \sum_{m=0}^\infty \psi^{(2m)}
+  \end{equation}
+where $\psi^0$ is a solution of the paraxial equation, and $\psi^{(2m)}$ obey
+\cite{Salamin2007}
+  \begin{equation}
+  \begin{aligned}
+    \left(\nabla_\perp^2-4i\partial_z\right)\psi^{(0)}  &=0, \\
+    \left(\nabla_\perp^2-4i\partial_z\right)\psi^{(2m)} &= -\epsilon^2\partial_z^2\psi^{(2m-2)}.
+  \end{aligned}
+  \end{equation}
+Depending on the choice of boundary condition for these equations, a number
+of different field models can be generated.
 
-\todo[inline]{Cite htis: https://arxiv.org/abs/1807.04482}
+Solutions to these equations can be incredibly useful when the fields are mildly
+focused. Indeed, down to beam waists of $w_0=\lambda$,
+$\epsilon\sim\nicefrac{1}{3}$, we can expect the series to converge given enough
+terms\cite{Borghi2003}. However, as we will show later, we can produce fields
+with waists of $w_0\sim0.4\lambda$ in a single optical element configuration,
+and we expect to see features that this series cannot replicate.
 
-\todo[inline]{Introduction of approximation (Lax series), and cite other attempts.}
+\todo[inline]{Cite this: https://arxiv.org/abs/1807.04482}
+
 \todo[inline]{Short discussion of propagation methods because of first-order in $z$.}
 \todo[inline]{Failure of the approximation for large divergences (tight focusing), but maybe
 other propagation methods? (cite literature).}
+
 
 \section{Closed-Form Solutions of Maxwell Equations in Vacuum}
 
