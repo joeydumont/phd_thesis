@@ -679,7 +679,7 @@ the vector potential $\vb{A}$, which is defined by
 This can be used to our advantage, as we only need to solve the one equation
 to find solutions for these three fields. From this, it will be possible to
 find expressions for different field characteristics, such as linearly versus
-radially polarized beams \cite{Salamin}.
+radially polarized beams \cite{Salamin2015a,Salamin2015b}.
 
 \todo[inline]{Add paragraph on Lax substitution to solve for both transverse
 and longitudinal components separately.}
@@ -733,7 +733,7 @@ of different field models can be generated.
 Solutions to these equations can be incredibly useful when the fields are mildly
 focused. Indeed, down to beam waists of $w_0=\lambda$,
 $\epsilon\sim\nicefrac{1}{3}$, we can expect the series to converge given enough
-terms\cite{Borghi2003}. However, as we will show later, we can produce fields
+terms \cite{Borghi2003}. However, as we will show later, we can produce fields
 with waists of $w_0\sim0.4\lambda$ in a single optical element configuration,
 and we expect to see features that this series cannot replicate.
 
@@ -743,6 +743,20 @@ and we expect to see features that this series cannot replicate.
 \todo[inline]{Failure of the approximation for large divergences (tight focusing), but maybe
 other propagation methods? (cite literature).}
 
+Indeed, by reviewing some of the methods based on the Lax series, we will see
+that they do not reproduce the large ellipticities that the vectorial theory
+predicts, but do predict the proper qualitative feature of the longitudinal
+fields.
+
+Add short section on direct Lax method. Compare higher-orders. Weird behaviour
+for magnetic field, qualitatively very different.
+
+Add paragraph on Salamin's approach. Show that $E_x$ and $B_y$ seem to be elliptical,
+but no in phase (one's perfectly circular and the other elliptical depending
+on the parameters chosen).
+
+Add paragraph on CSPSW, which is qualitatively closer to the vectorial approaches,
+but unfortunately diverges in the region of interest.
 
 \section{Closed-Form Solutions of Maxwell Equations in Vacuum}
 
@@ -807,7 +821,7 @@ apodization functions $q(\alpha)$ and arbitrary $\alpha$ limits.
 
 \subsection{Derivation of the Stratton-Chu Diffraction Integrals}
 
-The strategy to derive diffraction integrals from the Maxwell equations is to
+The strategy to derive diffraction integrals from Maxwell's equations is to
 first decouple the curl equations to form second order partial differential
 equations for the electric and magnetic fields. Then, it is possible to find the
 Green's function of this differential operator. Using the dyadic-vector surface
@@ -931,17 +945,17 @@ that depends on both the integration variables $\vb{r}$
 and the observation variables $\vb{r}'$.
 
 Equation (\ref{eq:sc.field-stratton-chu-sancer}) is an integral representation
-that expresses the field at any point in $V_\infty$ as integrals of the (yet unknown)
-fields $\{\vb{E},\vb{B}\}$ over the surface of the scatterer. Hence, to be able
-to actually compute the values of the fields at any point in $V_\infty$, it is
-first necessary to know the values of the fields on $S$ as a function of the
-incident fields. Taking the limit $\vb{r}'\rightarrow S$
-results in an integral equation for the fields on $S$, which can be solved iteratively. However,
-care must be taken in the evaluation of this limit as $g$ has a simple pole at $\vb{r}=\vb{r}'$,
-i.e. on the surface of the mirror.
-This singularity is dealt with analytically by deforming the surface at $\vb{r}=\vb{r}'$
-to a hemispherical surface with vanishing radius $R$. Let this surface be $S_\epsilon$. The
-surface integrals can now be written as
+that expresses the field at any point in $V_\infty$ as integrals of the (yet
+unknown) fields $\{\vb{E},\vb{B}\}$ over the surface of the scatterer. Hence, to
+be able to actually compute the values of the fields at any point in $V_\infty$,
+it is first necessary to know the values of the fields on $S$ as a function of
+the incident fields. Taking the limit $\vb{r}'\rightarrow S$ results in an
+integral equation for the fields on $S$, which can be solved iteratively.
+However, care must be taken in the evaluation of this limit as $g$ has a simple
+pole at $\vb{r}=\vb{r}'$, i.e. on the surface of the mirror. This singularity is
+dealt with analytically by deforming the surface at $\vb{r}=\vb{r}'$ to a
+hemispherical surface with vanishing radius $R$. Let this surface be
+$S_\epsilon$. The surface integrals can now be written as
   \begin{align}
     \lim_{\vb{r}'\rightarrow S}\iint_S \left\{\cdot\right\} dS
         &= \lim_{R\rightarrow0}\left(\iint_{S/S_\epsilon}+\iint_{S_\epsilon}\right) \left\{\cdot\right\}dS,
