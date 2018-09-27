@@ -505,14 +505,13 @@ the pair creation probability can be related to the poles of the EH Lagrangian.
   \label{}
 \end{figure}
 
-
 In the EH framework, it is possible to directly relate SF-QED observables to the
 electromagnetic fields that cause, either via a partial differential equation
 for FWM or a simple quadrature for SPP. For the former, the starting point is
 the derivation of an equation of motion for photons with the 4-point
 interaction. In full QED, this gives rise to a very complicated, coupled system
 of partial differential equations. Namely, Maxwell's equations coupled to the
-Dirac equation. It is very difficult to solve this system self-consistently \cite{}.
+Dirac equation. It is very difficult to solve this system self-consistently \cite{https://arxiv.org/abs/1607.04224}.
 In the EH framework, there are no fermions, and we are left with Maxwell's equations
 and a source term related to the 4-point interaction. This forms the basis of the
 method developed in Chapter \ref{chapter:fwm} aimed at computing FWM yields
@@ -541,32 +540,38 @@ geared towards execution on super-computing clusters.
 \begin{description}
   \item [Chapter \ref{chapter:methods} -- Tightly Focused Electromagnetic Field Models]
   This chapter describes the portions of electromagnetic theory that underpins
-  the results of this thesis. In section \ref{}, we discuss the paraxial optics
-  framework, its use in the description of beam transport and other areas, and
-  the limits of its basic approximation. We show that for \textit{tightly focused fields},
-  the paraxial framework breaks down and new models are needed. In the following sections,
-  we discuss analytical solutions of Maxwell's equations that are valid in the tight
-  focusing regime, and diffraction integral formulations of the same equations.
+  the results of this thesis. In section \ref{sec:methods.paraxial}, we discuss
+  the paraxial optics framework, its use in the description of beam transport
+  and other areas, and the limits of its basic approximation. We show that for
+  \textit{tightly focused fields}, the paraxial framework breaks down and new
+  models are needed. In the following sections, we discuss analytical solutions
+  of Maxwell's equations that are valid in the tight focusing regime, and
+  diffraction integral formulations of the same equations.
 
-  In section \ref{}, we discuss the Stratton-Chu diffraction integrals. Their
-  numerical evaluation is a central part of this thesis, and underpins most of
-  our research contributions. We review the mathematical derivation of the
-  diffraction integrals, and discuss some specific features of the integrals.
+  In section \ref{sec:methods.vector-diffration}, we discuss the Richards-Wolf
+  and Stratton-Chu diffraction integrals. We show some qualitative discrepancies
+  in their predictions in a specific parameter sector. While we conclude that
+  the correct model should be determined experimentally, we settle for the
+  Stratton-Chu integrals for the reminder of the thesis based on mathematical
+  controllability of the latter's assumptions. The numerical evaluation of the
+  Stratton-Chu diffraction integrals constitutes the central part of this
+  thesis, and underpins most of our research contributions. We review the
+  mathematical derivation of the diffraction integrals, and discuss some
+  specific features of the integrals.
 
   \item [Chapter \ref{chapter:stratton-chu} -- The Stratton-Chu Diffraction Integrals]
-  In this chapter, we discuss our parallel implementation of a computer code that
-  evaluates the Stratton-CHu diffraction integrals for generic incident
+  In this chapter, we discuss our parallel implementation of a computer code
+  that evaluates the Stratton-Chu diffraction integrals for generic incident
   electromagnetic fields and for arbitrary geometries. This tool is used as the
   basic tool to investigate light-matter interactions in tightly focused fields,
-  our main research contribution. The design and features
-  of the MPI-based code is thoroughly presented Section \ref{}.
+  our main research contribution. The design and features of the MPI-based code
+  is thoroughly presented Section \ref{sec:sc.parallel-implementation}.
 
-  Then, in Section
-  \ref{}, we study the properties of a short, linearly polarized Gaussian beam
-  after focusing through a parabolic mirror. We show that, in this geometry,
-  the focused beam has an elliptical spot shape, and that there exists a focal
-  length value for which the longitudinal components dominate over the transverse
-  ones, in the focal region.
+  Then, in Section \ref{sec:sc.case-study}, we study the properties of a short,
+  linearly polarized Gaussian beam after focusing through a parabolic mirror. We
+  show that, in this geometry, the focused beam has an elliptical spot shape,
+  and that there exists a focal length value for which the longitudinal
+  components dominate over the transverse ones, in the focal region.
 
   As an appendix to this chapter, we verify that our numerical implementation
   obeys some key requirements, such as convergence and energy conservation.
@@ -646,6 +651,7 @@ depth, and provide ideas for a more rigorous handling of the hypersingularities
 that arise in the modelization of open surfaces.
 
 \section{Paraxial Optics}
+\label{sec:methods.paraxial}
 
 The starting point is, as usual, the Maxwell equations. Their macroscopic
 version, in Lorentz-Heaviside units with $c=1$, reads
@@ -767,6 +773,7 @@ for tight focusing (e-dipole, Salamin). CSBs?}
 necessary in modeling local details of the fields.}
 
 \section{Vector Diffraction Integrals}
+\label{sec:methods.vector-diffration}
 
 \subsection{Richards-Wolf}
 
@@ -1320,6 +1327,7 @@ implementation. As no closed-form solution exist for the Stratton-Chu equations,
 we verify that the results converge and obey energy conservation.
 
 \section{Parallel Implementation}
+\label{sec:sc.parallel-implementation}
 
 Equations \eqref{eq:sc.stratton-chu-poa-og} describe a spectral component of
 frequency $k$ of the reflected field at a given position $\vb{r}'$ as an
@@ -1783,6 +1791,7 @@ overall better parallel efficiency on GP3.
 \end{figure}
 
 \section{Properties of Tightly Focused Fields}
+\label{sec:sc.case-study}
 
 In this section, we present some numerical results obtained with the
 StrattoCalculator. We explore some properties of the fields in the focal
