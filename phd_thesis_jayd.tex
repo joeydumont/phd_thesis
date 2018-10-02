@@ -749,21 +749,6 @@ and we expect to see features that this series cannot replicate.
 \todo[inline]{Failure of the approximation for large divergences (tight focusing), but maybe
 other propagation methods? (cite literature).}
 
-Indeed, by reviewing some of the methods based on the Lax series, we will see
-that they do not reproduce the large ellipticities that the vectorial theory
-predicts, but do predict the proper qualitative feature of the longitudinal
-fields.
-
-Add short section on direct Lax method. Compare higher-orders. Weird behaviour
-for magnetic field, qualitatively very different.
-
-Add paragraph on Salamin's approach. Show that $E_x$ and $B_y$ seem to be elliptical,
-but no in phase (one's perfectly circular and the other elliptical depending
-on the parameters chosen).
-
-Add paragraph on CSPSW, which is qualitatively closer to the vectorial approaches,
-but unfortunately diverges in the region of interest.
-
 \section{Closed-Form Solutions of Maxwell Equations in Vacuum}
 
 \todo[inline]{Short introduction on vacuum solutions, then mention specific
@@ -1156,10 +1141,74 @@ For the sake of comparison, we will use an incident beam that has a Gaussian
 spatial dependence, a super-Gaussian spectrum, and a parabola with a numerical
 aperture of exactly 1, or $\alpha=1$. This produces a focus that is firmly in
 the tight focusing regime, and allows for a comparison with a broad range of
-field categories. See Table \ref{tab:comparison.parameters} for the exact
-parameters.
+field categories. See Table \ref{tab:methods.comparison.parameters.linear} for
+the exact parameters.
+
+\begin{table}
+  \centering
+  \begin{tabular*}{0.6\columnwidth}{@{\extracolsep{\fill} }lSc|lSc}
+    \toprule
+    \multicolumn{6}{c}{\textbf{Simulation Parameters}} \\
+    \midrule
+    \multicolumn{3}{c|}{Parabola}  & \multicolumn{3}{c}{Incident Beam}\\
+    Param.           & {Value}     & Unit              & Param.          & {Value}     & Unit                 \\
+    \midrule
+    $r_\text{max}$   & 87.50       & \si{\milli\metre} & $w_0$           & 75          & \si{\mm}          \\
+    $f$              & 43.75       & \si{\milli\metre} & $\lambda_c$     & 800         & \si{\nano\metre}     \\
+                     &             &                   & $\Delta\lambda$ & 60          & \si{\nano\metre}     \\
+                     &             &                   & $n$             & 4           &  --                  \\
+                     &             &                   & $E_\text{tot}$  & 13.5        & \si{\joule}          \\
+    \bottomrule
+  \end{tabular*}
+  \caption[Parameters of the linearly polarized, Gaussian incident beam.]
+          {Parameters of the linearly polarized, Gaussian incident beam used in
+          the study of tightly focused fields with the StrattoCalculator. The waist of the beam
+          is chosen to minimize clipping, wherein the beam extends beyond the edge of the parabola,
+          and the other parameters are typical of a broad spectrum, high-power laser.}
+  \label{tab:methods.comparison.parameters.linear}
+\end{table}
 
 \subsection{Gaussian Optics Limit}
+
+Indeed, by reviewing some of the methods based on the Lax series, we will see
+that they do not reproduce the large ellipticities that the vectorial theory
+predicts, but do predict the proper qualitative feature of the longitudinal
+fields.
+
+Add short section on direct Lax method. Compare higher-orders. Weird behaviour
+for magnetic field, qualitatively very different.
+
+Add paragraph on Salamin's approach. Show that $E_x$ and $B_y$ seem to be elliptical,
+but no in phase (one's perfectly circular and the other elliptical depending
+on the parameters chosen).
+
+Add paragraph on CSPSW, which is qualitatively closer to the vectorial approaches,
+but unfortunately diverges in the region of interest.
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/LaxSeries-4.pdf}
+  \caption{Electromagnetic fields predicted by the Lax series for a linearly
+           polarized beam with $w_0=\lambda/2$, truncation order $m=4$ and
+           $\lambda=800\,\si{\nano\metre}$.}
+  \label{fig:methods.lax-series4}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/Salamin.pdf}
+  \caption{Electromagnetic fields predicted by the Salamin version of the Lax
+           series for a linearly polarized beam with $w_0=\lambda/2$, truncation
+           order $m=2$ and $\lambda=800\,\si{\nano\metre}$.}
+  \label{fig:methods.salamin}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/CSPSW.pdf}
+  \caption{Electromagnetic fields predicted by convergence of two spherical waves.}
+  \label{fig:methods.cspsw}
+\end{figure}
 
 \subsection{Analytical Field Models}
 
@@ -1286,6 +1335,35 @@ this, as a spherical shape could maybe explain that effect.
 (Check longitudinal fields https://en.wikipedia.org/wiki/Spherical\_aberration ).}
 
 \section{Summary}
+
+\begin{table}
+  \begin{tabular}{l|c}
+                  & $E_y=B_x$, anti-symmetric elliptical $E_x$/$B_y$, strong longitudinal components \\
+  Lax series      & \\
+  Salamin (Lax)   & \\
+  CSPSW           & \\
+  Salamin (Tight) & \\
+  e-dipoles       & \\
+  Richards-Wolf   & \\
+  Stratton-Chu    &
+  \end{tabular}
+  \caption{Qualitative features that different models predict.}
+\end{table}
+
+
+\begin{table}
+  \begin{tabular}{l|c}
+                  & Arbitrary spatial dependence, power spectrum and spectral phase, aberrations, space-time couplings, arbitrary focusing geometries, \\
+  Lax series      & \\
+  Salamin (Lax)   & \\
+  CSPSW           & \\
+  Salamin (Tight) & \\
+  e-dipoles       & \\
+  Richards-Wolf   & \\
+  Stratton-Chu    &
+  \end{tabular}
+  \caption{Effects that each model can implement.}
+\end{table}
 
 \todo[inline]{Another method: https://www.osapublishing.org/josaa/abstract.cfm?uri=josaa-35-8-1356}
 
@@ -3165,47 +3243,47 @@ yields
 %             E_0\left(r_\text{max}\alpha\frac{\sqrt{1-t^2}}{t}\right)t^{2k+2m+1}e^{2ikz't^2}
 %           dt.
 %   \end{multline*}
-% To go further, we must choose a field model that allows this integral to be evaluated.
-% As a first step, we will choose a top-hat field, i.e. $E_0=1$. The integrand
-% is thus the incomplete gamma function and we can write
-%   \begin{multline*}
-%     B_z = -8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
-%           \sum_{m=0}^\infty\frac{(-1)^m}{m!(m+1)!}(kr')^{2m+1}\sum_{k=0}^{m+1}(-1)^k\binom{m+1}{k}
-%           \left.
-%           \frac{\Gamma(m+k+1,-2ict^2)}{(-2ic)^{m+k+1}}
-%           \right|^{1/\sqrt{1+1/\alpha^2}}_1.
-%   \end{multline*}
-% We can simplify this to
-%   \begin{equation*}
-%     B_z = 8\pi\alpha kef^{2ikf}\sin\theta'e^{-ikz'}
-%           \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
-%           \left.
-%           \frac{\Gamma(m+k+1,-2ikz't^2)}{(2ikz')^{m+k+1}}
-%           \right|^{1/\sqrt{1+1/\alpha^2}}_1.
-%   \end{equation*}
-% Because $m+k+1\in\mathbb{N}$, we can write
-%   \begin{equation*}
-%     B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
-%           \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
-%           \left.
-%           \frac{(m+k)!}{(2ikz')^{m+k+1}}e^{2ikz't^2}\sum_{\ell=0}^{m+k}\frac{(-2ikz't^2)^\ell}{\ell!}
-%           \right|^{1/\sqrt{1+1/\alpha^2}}_1.
-%   \end{equation*}
-% In terms of our original variable, this is
-%   \begin{multline*}
-%     B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
-%           \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
-%           \left.
-%           \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell\left(1+\frac{\rho^2}{\alpha^2}\right)^{-\ell}\exp\left[-ikz'\frac{\rho^2-\alpha^2}{\rho^2+\alpha^2}\right]
-%           \right|^1_0,
-%   \end{multline*}
-% and, finally,
-%   \begin{multline*}
-%     B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
-%           \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
-%           \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell
-%             \left[\left(1+\frac{1}{\alpha^2}\right)^{-\ell}\exp\left[ikz'\frac{\alpha^2-1}{\alpha^2+1}\right]-e^{ikz'}\right].
-%   \end{multline*}
+To go further, we must choose a field model that allows this integral to be evaluated.
+As a first step, we will choose a top-hat field, i.e. $E_0=1$. The integrand
+is thus the incomplete gamma function and we can write
+  \begin{multline*}
+    B_z = -8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(-1)^m}{m!(m+1)!}(kr')^{2m+1}\sum_{k=0}^{m+1}(-1)^k\binom{m+1}{k}
+          \left.
+          \frac{\Gamma(m+k+1,-2ict^2)}{(-2ic)^{m+k+1}}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{multline*}
+We can simplify this to
+  \begin{equation*}
+    B_z = 8\pi\alpha kef^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
+          \left.
+          \frac{\Gamma(m+k+1,-2ikz't^2)}{(2ikz')^{m+k+1}}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{equation*}
+Because $m+k+1\in\mathbb{N}$, we can write
+  \begin{equation*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'e^{-ikz'}
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}
+          \left.
+          \frac{(m+k)!}{(2ikz')^{m+k+1}}e^{2ikz't^2}\sum_{\ell=0}^{m+k}\frac{(-2ikz't^2)^\ell}{\ell!}
+          \right|^{1/\sqrt{1+1/\alpha^2}}_1.
+  \end{equation*}
+In terms of our original variable, this is
+  \begin{multline*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
+          \left.
+          \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell\left(1+\frac{\rho^2}{\alpha^2}\right)^{-\ell}\exp\left[-ikz'\frac{\rho^2-\alpha^2}{\rho^2+\alpha^2}\right]
+          \right|^1_0,
+  \end{multline*}
+and, finally,
+  \begin{multline*}
+    B_z = 8\pi\alpha kfe^{2ikf}\sin\theta'
+          \sum_{m=0}^\infty\frac{(kr')^{2m+1}}{m!(m+1)!}\sum_{k=0}^{m+1}\binom{m+1}{k}\frac{(m+k)!}{(2ikz')^{m+k+1}}\\
+          \sum_{\ell=0}^{m+k}\frac{(-1)^\ell}{\ell!}(2ikz')^\ell
+            \left[\left(1+\frac{1}{\alpha^2}\right)^{-\ell}\exp\left[ikz'\frac{\alpha^2-1}{\alpha^2+1}\right]-e^{ikz'}\right].
+  \end{multline*}
 
 % We can perform the other integrals in a similar fashion, although the expressions
 % will be quite a big longer. We can write
