@@ -28,6 +28,7 @@
 \setmainfont{EB Garamond}
 \usepackage[varg]{newtxmath}
 % \usepackage{unicode-math}
+\usepackage{fontawesome}
 
 \usepackage{microtype}   % Fine small typographical details
 \usepackage{realscripts} % Use the font's sub- and superscripts
@@ -511,11 +512,11 @@ for FWM or a simple quadrature for SPP. For the former, the starting point is
 the derivation of an equation of motion for photons with the 4-point
 interaction. In full QED, this gives rise to a very complicated, coupled system
 of partial differential equations. Namely, Maxwell's equations coupled to the
-Dirac equation. It is very difficult to solve this system self-consistently \cite{https://arxiv.org/abs/1607.04224}.
-In the EH framework, there are no fermions, and we are left with Maxwell's equations
-and a source term related to the 4-point interaction. This forms the basis of the
-method developed in Chapter \ref{chapter:fwm} aimed at computing FWM yields
-in tightly focused fields.
+Dirac equation. It is very difficult to solve this system self-consistently
+\cite{https://arxiv.org/abs/1607.04224}. In the EH framework, there are no
+fermions, and we are left with Maxwell's equations and a source term related to
+the 4-point interaction. This forms the basis of the method developed in Chapter
+\ref{chapter:fwm} aimed at computing FWM yields in tightly focused fields.
 
 Similarly, the SPP yield can be computed via a quadrature of the
 electromagnetic fields, granted that we assume that fields vary slowly compared
@@ -578,19 +579,18 @@ geared towards execution on super-computing clusters.
 
   \item [Chapter \ref{chapter:fwm} -- Four-Wave Mixing \textit{in vacuo}]
   In this chapter, we apply our newly-developed tool to study four-wave mixing
-  \textit{in vacuo}, a strong-field QED process. In Section \ref{}, we review
-  the Euler-Heisenberg Lagrangian and the derivation of a non-linear modification
-  to Maxwell's equations from it.
+  \textit{in vacuo}, a strong-field QED process. In Section
+  \ref{sec:fwm.background}, we review the Euler-Heisenberg Lagrangian and the
+  derivation of a non-linear modification to Maxwell's equations from it. We
+  also e detail the development of a physics module to the StrattoCalculator
+  meant to evaluate FWM \textit{in vacuo} in arbitrary electromagnetic fields.
 
-  In the next section, we detail the development of a physics module to the
-  StrattoCalculator meant to evaluate FWM \textit{in vacuo} in arbitrary
-  electromagnetic fields.
-
-  In Section {}, we study FWM \textit{in vacuo} in different geometries. We start
-  from typical parabolic mirror geometries, such as the off-axis mirror, to
-  less common geometries such as on-axis mirrors, and parabolic mirrors where the
-  focal point is inside the aperture of the mirror. We show that there is parametric
-  maximum in the number of FWM photons when varying the focal length of such mirrors.
+  In Section \ref{sec:fwm.case-study}, we study FWM \textit{in vacuo} in
+  different geometries. We start from typical parabolic mirror geometries, such
+  as the off-axis mirror, to less common geometries such as on-axis mirrors, and
+  parabolic mirrors where the focal point is inside the aperture of the mirror.
+  We show that there is parametric maximum in the number of FWM photons when
+  varying the focal length of such mirrors.
 
   In the last section, we show that this same maximum is observed in a completely
   different physical process: Schwinger pair production.
@@ -633,16 +633,17 @@ waist size similar to its Rayleigh length or, in other words, a strong
 divergence angle. In this chapter, we review the paraxial field model and its
 important use in the description of beam transport inside a laser chain and show
 how it fails to describe tightly focused fields. We then review other approaches
-of modeling tightly focused fields: (1) analytical solutions of Maxwell's
-equations in vacuum, specifically the Salamin solutions
+of modeling tightly focused fields: (1) paraxial field models, (2) analytical
+solutions of Maxwell's equations in vacuum, specifically the Salamin solutions
 \cite{Salamin2015a,Salamin2015b}, the e-dipole models \cite{Gonoskov2012} and
 the complex source method \cite{April2012}. We show that to properly account for
 the local details of tightly focused fields, it is necessary to model the
-reflection off the focusing optics. This leads us to two (2) diffraction
-integral frameworks, the Richards-Wolf and Stratton-Chu formalisms. By comparing
-fields from different models, we show that the Stratton-Chu formalisms shows
-features unique to the tight focusing regime that the analytical models fail to
-show. We also discuss a discrepancy between the Richards-Wolf and Stratton-Chu
+reflection off the focusing optics. This leads us to (3): diffraction integral
+\todo{Rephrase the list.}
+frameworks, the Richards-Wolf and Stratton-Chu formalisms. By comparing fields
+from different models, we show that the Stratton-Chu formalisms shows features
+unique to the tight focusing regime that the analytical models fail to show. We
+also discuss a discrepancy between the Richards-Wolf and Stratton-Chu
 formalisms. The question of which formalism is correct should be resolved by
 comparison with experimental data. In the end, we settle on the Stratton-Chu
 formalism to model fields in the tight focusing regime because of its
@@ -657,18 +658,16 @@ The starting point is, as usual, the Maxwell equations. Their macroscopic
 version, in Lorentz-Heaviside units with $c=1$, reads
   \begin{subequations}
   \begin{align}
-    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
+    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= 0 \\
     \nabla\times\vb{H} - \frac{\partial\vb{D}}{\partial t}  &= \vb{J}_e
   \end{align}
   \end{subequations}
 where $\vb{E}$ is the electric field, $\vb{B}$ is the magnetic field, $\vb{D}$
 the electric displacement, and $\vb{H}$ the magnetic field strength. $\vb{J}_e$
-is an electric current distribution that generates the incident magnetic field
-and $\vb{J}_m$ is a fictitious magnetic current distribution that generates an
-incident electric field \cite{Schelkunoff1936,Elliott2003}. We will mostly be
-interested in the electromagnetic field distribution in the $V_\infty$ region,
-i.e. in vacuum. In this case, we have $\vb{D}=\vb{E}$ and $\vb{H}=\vb{B}$. In
-this section, we will also take vanishing sources $\vb{J}_e=\vb{J}_m\equiv0$.
+is an electric current distribution.We will mostly be interested in the
+electromagnetic field distribution in the $V_\infty$ region, i.e. in vacuum. In
+this case, we have $\vb{D}=\vb{E}$ and $\vb{H}=\vb{B}$. In this section, we will
+also take vanishing sources $\vb{J}_e\equiv0$.
 
 It can be shown that Maxwell's equations in vacuum obey the vector wave equation:
   \begin{equation}
@@ -733,8 +732,7 @@ where $\psi^0$ is a solution of the paraxial equation, and $\psi^{(2m)}$ obey
     \left(\nabla_\perp^2-4i\partial_z\right)\psi^{(2m)} &= -\epsilon^2\partial_z^2\psi^{(2m-2)}.
   \end{aligned}
   \end{equation}
-Depending on the choice of boundary condition for these equations, a number
-of different field models can be generated.
+
 
 Solutions to these equations can be incredibly useful when the fields are mildly
 focused. Indeed, down to beam waists of $w_0=\lambda$,
@@ -754,8 +752,6 @@ other propagation methods? (cite literature).}
 \todo[inline]{Short introduction on vacuum solutions, then mention specific
 for tight focusing (e-dipole, Salamin). CSBs?}
 
-\todo[inline]{Mention difficulty in handling complicated spectral profiles,
-necessary in modeling local details of the fields.}
 
 \section{Vector Diffraction Integrals}
 \label{sec:methods.vector-diffration}
@@ -826,7 +822,7 @@ equations is fairly standard, and has been written about many times \cite{}.
 Here, however, we follow Sancer's derivation \cite{Sancer1968}, whose exhaustive
 approach allows for a more thorough discussion. In this dissertation,¸we will
 take care of explaining the source of the hypersingularities and their
-consequence on the modelling of reflection off conducting surfaces.
+consequence on the modeling of reflection off conducting surfaces.
 
 The theoretical setup is as follows. Electric and magnetic
 currents\footnote{Magnetic currents are used as a stand-in for an incident
@@ -848,6 +844,19 @@ interest is defined by the volume $V_s$, and its surface by $S=\partial V_s$.
     \label{fig:sc.scatteringSystem}
   \end{figure}
 
+Our starting is a slightly modified version of Maxwell's equations
+  \begin{subequations}
+  \begin{align}
+    \nabla\times\vb{E} + \frac{\partial\vb{B}}{\partial t}  &= \vb{J}_m \\
+    \nabla\times\vb{H} - \frac{\partial\vb{D}}{\partial t}  &= \vb{J}_e
+  \end{align}
+  \end{subequations}
+where $\vb{J}_m$ is a fictitious magnetic current distribution that generates an
+incident electric field \cite{Schelkunoff1936,Elliott2003}. This approach allows
+us to postulate the existence of equivalent sources on a given surface that
+reproduce a given incident field model outside the volume enclosed by that
+surface.
+
 We first take the Fourier transform of the fields, defined as
   \begin{equation}
     \mathcal{F}\left\{\vb{A}(\vb{r},t)\right\}(\vb{r},\omega)
@@ -859,8 +868,8 @@ Note that we use $\omega$ and $k$ interchangeably in this section, and in most o
 this dissertation, as vacuum is non-dispersive, i.e. $\omega=k$. We thus have
   \begin{subequations}
   \begin{align}
-    \nabla\times\vb{E} - i\omega\vb{B} &= \vb{J}_m, \\
-    \nabla\times\vb{B} + i\omega\vb{E} &= \vb{J}_e.
+    \nabla\times\vb{E} - ik\vb{B} &= \vb{J}_m, \\
+    \nabla\times\vb{B} + ik\vb{E} &= \vb{J}_e.
   \end{align}
   \end{subequations}
 We can form two independent PDEs by taking the curl of both sides
@@ -1168,12 +1177,37 @@ the exact parameters.
   \label{tab:methods.comparison.parameters.linear}
 \end{table}
 
-\subsection{Gaussian Optics Limit}
+\subsection{Lax Models}
 
-Indeed, by reviewing some of the methods based on the Lax series, we will see
-that they do not reproduce the large ellipticities that the vectorial theory
-predicts, but do predict the proper qualitative feature of the longitudinal
-fields.
+In this section, we discuss some models based on the Lax series \cite{Lax1975},
+where the solution of the wave equation is expanded in a power series in
+$\epsilon=w_0/z_R$. The fact that the electric field, magnetic field and vector
+potential all obey the same differential equation, and that the technique above
+calls for a choice of boundary condition allows some flexibility in modeling
+moderately focused fields with the Lax series. Below, we will study two such
+choices and show that they fail to reproduce some qualitative and quantitative
+features of tightly focused fields.
+
+Our first model, described in \cite{Borghi2003}, describes a linearly polarized
+electric field with the boundary condition
+  \begin{equation}
+    \vb{E}_\perp(\vb{r}_\perp,z) = \psi_0(\vb{r}_\perp)\vu{x}.
+  \end{equation}
+The transverse and longitudinal fields are thus computed via
+  \begin{align}
+    \psi^{(2m)}(\vb{r}_\perp,z) &= \left(\frac{i}{2k}\right)^m
+          \sum_{p=1}^m c_p^{(m)}z^p\partial_z^{m+p}\psi^{(0)}(\vb{r}_\perp,z) \\
+    \phi^{(2m+1)}(\vb{r}_\perp,z) &= \frac{i}{k}\left[\partial_x\psi^{(2m)}+\partial_z\phi^{(2m-1)}\right]
+  \end{align}
+where $\phi^{-1}=0$ and
+  \begin{equation}
+    c_p^{(m)} = \frac{(2m)!}{m(p-1)!(m-1)!(m+p)!}
+  \end{equation}
+
+%This formal approach justifies the inherently \textit{ad hoc}
+%assumption of the usual paraxial theory of simply dropping the second-order $z$
+%derivative in favour of a first-order equation.
+
 
 Add short section on direct Lax method. Compare higher-orders. Weird behaviour
 for magnetic field, qualitatively very different.
@@ -1206,7 +1240,8 @@ but unfortunately diverges in the region of interest.
 \begin{figure}
   \centering
   \includegraphics{figs/CSPSW.pdf}
-  \caption{Electromagnetic fields predicted by convergence of two spherical waves.}
+  \caption{Electromagnetic fields predicted by convergence of two spherical waves
+           with $w_0=\lambda/2$.}
   \label{fig:methods.cspsw}
 \end{figure}
 
@@ -1337,11 +1372,11 @@ this, as a spherical shape could maybe explain that effect.
 \section{Summary}
 
 \begin{table}
-  \begin{tabular}{l|c}
+  \begin{tabular}{l|p{3cm}}
                   & $E_y=B_x$, anti-symmetric elliptical $E_x$/$B_y$, strong longitudinal components \\
-  Lax series      & \\
-  Salamin (Lax)   & \\
-  CSPSW           & \\
+  Lax series      & \faCheck \\
+  Salamin (Lax)   & \faClose \\
+  CSPSW           & --\\
   Salamin (Tight) & \\
   e-dipoles       & \\
   Richards-Wolf   & \\
@@ -1352,7 +1387,7 @@ this, as a spherical shape could maybe explain that effect.
 
 
 \begin{table}
-  \begin{tabular}{l|c}
+  \begin{tabular}{l|p{3cm}}
                   & Arbitrary spatial dependence, power spectrum and spectral phase, aberrations, space-time couplings, arbitrary focusing geometries, \\
   Lax series      & \\
   Salamin (Lax)   & \\
@@ -2052,10 +2087,9 @@ fields.}
                 as focal length decreases.}
 \todo[inline]{Confirm of infirm http://iopscience.iop.org/article/10.1088/2040-8986/aaadc8/meta.}
 
-\subsection{Longitudinal Components}
+\subsection{Aberrations in the Focal Plane}
 
-\todo[inline]{Relative strength of the longitudinal component as a function of the
-focal length.}
+\todo[inline]{Fragility of the longitudinal components.}
 
 \subsection{Gouy Phase}
 
@@ -2251,6 +2285,7 @@ production, and show that there exists a similar parametric optimum.
 % \end{itemize}
 
 \section{Modelling Four-Wave Mixing in Strong, Classical Fields}
+\label{sec:fwm.background}
 
 \subsection{Theoretical Framework}
 
@@ -2266,6 +2301,7 @@ https://arxiv.org/abs/1807.00101}
 \subsection{Parallel Implementation}
 
 \section{Four-Wave Mixing With Tightly Focused Fields}
+\label{sec:fwm.case-study}
 
 Multiple experimental setups have been proposed in the FWM literature, with the
 most common setup involving the collision of multiple beams at at angle. In this
@@ -2308,10 +2344,8 @@ major problem that it creates backreflections that go directly back into the
 laser chain, essentially destroying the laser chain. To avoid that, we remove
 the part of the parabolic mirror that creates those reflections. This still
 yields an optimal focal length, but even fewer photons. Finally, we explore
-masking the incident field to create artifical shadows in the far-field where
+masking the incident field to create artificial shadows in the far-field where
 FWM photons are emitted.
-
-Description of the numerical algorithm to compute FWM.
 
 \paragraph{Notation used in this chapter}
 
