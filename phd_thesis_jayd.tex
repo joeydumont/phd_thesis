@@ -13,7 +13,7 @@
 % ----------------------------------------------------------------- %
 % --                       Document Class                        -- %
 % ----------------------------------------------------------------- %
-
+\RequirePackage{fix-cm}
 \PassOptionsToPackage{table}{xcolor}
 \documentclass[11pt,SymmetricalJury,PhD]{inrsthesis/inrsthesis}
 \usepackage{lipsum}
@@ -1203,6 +1203,21 @@ where $\phi^{-1}=0$ and
   \begin{equation}
     c_p^{(m)} = \frac{(2m)!}{m(p-1)!(m-1)!(m+p)!}
   \end{equation}
+
+For comparison's sake, we choose the typical Gaussian beam solution
+as our boundary condition, i.e.
+  \begin{equation}
+    \psi_0(r,z) = \frac{w_0}{w(z)}\exp\left[-\frac{r^2}{w(z)^2}-ikz-ik\frac{r^2}{2R(z)}+i\arctan\left(\frac{z}{z_R}\right)\right]
+  \end{equation}
+where
+  \begin{align}
+    w(z) &= w_0\sqrt{1+\left(\frac{z}{z_R}\right)}, \\
+    R(z) &= \frac{z^2+z_R^2}{z}, \\
+    z_R  &= \frac{kw_0^2}{2}.
+  \end{align}
+To evaluate the non-paraxial corrections to this field model, we evaluate
+the derivatives symbolically using the SymPy Python library \cite{Meurer2017}.
+\todo{Fix \v{S} problem in bibliography}
 
 %This formal approach justifies the inherently \textit{ad hoc}
 %assumption of the usual paraxial theory of simply dropping the second-order $z$
