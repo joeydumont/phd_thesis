@@ -1217,7 +1217,19 @@ where
   \end{align}
 To evaluate the non-paraxial corrections to this field model, we evaluate
 the derivatives symbolically using the SymPy Python library \cite{Meurer2017}.
-\todo{Fix \v{S} problem in bibliography}
+\todo{Fix \v{S} problem in bibliography.}
+
+In the tight focusing regime with $w_0=\lambda/2$ and a truncation order of
+$m=4$, we see that 
+
+\begin{figure}
+  \centering
+  \includegraphics{figs/LaxSeries-4.pdf}
+  \caption{Electromagnetic fields predicted by the Lax series for a linearly
+           polarized beam with $w_0=\lambda/2$, truncation order $m=4$ and
+           $\lambda=800\,\si{\nano\metre}$.}
+  \label{fig:methods.lax-series4}
+\end{figure}
 
 %This formal approach justifies the inherently \textit{ad hoc}
 %assumption of the usual paraxial theory of simply dropping the second-order $z$
@@ -1234,14 +1246,6 @@ on the parameters chosen).
 Add paragraph on CSPSW, which is qualitatively closer to the vectorial approaches,
 but unfortunately diverges in the region of interest.
 
-\begin{figure}
-  \centering
-  \includegraphics{figs/LaxSeries-4.pdf}
-  \caption{Electromagnetic fields predicted by the Lax series for a linearly
-           polarized beam with $w_0=\lambda/2$, truncation order $m=4$ and
-           $\lambda=800\,\si{\nano\metre}$.}
-  \label{fig:methods.lax-series4}
-\end{figure}
 
 \begin{figure}
   \centering
