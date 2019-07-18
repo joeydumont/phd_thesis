@@ -95,7 +95,6 @@ clean:
 clean-figures:
 	rm -rf $(PY_OUTDIR)
 	rm -rf $(FIG_OUTDIR)
-	
 
 ### Core Latex Generation
 # Performs the typical build process for latex generations so that all

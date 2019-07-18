@@ -596,7 +596,7 @@ ratio_mask = np.isfinite(max_EzEx)
 fig = plt.figure(figsize=(4,3))
 ax  = fig.add_subplot(111)
 
-ax.plot(alpha_f[ratio_mask], max_EzEx[ratio_mask])
+ax.plot(alpha_f[ratio_mask], max_EzEx[rati1o_mask])
 ax.set_xlabel(r"$\alpha$")
 ax.set_ylabel("Ratio of $E_x$ to $E_z$", rotation='horizontal', ha='left')
 ax.yaxis.set_label_coords(0.00, 1.05)
